@@ -40,6 +40,7 @@ export default function NotesList({
 }: NotesListProps) {
   const [items, setItems] = useState<string[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null); // 拖曳中的卡片 ID
+  const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
     setItems(notes.map((note) => note.id));
@@ -75,18 +76,13 @@ export default function NotesList({
   };
 
   return (
-    <div className="flex flex-col w-[28%] bg-[#F7F7F7] overflow-y-auto p-5 dark:bg-[#2D2A2B]">
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragStart={(event) => setActiveId(String(event.active.id))}
-        onDragEnd={handleDragEnd}
-        modifiers={[restrictToParentElement, restrictToVerticalAxis]}
-      >
+    <div className="flex flex-col w-[27%] bg-[#F7F7F7] overflow-y-auto p-5 dark:bg-[#2D2A2B]">
         <div className="mb-6 flex gap-[14px]">
           <input
             type="text"
             placeholder="Search"
+            value={search}
+            onChange={(e)=>{setSearch(e.target.value)}}
             className="bg-white rounded-lg h-[40px] px-4 py-2 flex-1"
           />
           <button
@@ -97,6 +93,13 @@ export default function NotesList({
           </button>
         </div>
 
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={(event) => setActiveId(String(event.active.id))}
+          onDragEnd={handleDragEnd}
+          modifiers={[restrictToParentElement, restrictToVerticalAxis]}
+        >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
           <div className="flex flex-col gap-[20px]">
             {items.map((id) => {

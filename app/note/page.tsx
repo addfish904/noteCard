@@ -4,16 +4,23 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { addNote, deleteNote, getAllNotes, updateNote as updateNoteInFirestore } from "@/lib/firestore";
+import {
+  addNote,
+  deleteNote,
+  getAllNotes,
+  updateNote as updateNoteInFirestore,
+} from "@/lib/firestore";
 import Sidebar from "@/app/components/Sidebar";
 import NotesList from "@/app/components/NotesList";
 import Editor from "@/app/components/Editor";
 import { Note } from "@/types/note";
-
+import { getTags } from "@/lib/firestore";
+import { Tag } from "@/types/tag";
 
 export default function NotesPage() {
   const router = useRouter();
   const [notes, setNotes] = useState<Note[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [userUid, setUserUid] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -29,10 +36,15 @@ export default function NotesPage() {
         setUserEmail(user.email);
         setUserName(user.displayName);
         setUserAvatar(user.photoURL);
+        getTags(user.uid).then((fetchedTags) => {
+          setTags(fetchedTags);
+        });
 
         // 載入該使用者的 notes
         const allNotes = await getAllNotes();
-        const userNotes = allNotes.filter((note: any) => note.userId === user.uid);
+        const userNotes = allNotes.filter(
+          (note: any) => note.userId === user.uid
+        );
         const formattedNotes: Note[] = userNotes.map((note: any) => ({
           id: note.id,
           title: note.title,
@@ -55,24 +67,23 @@ export default function NotesPage() {
 
   const handleReorderNotes = async (newNotes: Note[]) => {
     setNotes(newNotes);
-  
+
     // 將每一筆 note 的 order 同步回 Firestore
     for (const note of newNotes) {
       await updateNoteInFirestore(note.id, { order: note.order });
     }
   };
 
-  
   // 刪除筆記
-  const handleDeleteNote = async ( id: string ) => {
+  const handleDeleteNote = async (id: string) => {
     try {
       await deleteNote(id);
-      const updateNote = notes.filter((note)=>note.id !==id);
-      setNotes(updateNote)
-    } catch(error) {
+      const updateNote = notes.filter((note) => note.id !== id);
+      setNotes(updateNote);
+    } catch (error) {
       console.error("刪除筆記時發生錯誤", error);
     }
-  }
+  };
 
   // 新增筆記
   const handleAddNote = async () => {
@@ -92,7 +103,7 @@ export default function NotesPage() {
       content: "輸入你的內容...",
       tag: "",
       updatedAt: new Date().toISOString().slice(0, 10),
-      order: 0
+      order: 0,
     };
 
     setNotes((prev) => [newNote, ...prev]);
@@ -132,6 +143,7 @@ export default function NotesPage() {
           userName={userName}
           userEmail={userEmail}
           userAvatar={userAvatar}
+          userId={userUid}
         />
         <NotesList
           notes={notes}
@@ -153,5 +165,3 @@ export default function NotesPage() {
     </div>
   );
 }
-
-

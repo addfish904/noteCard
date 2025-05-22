@@ -1,4 +1,3 @@
-// lib/firestore.ts
 import { db } from "@/lib/firebase";
 import {
   collection,
@@ -10,7 +9,10 @@ import {
   query,
   orderBy,
   Timestamp,
+  where
 } from "firebase/firestore";
+import { Tag } from "@/types/tag";
+
 
 const NOTES_COLLECTION = "notes";
 
@@ -47,4 +49,20 @@ export const getAllNotes = async () => {
   const q = query(collection(db, NOTES_COLLECTION), orderBy("order", "desc"));
   const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+
+
+export const getTags = async (userID: string) => {
+  const q = query(collection(db, "tags"), where("userID", "==", userID));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Tag[]; 
+};
+
+export const addTag = async (name: string, userId: string) => {
+  const tagRef = collection(db, "tags");
+  return await addDoc(tagRef, { name, userId });
 };
