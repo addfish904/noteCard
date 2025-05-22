@@ -12,6 +12,7 @@ interface SidebarProps {
   userEmail: string | null;
   userAvatar: string | null;
   userId: string | null;
+  tags: Tag[]; // 👈 從 page 傳入
 }
 
 const pages = ["Home", "Notes", "Calendar"];
@@ -27,13 +28,12 @@ export default function Sidebar({
   userEmail,
   userAvatar,
   userId,
+  tags,
 }: SidebarProps) {
   const [activePage, setActivePage] = useState("Notes");
   const [activeTagId, setActiveTagId] = useState<string | null>(null);
   const [newTagName, setNewTagName] = useState<string | null>(null);
-  const [localTags, setLocalTags] = useState<Tag[]>([]);
   const newTagInputRef = useRef<HTMLInputElement | null>(null);
-
 
   const handleNewTagKeyDown = async (
     e: React.KeyboardEvent<HTMLInputElement>
@@ -41,8 +41,8 @@ export default function Sidebar({
     if (e.key !== "Enter" || !newTagName?.trim() || !userId) return;
 
     try {
-      await addTag(newTagName.trim(), userId); // Firestore 自動觸發更新
-      setNewTagName(null); // 清除輸入欄
+      await addTag(newTagName.trim(), userId);
+      setNewTagName(null);
     } catch (err) {
       console.error("新增標籤失敗", err);
       alert("新增標籤失敗");
@@ -51,7 +51,7 @@ export default function Sidebar({
 
   useEffect(() => {
     if (newTagName === null) return;
-  
+
     const handleClickOutside = (e: MouseEvent) => {
       if (
         newTagInputRef.current &&
@@ -60,14 +60,13 @@ export default function Sidebar({
         setNewTagName(null);
       }
     };
-  
+
     document.addEventListener("mousedown", handleClickOutside);
-  
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [newTagName]);
-  
 
   return (
     <div className="w-[16%] flex flex-col">
@@ -114,8 +113,7 @@ export default function Sidebar({
       <div className="flex-1 py-5 px-3 border-t border-[var(--line)]">
         <p className="text-sm font-semibold mb-4 pl-2">TAGS</p>
         <div className="flex flex-col gap-2">
-          {/* 已有標籤 */}
-          {localTags.map((tag) => {
+          {tags.map((tag) => {
             const isActive = activeTagId === tag.id;
             return (
               <Button
@@ -135,7 +133,6 @@ export default function Sidebar({
               </Button>
             );
           })}
-          {/* 新增中的標籤輸入框 */}
           {newTagName !== null && (
             <div className="flex items-center gap-[10px] pl-5 pr-4 py-2">
               <img
@@ -163,12 +160,10 @@ export default function Sidebar({
             onClick={() => setNewTagName("")}
             className="mt-4 w-full text-gray-700 text-xs"
           >
-            + Add Tag
+            + 新增標籤
           </button>
         )}
       </div>
-
-      <ThemeToggle />
     </div>
   );
 }

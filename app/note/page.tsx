@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import {
   addNote,
@@ -14,8 +14,8 @@ import Sidebar from "@/app/components/Sidebar";
 import NotesList from "@/app/components/NotesList";
 import Editor from "@/app/components/Editor";
 import { Note } from "@/types/note";
-import { getTags } from "@/lib/firestore";
 import { Tag } from "@/types/tag";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 export default function NotesPage() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function NotesPage() {
   const [userAvatar, setUserAvatar] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
       if (!user) {
         router.push("/");
       } else {
@@ -36,15 +36,21 @@ export default function NotesPage() {
         setUserEmail(user.email);
         setUserName(user.displayName);
         setUserAvatar(user.photoURL);
-        getTags(user.uid).then((fetchedTags) => {
+
+        // 寫入 tag 監聽
+        const tagsRef = collection(db, "tags");
+        const q = query(tagsRef, where("userId", "==", user.uid));
+        const unsubscribeTags = onSnapshot(q, (snapshot) => {
+          const fetchedTags: Tag[] = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          })) as Tag[];
           setTags(fetchedTags);
         });
 
-        // 載入該使用者的 notes
+        // 載入 notes
         const allNotes = await getAllNotes();
-        const userNotes = allNotes.filter(
-          (note: any) => note.userId === user.uid
-        );
+        const userNotes = allNotes.filter((note: any) => note.userId === user.uid);
         const formattedNotes: Note[] = userNotes.map((note: any) => ({
           id: note.id,
           title: note.title,
@@ -57,24 +63,25 @@ export default function NotesPage() {
         if (formattedNotes.length > 0) {
           setSelectedNoteId(formattedNotes[0].id);
         }
+
+        return () => {
+          unsubscribeTags();
+        };
       }
     });
-    return () => unsubscribe();
+
+    return () => unsubscribeAuth();
   }, []);
 
-  // Notelist 選中的筆記
   const selectedNote = notes.find((note) => note.id === selectedNoteId);
 
   const handleReorderNotes = async (newNotes: Note[]) => {
     setNotes(newNotes);
-
-    // 將每一筆 note 的 order 同步回 Firestore
     for (const note of newNotes) {
       await updateNoteInFirestore(note.id, { order: note.order });
     }
   };
 
-  // 刪除筆記
   const handleDeleteNote = async (id: string) => {
     try {
       await deleteNote(id);
@@ -85,7 +92,6 @@ export default function NotesPage() {
     }
   };
 
-  // 新增筆記
   const handleAddNote = async () => {
     if (!userUid) return;
 
@@ -98,7 +104,7 @@ export default function NotesPage() {
     });
 
     const newNote: Note = {
-      id: docRef.id, // Firestore 自動產生的 ID
+      id: docRef.id,
       title: "Untitled Note",
       content: "輸入你的內容...",
       tag: "",
@@ -110,7 +116,6 @@ export default function NotesPage() {
     setSelectedNoteId(newNote.id);
   };
 
-  // 更新筆記
   const updateNote = async (
     id: string,
     updatedFields: Partial<Pick<Note, "title" | "content">>
@@ -128,7 +133,7 @@ export default function NotesPage() {
 
     const noteToUpdate = updatedNotes.find((n) => n.id === id);
     if (noteToUpdate) {
-      await updateNoteInFirestore(noteToUpdate.id.toString(), {
+      await updateNoteInFirestore(noteToUpdate.id, {
         title: noteToUpdate.title,
         content: noteToUpdate.content,
       });
@@ -144,13 +149,14 @@ export default function NotesPage() {
           userEmail={userEmail}
           userAvatar={userAvatar}
           userId={userUid}
+          tags={tags}
         />
         <NotesList
           notes={notes}
           selectedId={selectedNoteId}
           onSelect={(id: string) => setSelectedNoteId(id)}
           onAddNote={handleAddNote}
-          onDelete={(id: string) => handleDeleteNote(id)}
+          onDelete={handleDeleteNote}
           onReorder={handleReorderNotes}
         />
         {selectedNote && (

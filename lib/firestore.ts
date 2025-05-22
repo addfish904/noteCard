@@ -62,6 +62,7 @@ export const getTags = async (userID: string) => {
   })) as Tag[]; 
 };
 
+//新增標籤
 export const addTag = async (name: string, userId: string) => {
   const tagRef = collection(db, "tags");
   return await addDoc(tagRef, { name, userId });
