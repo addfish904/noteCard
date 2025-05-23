@@ -53,6 +53,7 @@ export const getAllNotes = async () => {
 
 
 
+
 export const getTags = async (userID: string) => {
   const q = query(collection(db, "tags"), where("userID", "==", userID));
   const snapshot = await getDocs(q);
@@ -63,7 +64,24 @@ export const getTags = async (userID: string) => {
 };
 
 //新增標籤
-export const addTag = async (name: string, userId: string) => {
+export const addTag = async (name: string, color: string, userId: string) => {
   const tagRef = collection(db, "tags");
-  return await addDoc(tagRef, { name, userId });
+  return await addDoc(tagRef, { name, color, userId });
 };
+
+// 轉換時間格式
+export function formatNoteDate(timestampOrString: Timestamp | string): string {
+  let date: Date;
+
+  if (typeof timestampOrString === 'string') {
+    date = new Date(timestampOrString); // 將 ISO 字串轉成 Date
+  } else {
+    date = timestampOrString.toDate(); // Firebase Timestamp 轉 Date
+  }
+
+  const day = date.getDate();
+  const month = date.toLocaleString('en-US', { month: 'long' });
+  const year = date.getFullYear();
+
+  return `${day}, ${month} ${year}`;
+}

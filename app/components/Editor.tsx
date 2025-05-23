@@ -12,14 +12,19 @@ import { commonmark } from "@milkdown/kit/preset/commonmark";
 import { nord } from "@milkdown/theme-nord";
 import { getMarkdown } from "@milkdown/utils";
 import { tooltip, TooltipView } from "./Tooltip";
+import { Tag } from "@/types/tag";
+import { formatNoteDate } from "@/lib/firestore";
 
 interface EditorProps {
   note: Note;
   onUpdate: (updatedFields: Partial<Pick<Note, "title" | "content">>) => void;
+  tags: Tag[];
 }
 
-export default function Editor({ note, onUpdate }: EditorProps) {
+export default function Editor({ note, onUpdate, tags }: EditorProps) {
   const editorRef = useRef<MdEditor | null>(null);
+  const tag = tags.find(t => t.id === note.tagId);
+
 
   const handleChange =
     (field: "title") => (e: ChangeEvent<HTMLInputElement>) => {
@@ -51,17 +56,18 @@ export default function Editor({ note, onUpdate }: EditorProps) {
 
     return <Milkdown />;
   };
-
+  
   return (
     <div className="w-[57%] flex flex-col">
-      <div className="border-b border-[var(--line)] px-20 py-3">
-        {note.updatedAt}
+      <div className="flex justify-between border-b border-[var(--line)] px-20 py-3 text-xs">
+        <span>{tag?.name} / {note.title}</span>
+        <span className="text-[#808080] dark:text-white">{formatNoteDate(note.updatedAt)}</span>
       </div>
-      <div className="flex-1 py-3 px-20 prose">
+      <div className="flex-1 pt-4 pb-3 px-20">
         <input
           value={note.title}
           onChange={handleChange("title")}
-          className="w-full text-[34px] font-bold border-b border-[var(--line)] pb-3 mb-[30px]"
+          className="w-full text-[34px] font-bold border-b border-[var(--line)] pb-3 mb-[30px] dark:text-white"
           placeholder="請輸入標題"
         />
         <MilkdownProvider>
