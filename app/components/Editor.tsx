@@ -58,7 +58,7 @@ export default function Editor({ note, onUpdate, tags }: EditorProps) {
   };
   
   return (
-    <div className="w-[57%] flex flex-col">
+    <div className="w-[70%] flex flex-col">
       <div className="flex justify-between border-b border-[var(--line)] px-20 py-3 text-xs">
         <span>{tag?.name} / {note.title}</span>
         <span className="text-[#808080] dark:text-white">{formatNoteDate(note.updatedAt)}</span>

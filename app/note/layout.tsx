@@ -48,9 +48,9 @@ export default function NotesLayout({ children }: { children: ReactNode }) {
 
   return (
     <TagContext.Provider value={{ tags }}>
-      <div className="flex flex-col h-screen overflow-hidden">
+      <div className="flex flex-col">
         <header className="h-[40px] border-b border-[var(--line)] shrink-0"></header>
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1">
           <Sidebar
             userName={userName}
             userEmail={userEmail}
@@ -58,7 +58,7 @@ export default function NotesLayout({ children }: { children: ReactNode }) {
             userId={userUid}
             tags={tags}
           />
-          <div className="flex-1 overflow-hidden">{children}</div>
+          <div className="flex-1">{children}</div>
         </div>
       </div>
     </TagContext.Provider>

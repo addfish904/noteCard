@@ -12,6 +12,8 @@ import {
   where
 } from "firebase/firestore";
 import { Tag } from "@/types/tag";
+import { auth } from './firebase';
+import { signOut } from "firebase/auth";
 
 
 const NOTES_COLLECTION = "notes";
@@ -84,4 +86,14 @@ export function formatNoteDate(timestampOrString: Timestamp | string): string {
   const year = date.getFullYear();
 
   return `${day}, ${month} ${year}`;
+}
+
+//登出
+export async function logout() {
+  try {
+    await signOut(auth);
+    console.log("使用者已登出");
+  } catch (error) {
+    console.error("登出失敗", error);
+  }
 }

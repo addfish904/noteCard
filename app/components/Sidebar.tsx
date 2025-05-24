@@ -5,8 +5,9 @@ import Button from "./ui/notes/Button";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
 import { Tag } from "@/types/tag";
-import { addTag } from "@/lib/firestore";
+import { addTag, logout as userLogout } from "@/lib/firestore";
 import { useRouter, usePathname } from "next/navigation";
+import { LogOut } from 'lucide-react';
 
 interface SidebarProps {
   userName: string | null;
@@ -36,7 +37,6 @@ export default function Sidebar({
   userId,
   tags,
 }: SidebarProps) {
-  const [activePage, setActivePage] = useState("Notes");
   const [activeTagId, setActiveTagId] = useState<string | null>(null);
   const [newTagName, setNewTagName] = useState<string | null>(null);
   const newTagInputRef = useRef<HTMLInputElement | null>(null);
@@ -59,6 +59,11 @@ export default function Sidebar({
       console.error("新增標籤失敗", err);
       alert("新增標籤失敗");
     }
+  };
+
+  const handleLogout = async () => {
+    await userLogout();
+    router.push("/");
   };
 
   useEffect(() => {
@@ -99,27 +104,6 @@ export default function Sidebar({
 
       {/* 功能選單 */}
       <div className="flex flex-col gap-2 px-2 py-5 border-t border-[var(--line)]">
-        {/* {pages.map((page) => {
-          const iconSrc = iconMap[page];
-          const isActive = activePage === page;
-          return (
-            <Button
-              key={page}
-              variant={isActive ? "active" : "default"}
-              onClick={() => setActivePage(page)}
-              className="flex items-center gap-[22px] group"
-            >
-              <img
-                src={iconSrc}
-                className={cn(
-                  "w-[22px] h-[22px] transition-all filter",
-                  isActive ? "invert-0" : "invert-[0.4] group-hover:invert-0"
-                )}
-              />
-              {page}
-            </Button>
-          );
-        })} */}
         {pages.map((page) => {
         const iconSrc = iconMap[page];
         const targetPath = pagePathMap[page];
@@ -221,13 +205,13 @@ export default function Sidebar({
       </div>
 
       {/* 設定/登出 */}
-      <div className="flex flex-col py-5 px-3 border-t border-[var(--line)]">
+      <div className="flex flex-col gap-2 py-5 px-3 border-t border-[var(--line)]">
         <button
           key="setting"
           className="inline-flex items-center justify-start gap-[20px] rounded-md pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white"
         >
           <img
-            src="/icons/tag.svg"
+            src="/icons/Settings.svg"
             className="w-[22px] h-[22px] transition-all filter"
           />
           <span className="text-sm text-gray-600 hover:underline cursor-pointer dark:text-white">
@@ -236,12 +220,10 @@ export default function Sidebar({
         </button>
         <button
           key="logout"
+          onClick={handleLogout}
           className="inline-flex items-center justify-start gap-[20px] rounded-md pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white"
         >
-          <img
-            src="/icons/tag.svg"
-            className="w-[22px] h-[22px] transition-all filter"
-          />
+          <LogOut className="w-[20px] h-[20px] text-[#767676]"/>
           <span className="text-sm text-gray-600 hover:underline cursor-pointer dark:text-white">
             登出
           </span>
