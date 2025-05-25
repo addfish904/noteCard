@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { getAllNotes, deleteNote, addNote, updateNote as updateNoteInFirestore } from "@/lib/firestore";
-import NotesList from "@/app/components/NotesList";
-import Editor from "@/app/components/Editor";
+import NotesList from "@/app/components/note/NotesList";
+import Editor from "@/app/components/note/Editor";
 import { Note } from "@/types/note";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
@@ -31,6 +31,7 @@ export default function NotesPage() {
           tagId: note.tagId || "",
           updatedAt: note.updatedAt.toDate().toISOString().slice(0, 10),
           order: note.order ?? 0,
+          userId: user.uid,
         }));
         setNotes(formattedNotes);
         if (formattedNotes.length > 0) {
@@ -72,6 +73,7 @@ export default function NotesPage() {
       tagId: "",
       updatedAt: new Date().toISOString().slice(0, 10),
       order: 0,
+      userId: userUid,
     };
     setNotes((prev) => [newNote, ...prev]);
     setSelectedNoteId(newNote.id);

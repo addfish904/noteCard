@@ -139,3 +139,35 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.react-grid-layout {
+  @apply relative transition-[height] duration-200 ease-in-out;
+
+  .react-grid-item {
+    @apply transition-[left,_top,_width,_height] delay-0 duration-500 ease-in-out;
+
+    img {
+      @apply pointer-events-none select-none;
+    }
+
+    &.rezising {
+      @apply z-1 transition-none will-change-[width,_height];
+    }
+
+    &.react-draggable-dragging {
+      @apply z-3 transition-none will-change-transform;
+    }
+
+    &.dropping {
+      @apply invisible;
+    }
+
+    &.react-grid-placeholder {
+      @apply z-2 rounded-3xl bg-black opacity-5 duration-100 select-none;
+
+      html.dark & {
+        @apply bg-white opacity-5;
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Button from "./ui/notes/Button";
+import Button from "./Button";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
 import { Tag } from "@/types/tag";

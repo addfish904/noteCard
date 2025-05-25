@@ -14,6 +14,7 @@ import {
 import { Tag } from "@/types/tag";
 import { auth } from './firebase';
 import { signOut } from "firebase/auth";
+import { Note } from "@/types/note";
 
 
 const NOTES_COLLECTION = "notes";
@@ -50,7 +51,13 @@ export const deleteNote = async (id: string) => {
 export const getAllNotes = async () => {
   const q = query(collection(db, NOTES_COLLECTION), orderBy("order", "desc"));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  return snapshot.docs.map((doc) => {
+    const data = doc.data() as Omit<Note, "id">;  // 斷言 doc.data() 是 Note 除了 id 的部分
+    return {
+      id: doc.id,
+      ...data,
+    };
+  });
 };
 
 

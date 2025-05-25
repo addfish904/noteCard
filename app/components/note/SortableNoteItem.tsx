@@ -1,7 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Note } from "@/types/note";
-import NoteCard from "./ui/notes/NoteCard";
+import NoteCard from "./NoteCard";
 import { Tag } from "@/types/tag";
 
 

@@ -5,4 +5,5 @@ export interface Note {
     tagId: string;
     updatedAt: string;
     order: number; 
+    userId: string;
   }

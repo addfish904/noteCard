@@ -6,7 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { Tag } from "@/types/tag";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import Sidebar from "@/app/components/Sidebar";
+import Sidebar from "@/app/components/note/Sidebar";
 import { TagContext } from "@/app/context/TagContext";
 
 export default function NotesLayout({ children }: { children: ReactNode }) {

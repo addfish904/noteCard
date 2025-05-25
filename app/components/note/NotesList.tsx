@@ -17,7 +17,7 @@ import {
 } from "@dnd-kit/modifiers";
 import { useEffect, useState } from "react";
 import { Note } from "@/types/note";
-import NoteCard from "./ui/notes/NoteCard";
+import NoteCard from "./NoteCard";
 import { SortableNoteItem } from "./SortableNoteItem";
 import { Tag } from "@/types/tag";
 import { Plus } from "lucide-react";
