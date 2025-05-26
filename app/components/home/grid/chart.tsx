@@ -1,10 +1,18 @@
 "use client";
 
-import { Line } from "react-chartjs-2";
-import { CategoryScale, Chart as ChartJS, LineElement, LinearScale, PointElement, Title, Tooltip } from "chart.js";
+import { Bar } from "react-chartjs-2";
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+} from "chart.js";
 import { MonthlyNoteCount } from "@/lib/utils";
+import Card from "../ui/card";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
 export default function Chart({ data }: { data: MonthlyNoteCount[] }) {
   const chartData = {
@@ -13,10 +21,9 @@ export default function Chart({ data }: { data: MonthlyNoteCount[] }) {
       {
         label: "每月筆記數量",
         data: data.map((item) => item.count),
-        borderColor: "#4f46e5", // Tailwind indigo-600
-        backgroundColor: "rgba(99, 102, 241, 0.1)",
-        tension: 0.3,
-        fill: true,
+        backgroundColor: "rgba(79,71,230,70%)",
+        borderRadius: 8, 
+        barThickness: 30,
       },
     ],
   };
@@ -40,8 +47,9 @@ export default function Chart({ data }: { data: MonthlyNoteCount[] }) {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto mt-6">
-      <Line data={chartData} options={options} />
-    </div>
+    <Card className="w-full max-w-3xl mx-auto p-4">
+      <h3>每月筆記</h3>
+      <Bar data={chartData} options={options} />
+    </Card>
   );
 }

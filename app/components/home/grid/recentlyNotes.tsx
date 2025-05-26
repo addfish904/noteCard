@@ -15,7 +15,7 @@ export default function RecentlyNotes({
 }: RecentlyNotesProps) {
   return (
     <Card className="p-6">
-      <h2 className="text-base mb-1">✏️ 最近筆記</h2>
+      <h2 className="text-base mb-1">最近筆記 ✏️</h2>
       {latestNotes.length === 0 ? (
         <p>No notes.</p>
       ) : (
@@ -28,7 +28,7 @@ export default function RecentlyNotes({
               <li 
                 key={note.id} 
                 className={`flex flex-col gap-2 py-4 ${
-                  !isLast ? "border-b border-gray-300 mb-2" : ""
+                  !isLast ? "cancel-drag border-b border-gray-300 mb-2 p-2 rounded hover:bg-[#FFFAF4]" : ""
               }`}>
                 <h3 className="font-semibold mb-2">{note.title}</h3>
                 <p className="text-xs text-gray-500">
@@ -50,7 +50,7 @@ export default function RecentlyNotes({
                       {tag.name}
                     </span>
                   ) : (
-                    <span className="text-gray-400 italic">無標籤</span>
+                    <span></span>
                   )}
                 </div>
               </li>

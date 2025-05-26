@@ -12,7 +12,7 @@ export default function Card({ className, children, ...props }: Readonly<CardPro
                 {...props}
                 className={cn(
                     'size-full overflow-hidden rounded-3xl',
-                    'bg-white dark:bg-dark-900',
+                    'bg-white dark:bg-[var(--black)]',
                     'select-none md:cursor-grab md:active:cursor-grabbing',
                     'dark:ring-1 dark:ring-dark-800',
                     className

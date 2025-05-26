@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import Button from "./Button";
 import { cn } from "@/lib/utils";
-import ThemeToggle from "./ThemeToggle";
 import { Tag } from "@/types/tag";
 import { addTag, logout as userLogout } from "@/lib/firestore";
 import { useRouter, usePathname } from "next/navigation";
@@ -88,7 +87,7 @@ export default function Sidebar({
   }, [newTagName]);
 
   return (
-    <div className="w-[18%] flex flex-col">
+    <div className="w-[18%] flex flex-col bg-white dark:bg-black">
       {/* 使用者資料 */}
       <div className="flex items-center justify-start gap-[16px] px-5 py-4">
         <img
@@ -130,7 +129,7 @@ export default function Sidebar({
       </div>
 
       {/* 標籤欄 */}
-      <div className="flex-1 py-5 px-3 border-t border-[var(--line)]">
+      <div className="py-5 px-3 border-t border-[var(--line)]">
         <p className="text-sm font-semibold mb-4 pl-2">TAGS</p>
         <div className="flex flex-col gap-2">
           {tags.map((tag) => {
@@ -229,7 +228,6 @@ export default function Sidebar({
           </span>
         </button>
       </div>
-      <ThemeToggle />
     </div>
   );
 }

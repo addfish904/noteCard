@@ -23,7 +23,7 @@ export function groupNotesByMonth(notes: Note[]): MonthlyNoteCount[] {
   });
 
   const sortedMonths = Array.from(monthMap.entries())
-    .sort((a, b) => a[0].localeCompare(b[0])) // 按時間排序
+    .sort((a, b) => a[0].localeCompare(b[0]))
     .map(([month, count]) => ({ month, count }));
 
   return sortedMonths;

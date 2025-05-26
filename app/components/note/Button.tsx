@@ -10,9 +10,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         className={cn(
-          "inline-flex items-center justify-start gap-[20px] rounded-md pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white",
+          "inline-flex items-center justify-start gap-[20px] rounded-md pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black hover:bg-[#FAF9FD] dark:text-white",
           variant === "active" &&
-          "bg-[var(--color-secondary)] hover:bg-[var(--color-secondary)] text-black font-semibold",
+          "bg-[var(--color-secondary)] text-black font-semibold",
           
           variant === "default" &&
           "bg-transparent text-gray-600 font-normal",

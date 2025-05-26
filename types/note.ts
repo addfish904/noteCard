@@ -3,7 +3,7 @@ export interface Note {
     title: string;
     content: string;
     tagId: string;
-    updatedAt: string;
+    updatedAt: Date,
     order: number; 
     userId: string;
   }

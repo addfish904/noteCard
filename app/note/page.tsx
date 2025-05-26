@@ -22,14 +22,13 @@ export default function NotesPage() {
       if (user) {
         setUserUid(user.uid);
 
-        const allNotes = await getAllNotes();
-        const userNotes = allNotes.filter((n: any) => n.userId === user.uid);
-        const formattedNotes: Note[] = userNotes.map((note: any) => ({
+        const allNotes = await getAllNotes(user.uid);
+        const formattedNotes: Note[] = allNotes.map((note: any) => ({
           id: note.id,
           title: note.title,
           content: note.content,
           tagId: note.tagId || "",
-          updatedAt: note.updatedAt.toDate().toISOString().slice(0, 10),
+          updatedAt: note.updatedAt,
           order: note.order ?? 0,
           userId: user.uid,
         }));
@@ -45,12 +44,19 @@ export default function NotesPage() {
 
   const selectedNote = notes.find((note) => note.id === selectedNoteId);
 
-  const handleReorderNotes = async (newNotes: Note[]) => {
-    setNotes(newNotes);
-    for (const note of newNotes) {
-      await updateNoteInFirestore(note.id, { order: note.order });
-    }
-  };
+const handleReorderNotes = async (newNotes: Note[]) => {
+  const reorderedNotes = newNotes.map((note, index) => ({
+    ...note,
+    order: index,
+  }));
+
+  setNotes(reorderedNotes);
+
+  for (const note of reorderedNotes) {
+    await updateNoteInFirestore(note.id, { order: note.order });
+  }
+};
+
 
   const handleDeleteNote = async (id: string) => {
     await deleteNote(id);
@@ -59,19 +65,20 @@ export default function NotesPage() {
 
   const handleAddNote = async () => {
     if (!userUid) return;
+    const maxOrder = notes.length > 0 ? Math.max(...notes.map(n => n.order)) : 0;
     const docRef = await addNote({
       title: "Untitled Note",
       content: "",
       tags: [],
       userId: userUid,
-      order: 0,
+      order: maxOrder + 1,
     });
     const newNote: Note = {
       id: docRef.id,
       title: "Untitled Note",
       content: "輸入你的內容...",
       tagId: "",
-      updatedAt: new Date().toISOString().slice(0, 10),
+      updatedAt: new Date(),
       order: 0,
       userId: userUid,
     };
@@ -83,9 +90,10 @@ export default function NotesPage() {
     id: string,
     updatedFields: Partial<Pick<Note, "title" | "content" | "tagId">>
   ) => {
+    const updatedAt = new Date();
     const updatedNotes = notes.map((note) =>
       note.id === id
-        ? { ...note, ...updatedFields, updatedAt: new Date().toISOString().slice(0, 10) }
+        ? { ...note, ...updatedFields, updatedAt }
         : note
     );
     setNotes(updatedNotes);
@@ -96,6 +104,7 @@ export default function NotesPage() {
         title: noteToUpdate.title,
         content: noteToUpdate.content,
         tagId: noteToUpdate.tagId,
+        updatedAt,
       });
     }
   };
@@ -105,7 +114,7 @@ export default function NotesPage() {
   };
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-screen">
       <NotesList
         notes={notes}
         selectedId={selectedNoteId}

@@ -31,7 +31,6 @@ export const addNote = async (data: {
       ...data,
       createdAt: now,
       updatedAt: now,
-      order: 0
     });
   };
   
@@ -40,7 +39,6 @@ export const updateNote = async (id: string, data: Partial<any>) => {
   return await updateDoc(noteRef, {
     ...data,
     updatedAt: Timestamp.now(),
-    order: 0
   });
 };
 
@@ -48,23 +46,27 @@ export const deleteNote = async (id: string) => {
   return await deleteDoc(doc(db, NOTES_COLLECTION, id));
 };
 
-export const getAllNotes = async () => {
-  const q = query(collection(db, NOTES_COLLECTION), orderBy("order", "desc"));
+
+export const getAllNotes = async (userId: string) => {
+  const q = query(
+    collection(db, NOTES_COLLECTION),
+    where("userId", "==", userId),
+    orderBy("order", "asc")
+  );
   const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => {
-    const data = doc.data() as Omit<Note, "id">;  // 斷言 doc.data() 是 Note 除了 id 的部分
+    const data = doc.data() as Omit<Note, "id">& { updatedAt: Timestamp };
     return {
       id: doc.id,
       ...data,
+      updatedAt: data.updatedAt.toDate(),
     };
   });
 };
 
 
-
-
-export const getTags = async (userID: string) => {
-  const q = query(collection(db, "tags"), where("userID", "==", userID));
+export const getTags = async (userId: string) => {
+  const q = query(collection(db, "tags"), where("userID", "==", userId));
   const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => ({
     id: doc.id,
@@ -79,17 +81,21 @@ export const addTag = async (name: string, color: string, userId: string) => {
 };
 
 // 轉換時間格式
-export function formatNoteDate(timestampOrString: Timestamp | string): string {
+export function formatNoteDate(input: Date | string | Timestamp): string {
   let date: Date;
 
-  if (typeof timestampOrString === 'string') {
-    date = new Date(timestampOrString); // 將 ISO 字串轉成 Date
+  if (input instanceof Timestamp) {
+    date = input.toDate();
+  } else if (typeof input === "string") {
+    date = new Date(input);
   } else {
-    date = timestampOrString.toDate(); // Firebase Timestamp 轉 Date
+    date = input; // 假設是 Date
   }
 
+  if (isNaN(date.getTime())) return ""; // 無效日期安全處理
+
   const day = date.getDate();
-  const month = date.toLocaleString('en-US', { month: 'long' });
+  const month = date.toLocaleString("en-US", { month: "long" });
   const year = date.getFullYear();
 
   return `${day}, ${month} ${year}`;

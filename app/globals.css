@@ -15,7 +15,7 @@
 :root {
   --color-secondary: #f5f4fa;
   --color-primary: #14133d;
-  --black: #222628;
+  --black: #1a1a1a;
   --gray: #767676;
   --line: #cdcdcd;
   --card-outline: #8384c9;
@@ -58,7 +58,7 @@ body {
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: #151515;
   --foreground: oklch(0.985 0 0);
   --color-secondary: #2d2a2b;
   --gray: #ffffff;
