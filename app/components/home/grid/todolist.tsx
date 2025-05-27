@@ -1,76 +1,129 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Card from '../ui/card';
+import { useEffect, useState } from "react";
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+  orderBy,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import Card from "../ui/card";
 
 interface Todo {
-  id: number;
+  id: string;
   text: string;
   completed: boolean;
+  createdAt: Date;
 }
 
-export default function TodoList() {
+interface Props {
+  userUid: string | null;
+}
+
+export default function Todolist({ userUid }: Props) {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
 
-  const addTodo = () => {
-    if (input.trim() === '') return;
-    const newTodo: Todo = {
-      id: Date.now(),
-      text: input,
+  useEffect(() => {
+    if (!userUid) return;
+
+    const q = query(
+      collection(db, "todos"),
+      where("userId", "==", userUid),
+      orderBy("createdAt", "desc")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedTodos: Todo[] = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          text: data.text,
+          completed: data.completed,
+          createdAt: data.createdAt?.toDate(),
+        };
+      });
+
+      setTodos(fetchedTodos);
+    });
+
+    return () => unsubscribe();
+  }, [userUid]);
+
+  const handleAddTodo = async () => {
+    if (!input.trim()) return;
+
+    await addDoc(collection(db, "todos"), {
+      text: input.trim(),
       completed: false,
-    };
-    setTodos([newTodo, ...todos]);
-    setInput('');
+      createdAt: new Date(),
+      userId: userUid,
+    });
+
+    console.log(todos)
+    setInput("");
   };
 
-  const toggleTodo = (id: number) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
+  const handleToggleCompleted = async (id: string, current: boolean) => {
+    await updateDoc(doc(db, "todos", id), {
+      completed: !current,
+    });
   };
 
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+  const handleDelete = async (id: string) => {
+    await deleteDoc(doc(db, "todos", id));
   };
 
   return (
-    <Card className="p-6 bg-white">
-      <h1 className="text-2xl font-bold mb-4 text-center">My Todo List</h1>
+    <Card className="p-6">
+      <h2 className="text-xl font-bold mb-4">Todolist ✅</h2>
 
-      <div className="flex mb-4 cancel-drag">
+      <div className="cancel-drag flex items-center mb-4 h-[40px]">
         <input
           type="text"
           value={input}
-          onChange={e => setInput(e.target.value)}
-          className="flex-grow w-full px-4 py-2 border rounded-l-xl bg-white focus:ring-2 focus:ring-blue-400"
-          placeholder="Add a new task"
+          onChange={(e) => setInput(e.target.value)}
+          className="flex-grow w-full h-full px-4 py-2 border rounded-l-md border-gray-300 dark:bg-zinc-700 dark:text-white"
+          placeholder="新增待辦事項"
         />
         <button
-          onClick={addTodo}
-          className="bg-[var(--color-primary)] text-white px-3 py-2 rounded-r-xl hover:bg-blue-600"
+          onClick={handleAddTodo}
+          className="bg-[var(--color-primary)] text-white rounded-r-md text-lg h-full px-3 dark:bg-[#D9F275] dark:text-black"
         >
-          +
+          ＋
         </button>
       </div>
 
-      <ul className="space-y-2 cancel-drag">
-        {todos.map(todo => (
+      <ul className="cancel-drag space-y-2">
+        {todos.map((todo) => (
           <li
             key={todo.id}
-            className="flex justify-between items-center bg-gray-100 px-4 py-2 rounded-xl"
+            className="flex items-center justify-between bg-gray-100 dark:bg-zinc-700 px-4 py-2 rounded-md"
           >
-            <span
-              className={`flex-1 cursor-pointer ${
-                todo.completed ? 'line-through text-gray-400' : ''
-              }`}
-              onClick={() => toggleTodo(todo.id)}
-            >
-              {todo.text}
-            </span>
+            <div className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => handleToggleCompleted(todo.id, todo.completed)}
+                className="w-4 h-4 accent-[var(--color-primary)] cursor-pointer"
+              />
+              <span
+                className={`${
+                  todo.completed ? "line-through text-gray-500" : ""
+                } dark:text-white`}
+              >
+                {todo.text}
+              </span>
+            </div>
             <button
-              onClick={() => deleteTodo(todo.id)}
-              className="text-red-500 hover:text-red-700"
+              onClick={() => handleDelete(todo.id)}
+              className="text-sm text-red-500 cursor-pointer"
             >
               ✕
             </button>

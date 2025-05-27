@@ -8,11 +8,13 @@ import { Note } from "@/types/note";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useTags } from "@/app/context/TagContext";
+import { useSelectedTag } from "@/app/context/SelectedTagContext";
 
 export default function NotesPage() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [userUid, setUserUid] = useState<string | null>(null);
+  const { selectedTagId } = useSelectedTag();
   
   // 取得全域tags
   const { tags } = useTags();
@@ -124,6 +126,7 @@ const handleReorderNotes = async (newNotes: Note[]) => {
         onReorder={handleReorderNotes}
         onUpdateTag={handleUpdateTag}
         tags={tags}
+        selectedTagId={selectedTagId} 
       />
       {selectedNote && (
         <Editor

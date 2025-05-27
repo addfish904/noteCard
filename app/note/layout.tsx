@@ -8,6 +8,7 @@ import { Tag } from "@/types/tag";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import Sidebar from "@/app/components/note/Sidebar";
 import { TagContext } from "@/app/context/TagContext";
+import { SelectedTagProvider } from "@/app/context/SelectedTagContext";
 
 export default function NotesLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -48,6 +49,7 @@ export default function NotesLayout({ children }: { children: ReactNode }) {
 
   return (
     <TagContext.Provider value={{ tags }}>
+      <SelectedTagProvider>
       <div className="flex flex-col">
         <header className="h-[40px] border-b border-[var(--line)] shrink-0"></header>
         <div className="flex flex-1">
@@ -61,6 +63,7 @@ export default function NotesLayout({ children }: { children: ReactNode }) {
           <div className="flex-1">{children}</div>
         </div>
       </div>
+      </SelectedTagProvider>
     </TagContext.Provider>
   );
 }

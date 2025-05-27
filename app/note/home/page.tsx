@@ -17,6 +17,7 @@ import Thread from "@/app/components/home/grid/thread";
 import Chart from "@/app/components/home/grid/chart";
 import Todolist from "@/app/components/home/grid/todolist";
 import Theme from "@/app/components/home/grid/theme";
+import QuickStartGuide from "@/app/components/home/grid/QuickStartGuide";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 interface GridItem {
@@ -31,6 +32,7 @@ export const gridItems: GridItem[] = [
   { i: "chart" },
   { i: "todolist" },
   { i: "theme" },
+  { i: "quickStart" },
 ];
 
 export const layouts = {
@@ -41,7 +43,8 @@ export const layouts = {
     { i: "thread", x: 2, y: 4, w: 2, h: 4 },
     { i: "chart", x: 2, y: 8, w: 4, h: 4 },
     { i: "todolist", x: 7, y: 8, w: 2, h: 8 },
-    { i: "theme", x: 7, y: 0, w: 2, h: 4 },
+    { i: "theme", x: 0, y: 8, w: 2, h: 4 },
+    { i: "quickStart", x: 7, y: 0, w: 2, h: 4 },
   ],
 };
 
@@ -49,11 +52,13 @@ export default function HomePage() {
   const [latestNotes, setLatestNotes] = useState<Note[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [chartData, setChartData] = useState<MonthlyNoteCount[]>([]);
+  const [userUid, setUserUid] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const allNotes = await getAllNotes(user.uid);
+        setUserUid(user.uid)
         setChartData(groupNotesByMonth(allNotes));
 
         const sortedNotes = allNotes
@@ -88,7 +93,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F7F7F7] px-4 py-8 dark:bg-[var(--background)]">
+    <div className="flex flex-col min-h-screen bg-[#F2F2F2] px-4 py-6 dark:bg-[var(--background)]">
       <div className="flex items-center justify-between mb-3">
         <h1 className="text-3xl font-bold pl-4">Welcome back! 🔮</h1>
         <button className="bg-[var(--color-primary)] text-white rounded-[8px] px-4 py-3 cursor-pointer">+ New Note</button>
@@ -112,7 +117,9 @@ export default function HomePage() {
             <Calendar />
           </div>
           <div key="recentlyNotes">
-            <RecentlyNotes latestNotes={latestNotes} tags={tags} />
+            <RecentlyNotes 
+              latestNotes={latestNotes} 
+              tags={tags}/>
           </div>
           <div key="thread">
             <Thread />
@@ -121,10 +128,13 @@ export default function HomePage() {
             <Chart data={chartData}/>
           </div>
           <div key="todolist">
-            <Todolist />
+            <Todolist userUid={userUid}/>
           </div>
           <div key="theme">
             <Theme />
+          </div>
+          <div key="quickStart">
+            <QuickStartGuide />
           </div>
         </ResponsiveGridLayout>
       </main>

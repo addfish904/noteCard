@@ -41,7 +41,7 @@ export default function CustomCalendar() {
     <Card className="p-4 flex flex-col justify-end">
 
       {/* 星期列 */}
-      <div className="grid grid-cols-7 text-xs text-center text-gray-500 font-medium uppercase mb-2">
+      <div className="grid grid-cols-7 text-xs text-center text-gray-500 font-medium uppercase mb-2 dark:text-gray-300">
         {WEEK_DAYS.map((day) => (
           <div key={day}>{day}</div>
         ))}
@@ -55,7 +55,7 @@ export default function CustomCalendar() {
             className={clsx(
               "aspect-square rounded-md flex items-center justify-center",
               day
-                ? "text-gray-700 cursor-pointer hover:bg-gray-100"
+                ? "text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-gray-200"
                 : ""
             )}
           >
@@ -63,7 +63,7 @@ export default function CustomCalendar() {
               <span
                 className={clsx(
                   "inline-block w-7 h-7 leading-7 rounded-full",
-                  isThisMonth && day === todayDate ? "bg-blue-500 text-white" : ""
+                  isThisMonth && day === todayDate ? "bg-[#D9F273] text-black" : ""
                 )}
               >
                 {day}

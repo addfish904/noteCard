@@ -31,6 +31,7 @@ interface NotesListProps {
   onReorder: (newNotes: Note[]) => void;
   onUpdateTag: (noteId: string, tagId: string) => void;
   tags: Tag[];
+  selectedTagId: string | null;
 }
 
 export default function NotesList({
@@ -41,7 +42,8 @@ export default function NotesList({
   onDelete,
   onReorder,
   onUpdateTag,
-  tags
+  tags,
+  selectedTagId
 }: NotesListProps) {
   const [items, setItems] = useState<string[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null); // 拖曳中的卡片 ID
@@ -79,16 +81,29 @@ export default function NotesList({
 
     onReorder(newNotes);
   };
-
   const filteredItems = items.filter((id) => {
     const note = notes.find((n) => n.id === id);
     if (!note) return false;
-    return note.title.toLowerCase().includes(search.toLowerCase());
+  
+    const hasSearch = search.trim() !== "";
+    const hasTag = selectedTagId !== null;
+    const matchesSearch = note.title.toLowerCase().includes(search.toLowerCase());
+    const matchesTag = note.tagId === selectedTagId;
+  
+    // 沒搜尋也沒選標籤 → 顯示所有筆記
+    if (!hasSearch && !hasTag) return true;
+  
+    // 有搜尋 → 忽略標籤，只搜尋關鍵字
+    if (hasSearch) return matchesSearch;
+  
+    // 沒搜尋但有選標籤
+    return matchesTag;
   });
+  
   
 
   return (
-    <div className="flex flex-col w-[30%] bg-[#F7F7F7] overflow-y-auto p-5 dark:bg-[#2D2A2B] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="flex flex-col w-[30%] bg-[#F5F5F5] overflow-y-auto p-6 dark:bg-[#2D2A2B] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="relative mb-6 flex gap-[14px]">
           <img src="/icons/Search.svg" className="absolute text-[#333] -translate-x-2/4 -translate-y-2/4 top-2/4 left-6" />
           <input

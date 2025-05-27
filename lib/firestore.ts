@@ -26,11 +26,10 @@ export const addNote = async (data: {
     userId: string;
     order: number
   }) => {
-    const now = Timestamp.now();
     return await addDoc(collection(db, NOTES_COLLECTION), {
       ...data,
-      createdAt: now,
-      updatedAt: now,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
     });
   };
   

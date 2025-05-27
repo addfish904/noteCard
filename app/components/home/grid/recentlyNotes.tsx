@@ -3,6 +3,7 @@ import { Note } from "@/types/note";
 import Card from "../ui/card";
 import { Tag } from "@/types/tag";
 import { formatNoteDate } from "@/lib/firestore";
+import { useRouter } from "next/navigation";
 
 interface RecentlyNotesProps {
   latestNotes: Note[];
@@ -13,8 +14,10 @@ export default function RecentlyNotes({
   latestNotes,
   tags,
 }: RecentlyNotesProps) {
+  const router = useRouter();
+
   return (
-    <Card className="p-6">
+    <Card className="py-6 px-5">
       <h2 className="text-base mb-1">最近筆記 ✏️</h2>
       {latestNotes.length === 0 ? (
         <p>No notes.</p>
@@ -27,8 +30,9 @@ export default function RecentlyNotes({
             return (
               <li 
                 key={note.id} 
-                className={`flex flex-col gap-2 py-4 ${
-                  !isLast ? "cancel-drag border-b border-gray-300 mb-2 p-2 rounded hover:bg-[#FFFAF4]" : ""
+                onClick={() => router.push(`/note?id=${note.id}`)}
+                className={`cancel-drag cursor-pointer flex flex-col gap-2 py-4 mb-2 p-2 rounded transition ${
+                  !isLast ? "border-b border-gray-300" : ""
               }`}>
                 <h3 className="font-semibold mb-2">{note.title}</h3>
                 <p className="text-xs text-gray-500">
@@ -44,7 +48,7 @@ export default function RecentlyNotes({
                   </div>
                   {tag ? (
                     <span
-                      className="inline-block px-2 py-1 rounded"
+                      className="inline-block px-2 py-1 rounded text-black"
                       style={{ backgroundColor: tag.color }}
                     >
                       {tag.name}

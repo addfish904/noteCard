@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 import { Tag } from "@/types/tag";
 import { addTag, logout as userLogout } from "@/lib/firestore";
 import { useRouter, usePathname } from "next/navigation";
-import { LogOut } from 'lucide-react';
+import { LogOut } from "lucide-react";
+import { useSelectedTag } from "@/app/context/SelectedTagContext";
 
 interface SidebarProps {
   userName: string | null;
@@ -43,6 +44,7 @@ export default function Sidebar({
   const [showColorPicker, setShowColorPicker] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const { setSelectedTagId } = useSelectedTag();
 
   const handleNewTagKeyDown = async (
     e: React.KeyboardEvent<HTMLInputElement>
@@ -104,41 +106,66 @@ export default function Sidebar({
       {/* 功能選單 */}
       <div className="flex flex-col gap-2 px-2 py-5 border-t border-[var(--line)]">
         {pages.map((page) => {
-        const iconSrc = iconMap[page];
-        const targetPath = pagePathMap[page];
-        const isActive = pathname === targetPath;
+          const iconSrc = iconMap[page];
+          const targetPath = pagePathMap[page];
+          const isActive = pathname === targetPath;
 
-        return (
-          <Button
-            key={page}
-            variant={isActive ? "active" : "default"}
-            onClick={() => router.push(targetPath)}
-            className="flex items-center gap-[22px] group"
-          >
-            <img
-              src={iconSrc}
-              className={cn(
-                "w-[22px] h-[22px] transition-all filter",
-                isActive ? "invert-0" : "invert-[0.4] group-hover:invert-0"
-              )}
-            />
-            {page}
-          </Button>
-        );
-      })}
+          return (
+            <Button
+              key={page}
+              variant={isActive ? "active" : "default"}
+              onClick={() => router.push(targetPath)}
+              className="flex items-center gap-[22px] group"
+            >
+              <img
+                src={iconSrc}
+                className={cn(
+                  "w-[22px] h-[22px] transition-all filter",
+                  isActive ? "invert-0" : "invert-[0.4] group-hover:invert-0"
+                )}
+              />
+              {page}
+            </Button>
+          );
+        })}
       </div>
 
       {/* 標籤欄 */}
       <div className="py-5 px-3 border-t border-[var(--line)]">
-        <p className="text-sm font-semibold mb-4 pl-2">TAGS</p>
+        <p className="text-sm font-semibold mt-1 mb-3 pl-3">TAGS</p>
         <div className="flex flex-col gap-2">
+          {/* ALL 所有標籤 */}
+          <button
+            onClick={() => {
+              setSelectedTagId(null);
+              setActiveTagId(null);
+              router.push("/note");
+            }}
+            className={
+              "inline-flex items-center justify-start gap-[20px] rounded-md pl-5 pr-4 py-2 text-sm transition-colors dark:text-white"
+            }
+          >
+            <img
+              src="/icons/tag.svg"
+              alt="All tags"
+              className="w-[22px] h-[22px] transition-all filter"
+            />
+            <span className="text-sm text-gray-600 hover:underline cursor-pointer dark:text-white">
+              All
+            </span>
+          </button>
+
           {tags.map((tag) => {
             const isActive = activeTagId === tag.id;
             return (
               <button
                 key={tag.id}
-                onClick={() => setActiveTagId(tag.id)}
-                className="inline-flex items-center justify-start gap-[20px] rounded-md pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white"
+                onClick={() => {
+                  setSelectedTagId(tag.id);
+                  setActiveTagId(tag.id);
+                  router.push("/note");
+                }}
+                className="inline-flex items-center justify-start gap-[20px] rounded-md pl-5 pr-4 py-2 text-sm transition-colors dark:text-white"
               >
                 <img
                   src="/icons/tag.svg"
@@ -222,7 +249,7 @@ export default function Sidebar({
           onClick={handleLogout}
           className="inline-flex items-center justify-start gap-[20px] rounded-md pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white"
         >
-          <LogOut className="w-[20px] h-[20px] text-[#767676]"/>
+          <LogOut className="w-[20px] h-[20px] text-[#767676]" />
           <span className="text-sm text-gray-600 hover:underline cursor-pointer dark:text-white">
             登出
           </span>
