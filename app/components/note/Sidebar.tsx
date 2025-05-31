@@ -27,9 +27,9 @@ const iconMap: Record<string, string> = {
 };
 
 const pagePathMap: Record<string, string> = {
-  Home: "/note/home",
-  Notes: "/note",
-  Calendar: "/note/calendar",
+  Home: "/home",
+  Notes: "/home/note",
+  Calendar: "/home/calendar",
 };
 
 export default function Sidebar({
@@ -179,7 +179,7 @@ export default function Sidebar({
                 onClick={() => {
                   setSelectedTagId(tag.id);
                   setActiveTagId(tag.id);
-                  router.push("/note");
+                  router.push("/home/note");
                 }}
                 className="inline-flex items-center justify-start gap-[20px] rounded-md pl-5 pr-4 py-2 text-sm transition-colors dark:text-white"
               >

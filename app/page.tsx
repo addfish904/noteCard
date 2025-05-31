@@ -12,7 +12,7 @@ export default function HomePage() {
   const login = async () => {
     try {
       await signInWithPopup(auth, provider);
-      router.push("/note")
+      router.push("/home")
     } catch (error) {
       console.error("登入失敗：", error);
     }
