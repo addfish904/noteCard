@@ -20,21 +20,10 @@ import QuickStartGuide from "@/app/components/home/grid/QuickStartGuide";
 
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { gridlayouts } from "../components/home/config/gridLayouts";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-export const layouts = {
-  lg: [
-    { i: "article", x: 0, y: 0, w: 4, h: 4 },
-    { i: "calendar", x: 0, y: 5, w: 2, h: 4 },
-    { i: "recentlyNotes", x: 4, y: 0, w: 2, h: 8 },
-    { i: "thread", x: 2, y: 4, w: 2, h: 4 },
-    { i: "chart", x: 2, y: 8, w: 4, h: 4 },
-    { i: "todolist", x: 7, y: 8, w: 2, h: 8 },
-    { i: "theme", x: 0, y: 8, w: 2, h: 4 },
-    { i: "quickStart", x: 7, y: 0, w: 2, h: 4 },
-  ],
-};
 
 export default function HomePage() {
   const { user, loading } = useAuth();
@@ -93,7 +82,7 @@ export default function HomePage() {
       <main className="w-full max-w-6xl mx-auto">
         <ResponsiveGridLayout
           className="layout"
-          layouts={layouts}
+          layouts={gridlayouts}
           breakpoints={{ lg: 1400, md: 996, sm: 768, xs: 480, xxs: 0 }}
           cols={{ lg: 9, md: 8, sm: 8, xs: 4, xxs: 2 }}
           rowHeight={50}
