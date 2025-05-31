@@ -15,7 +15,6 @@ import {
   limit,
   getDocs,
 } from "firebase/firestore";
-import { MonthlyNoteCount, groupNotesByMonth } from "@/lib/utils";
 
 import Article from "@/app/components/home/grid/article";
 import Calendar from "@/app/components/home/grid/calendar";
@@ -76,7 +75,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f3f5f7] py-6 dark:bg-[var(--background)]">
+    <div className="flex flex-col bg-[#f3f5f7] py-6 dark:bg-[var(--background)]">
       <div className="flex items-center justify-between mb-3 px-16">
         <h1 className="text-3xl font-bold ml-4">Welcome back! 🔮</h1>
         <button
@@ -97,7 +96,7 @@ export default function HomePage() {
                 ? 0
                 : (snapshot.docs[0].data().order as number) - 1;
 
-              const docRef = await addNote({
+              await addNote({
                 title: "Untitled Note",
                 content: "請輸入內容...",
                 userId: user.uid,
