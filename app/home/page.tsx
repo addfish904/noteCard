@@ -3,17 +3,25 @@
 import React, { useEffect, useState } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import { Note } from "@/types/note";
-import { getAllNotes } from "@/lib/firestore";
+import { getAllNotes, addNote } from "@/lib/firestore";
 import { db } from "@/lib/firebase";
 import { Tag } from "@/types/tag";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  limit,
+  getDocs,
+} from "firebase/firestore";
 import { MonthlyNoteCount, groupNotesByMonth } from "@/lib/utils";
 
 import Article from "@/app/components/home/grid/article";
 import Calendar from "@/app/components/home/grid/calendar";
 import RecentlyNotes from "@/app/components/home/grid/recentlyNotes";
 import Thread from "@/app/components/home/grid/thread";
-import Chart from "@/app/components/home/grid/chart";
+import Chart from "@/app/components/home/grid/Heatmap";
 import Todolist from "@/app/components/home/grid/todolist";
 import Theme from "@/app/components/home/grid/theme";
 import QuickStartGuide from "@/app/components/home/grid/QuickStartGuide";
@@ -24,14 +32,12 @@ import { gridlayouts } from "../components/home/config/gridLayouts";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-
 export default function HomePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
   const [latestNotes, setLatestNotes] = useState<Note[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
-  const [chartData, setChartData] = useState<MonthlyNoteCount[]>([]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -41,7 +47,6 @@ export default function HomePage() {
     if (user) {
       (async () => {
         const allNotes = await getAllNotes(user.uid);
-        setChartData(groupNotesByMonth(allNotes));
 
         const sortedNotes = allNotes
           .sort(
@@ -66,20 +71,49 @@ export default function HomePage() {
     }
   }, [user, loading, router]);
 
-
   if (loading || !user) {
     return null;
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f3f5f7] px-4 py-6 dark:bg-[var(--background)]">
-      <div className="flex items-center justify-between mb-3">
-        <h1 className="text-3xl font-bold pl-4">Welcome back! 🔮</h1>
-        <button className="bg-[var(--color-primary)] text-white rounded-[8px] px-4 py-3 cursor-pointer">
+    <div className="flex flex-col min-h-screen bg-[#f3f5f7] py-6 dark:bg-[var(--background)]">
+      <div className="flex items-center justify-between mb-3 px-16">
+        <h1 className="text-3xl font-bold ml-4">Welcome back! 🔮</h1>
+        <button
+          className="bg-[var(--color-primary)] text-white rounded-[8px] px-4 py-3 cursor-pointer mr-4 hover:bg-[#323153]"
+          onClick={async () => {
+            if (!user) return;
+
+            try {
+              const q = query(
+                collection(db, "notes"),
+                where("userId", "==", user.uid),
+                orderBy("order", "asc"),
+                limit(1)
+              );
+              const snapshot = await getDocs(q);
+
+              const minOrder = snapshot.empty
+                ? 0
+                : (snapshot.docs[0].data().order as number) - 1;
+
+              const docRef = await addNote({
+                title: "Untitled Note",
+                content: "請輸入內容...",
+                userId: user.uid,
+                order: minOrder,
+              });
+
+              router.push(`/home/note`);
+            } catch (err) {
+              console.error("新增筆記失敗", err);
+            }
+          }}
+        >
           + New Note
         </button>
       </div>
-      <main className="w-full max-w-6xl mx-auto">
+      <main className="w-full mx-auto px-16">
         <ResponsiveGridLayout
           className="layout"
           layouts={gridlayouts}
@@ -104,7 +138,7 @@ export default function HomePage() {
             <Thread />
           </div>
           <div key="chart">
-            <Chart data={chartData} />
+            <Chart />
           </div>
           <div key="todolist">
             <Todolist userUid={user.uid} />

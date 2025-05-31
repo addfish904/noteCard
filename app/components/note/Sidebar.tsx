@@ -21,9 +21,9 @@ interface SidebarProps {
 const pages = ["Home", "Notes", "Calendar"];
 
 const iconMap: Record<string, string> = {
-  Home: "/icons/home.svg",
-  Notes: "/icons/note.svg",
-  Calendar: "/icons/note.svg",
+  Home: "/icons/Home.svg",
+  Notes: "/icons/Note.svg",
+  Calendar: "/icons/Calendar.svg",
 };
 
 const pagePathMap: Record<string, string> = {
@@ -123,7 +123,11 @@ export default function Sidebar({
       )}
 
       {/* 功能選單 */}
-      <div className="flex flex-col gap-2 px-2 py-5 border-t border-[var(--line)]">
+      <div 
+        className={cn(
+          "flex flex-col px-2 py-5 border-t border-[var(--line)]",
+          collapsed ? "gap-4" : "gap-2",
+        )}>
         {pages.map((page) => {
           const iconSrc = iconMap[page];
           const targetPath = pagePathMap[page];
@@ -134,7 +138,10 @@ export default function Sidebar({
               key={page}
               variant={isActive ? "active" : "default"}
               onClick={() => router.push(targetPath)}
-              className="flex items-center gap-[22px] group justify-start"
+              className={cn(
+                "flex items-center gap-[22px] group justify-start",
+                collapsed ? "py-2 px-0 justify-center" : "",
+              )}
             >
               <Image
                 src={iconSrc}
@@ -143,7 +150,8 @@ export default function Sidebar({
                 height={22}
                 className={cn(
                   "transition-all filter",
-                  isActive ? "invert-0" : "invert-[0.4] group-hover:invert-0"
+                  isActive ? "invert-0" : "invert-[0.4] group-hover:invert-0",
+                  "dark:invert"
                 )}
               />
               {!collapsed && page}
@@ -153,7 +161,11 @@ export default function Sidebar({
       </div>
 
       {/* 標籤欄 */}
-      <div className="py-5 px-3 border-t border-[var(--line)]">
+      <div 
+        className={cn(
+          "py-5 px-3 border-t border-[var(--line)]",
+          collapsed ? "hidden" : ""
+        )}>
         {!collapsed && (
           <p className="text-sm font-semibold mt-1 mb-3 pl-3">TAGS</p>
         )}
@@ -162,11 +174,16 @@ export default function Sidebar({
             onClick={() => {
               setSelectedTagId(null);
               setActiveTagId(null);
-              router.push("/note");
+              router.push("/home/note");
             }}
-            className="inline-flex items-center justify-start gap-[20px] rounded-md pl-5 pr-4 py-2 text-sm transition-colors dark:text-white"
+            className="inline-flex items-center justify-start gap-[20px] rounded-md text-sm transition-colors dark:text-white pl-5 pr-4 py-2 dark:hover:bg-[var(--color-secondary)]"
           >
-            <Image src="/icons/tag.svg" alt="All tags" width={22} height={22} />
+            <Image 
+              src="/icons/tag.svg" 
+              alt="All tags" 
+              width={22} 
+              height={22}
+              className="invert-[0.4] dark:invert" />
             {!collapsed && (
               <span className="text-sm text-gray-600 dark:text-white">All</span>
             )}
@@ -181,13 +198,14 @@ export default function Sidebar({
                   setActiveTagId(tag.id);
                   router.push("/home/note");
                 }}
-                className="inline-flex items-center justify-start gap-[20px] rounded-md pl-5 pr-4 py-2 text-sm transition-colors dark:text-white"
+                className="inline-flex items-center justify-start gap-[20px] rounded-md text-sm transition-colors dark:text-white pl-5 pr-4 py-2 dark:hover:bg-[var(--color-secondary)]"
               >
                 <Image
                   src="/icons/tag.svg"
                   alt={`${tag.name} icon`}
                   width={22}
                   height={22}
+                  className="invert-[0.4] dark:invert"
                 />
                 {!collapsed && (
                   <span className="text-sm text-gray-600 dark:text-white">
@@ -244,7 +262,7 @@ export default function Sidebar({
         {!collapsed && newTagName === null && (
           <button
             onClick={() => setNewTagName("")}
-            className="mt-4 w-full text-gray-700 text-xs"
+            className="mt-4 w-full text-gray-700 text-xs dark:text-white"
           >
             + 新增標籤
           </button>
@@ -252,13 +270,18 @@ export default function Sidebar({
       </div>
 
       {/* 設定 / 登出 */}
-      <div className="flex flex-col gap-2 py-5 px-3 border-t border-[var(--line)]">
-        <button className="inline-flex items-center justify-start gap-[20px] pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white">
+      <div 
+        className={cn(
+          "flex flex-col gap-2 py-5 px-3 border-t border-[var(--line)]",
+          collapsed ? "hidden" : ""
+        )}>
+        <button className="inline-flex items-center justify-start gap-[20px] pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white rounded-md dark:hover:bg-[var(--color-secondary)]">
           <Image
             src="/icons/Settings.svg"
             alt="setting icon"
-            width={22}
-            height={22}
+            width={20}
+            height={20}
+            className="invert-[0.4] dark:invert"
           />
           {!collapsed && (
             <span className="text-sm text-gray-600 dark:text-white">設定</span>
@@ -266,9 +289,9 @@ export default function Sidebar({
         </button>
         <button
           onClick={handleLogout}
-          className="inline-flex items-center justify-start gap-[20px] pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white"
+          className="inline-flex items-center justify-start gap-[20px] pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white rounded-md dark:hover:bg-[var(--color-secondary)]"
         >
-          <LogOut className="w-[20px] h-[20px] text-[#767676]" />
+          <LogOut className="w-[20px] h-[20px] text-[#767676] dark:text-white" />
           {!collapsed && (
             <span className="text-sm text-gray-600 dark:text-white">登出</span>
           )}

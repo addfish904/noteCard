@@ -50,7 +50,7 @@ export default function Thread() {
                     />
                 </Anchor>
             ) : (
-                <FaSquareThreads size="6rem" color="black" />
+                <FaSquareThreads size="6rem" className='text-black dark:text-white'/>
             )}
 
             {editing && (

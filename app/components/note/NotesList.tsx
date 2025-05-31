@@ -113,7 +113,7 @@ export default function NotesList({
           alt="search icon"
           width={18}
           height={18}
-          className="absolute text-[#333] -translate-x-2/4 -translate-y-2/4 top-2/4 left-6" />
+          className="absolute inver-[0.4] -translate-x-2/4 -translate-y-2/4 top-2/4 left-6 dark:invert" />
           <input
             type="text"
             placeholder="Search"
@@ -123,7 +123,7 @@ export default function NotesList({
           />
           <button
             onClick={onAddNote}
-            className="flex justify-center items-center bg-[var(--color-primary)] w-[40px] h-[40px] rounded-md text-white text-2xl hover:bg-[#323153]"
+            className="flex justify-center items-center bg-[var(--color-primary)] w-[40px] h-[40px] rounded-md cursor-pointer text-white text-2xl hover:bg-[#323153]"
           >
             <Plus/>
           </button>

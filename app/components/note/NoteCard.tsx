@@ -146,13 +146,18 @@ export default function NoteCard({
       <p className="text-xs text-gray-500 overflow-hidden">{note.content}</p>
       <div className="flex gap-[10px]">
         <div className="flex items-end gap-3 bg-[var(--color-secondary)] px-[10px] py-[5px] rounded">
-          <Image src="/icons/Edit.svg" alt="edit icon" width={18} height={18} />
+          <Image 
+            src="/icons/Edit.svg" 
+            alt="edit icon" 
+            width={18} 
+            height={18}
+            className="dark:invert"/>
 
           <p className="text-xs">{formatNoteDate(note.updatedAt)}</p>
         </div>
         {tag?.name && (
           <p
-            className="flex items-center text-xs rounded px-2 py-0.5"
+            className="flex items-center text-xs rounded px-2 py-0.5 dark:text-black"
             style={{ backgroundColor: tag.color }}
           >
             {tag.name}

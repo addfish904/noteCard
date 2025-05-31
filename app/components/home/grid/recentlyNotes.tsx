@@ -20,7 +20,7 @@ export default function RecentlyNotes({
 
   return (
     <Card className="py-6 px-5">
-      <h2 className="text-base mb-1">最近筆記 ✏️</h2>
+      <h2 className="text-xl font-bold mb-2">最近筆記 ✏️</h2>
       {latestNotes.length === 0 ? (
         <p>No notes.</p>
       ) : (
@@ -36,9 +36,9 @@ export default function RecentlyNotes({
                 className={`cancel-drag cursor-pointer flex flex-col gap-2 py-4 mb-2 p-2 rounded transition ${
                   !isLast ? "border-b border-gray-300" : ""
               }`}>
-                <h3 className="font-semibold mb-2">{note.title}</h3>
+                <h3 className="font-semibold">{note.title}</h3>
                 <p className="text-xs text-gray-500">
-                  {note.content.slice(0, 50)}...
+                  {note.content.slice(0, 30)}...
                 </p>
 
                 <div className="mt-2 flex items-center gap-1 text-xs">
@@ -47,7 +47,8 @@ export default function RecentlyNotes({
                       src="/icons/Edit.svg" 
                       alt="edit icon"
                       width={12}
-                      height={12}/>
+                      height={12}
+                      className="dark:invert"/>
                   <span>
                     {formatNoteDate(note.updatedAt)}
                   </span>

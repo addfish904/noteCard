@@ -32,12 +32,12 @@ const containerVariants = {
         animate="show"
       >
         {/* 左上文字 */}
-        <motion.div variants={fromLeft} className="absolute top-8 left-6 text-center rotate-[-6deg] text-black">
+        <motion.div variants={fromLeft} className="absolute top-8 left-6 text-center rotate-[-6deg] text-black dark:text-white">
           quickly create<br />your notes!
         </motion.div>
   
         {/* 箭頭 */}
-        <motion.div variants={fromLeft} className="absolute top-7 right-14">
+        <motion.div variants={fromLeft} className="absolute top-7 right-14 dark:invert">
           <Image 
             src="/img/arrowSvg.svg"
             width={45}

@@ -9,7 +9,6 @@ export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // 避免 hydration 錯誤：只在 client side 顯示
   useEffect(() => {
     setMounted(true);
   }, []);
