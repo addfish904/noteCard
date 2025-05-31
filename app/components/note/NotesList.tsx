@@ -148,7 +148,6 @@ export default function NotesList({
                   isSelected={selectedId === note.id}
                   onSelect={onSelect}
                   onDelete={onDelete}
-                  activeId={activeId}
                   tags={tags}
                   onUpdateTag={onUpdateTag}
                 />
