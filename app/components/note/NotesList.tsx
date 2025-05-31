@@ -103,7 +103,7 @@ export default function NotesList({
   
 
   return (
-    <div className="flex flex-col w-[30%] bg-[#F5F5F5] overflow-y-auto p-6 dark:bg-[#2D2A2B] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="flex flex-col w-[30%] bg-[#f3f5f7] overflow-y-auto p-6 dark:bg-[#2D2A2B] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="relative mb-6 flex gap-[14px]">
           <img src="/icons/Search.svg" className="absolute text-[#333] -translate-x-2/4 -translate-y-2/4 top-2/4 left-6" />
           <input

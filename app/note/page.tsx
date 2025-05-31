@@ -5,24 +5,21 @@ import { getAllNotes, deleteNote, addNote, updateNote as updateNoteInFirestore }
 import NotesList from "@/app/components/note/NotesList";
 import Editor from "@/app/components/note/Editor";
 import { Note } from "@/types/note";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase";
 import { useTags } from "@/app/context/TagContext";
 import { useSelectedTag } from "@/app/context/SelectedTagContext";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function NotesPage() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [userUid, setUserUid] = useState<string | null>(null);
   const { selectedTagId } = useSelectedTag();
-  
-  // 取得全域tags
   const { tags } = useTags();
+  const { user, loading } = useAuth();  
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setUserUid(user.uid);
+    if (user && !loading) {
+      (async () => {
 
         const allNotes = await getAllNotes(user.uid);
         const formattedNotes: Note[] = allNotes.map((note: any) => ({
@@ -38,11 +35,9 @@ export default function NotesPage() {
         if (formattedNotes.length > 0) {
           setSelectedNoteId(formattedNotes[0].id);
         }
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
+      })();
+    }
+  }, [user, loading]);
 
   const selectedNote = notes.find((note) => note.id === selectedNoteId);
 

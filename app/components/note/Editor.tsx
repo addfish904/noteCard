@@ -11,9 +11,11 @@ import {
 import { commonmark } from "@milkdown/kit/preset/commonmark";
 import { nord } from "@milkdown/theme-nord";
 import { getMarkdown } from "@milkdown/utils";
-import { tooltip, TooltipView } from "./Tooltip";
 import { Tag } from "@/types/tag";
 import { formatNoteDate } from "@/lib/firestore";
+import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
+import { tooltipFactory } from "@milkdown/kit/plugin/tooltip";
+import { tooltipPluginView } from "./tooltipPluginView";
 
 interface EditorProps {
   note: Note;
@@ -23,8 +25,7 @@ interface EditorProps {
 
 export default function Editor({ note, onUpdate, tags }: EditorProps) {
   const editorRef = useRef<MdEditor | null>(null);
-  const tag = tags.find(t => t.id === note.tagId);
-
+  const tag = tags.find((t) => t.id === note.tagId);
 
   const handleChange =
     (field: "title") => (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,35 +34,52 @@ export default function Editor({ note, onUpdate, tags }: EditorProps) {
 
   const handleSave = () => {
     if (!editorRef.current) return;
-
     const markdown = getMarkdown()(editorRef.current.ctx);
     onUpdate({ content: markdown });
   };
 
   const MilkdownEditor: React.FC = () => {
     useEditor((root) => {
+      const tooltip = tooltipFactory("selection-tooltip");
+
       const editor = MdEditor.make()
         .config(nord)
         .config((ctx) => {
           ctx.set(rootCtx, root);
           ctx.set(defaultValueCtx, note.content || "");
+
+          const listenerInstance = ctx.get(listenerCtx);
+          listenerInstance.markdownUpdated((ctx, markdown, prevMarkdown) => {
+            if (markdown !== prevMarkdown) {
+              onUpdate({ content: markdown });
+            }
+          });
+
+          // 設定 tooltip plugin view
+          ctx.set(tooltip.key, {
+            view: (view) => tooltipPluginView(editor, view),
+          });
         })
         .use(commonmark)
+        .use(listener)
         .use(tooltip);
 
       editorRef.current = editor;
-
       return editor;
-    });
+    },[]);
 
     return <Milkdown />;
   };
-  
+
   return (
     <div className="w-[70%] flex flex-col">
       <div className="flex justify-between border-b border-[var(--line)] px-20 py-3 text-xs">
-        <span>{tag?.name} / {note.title}</span>
-        <span className="text-[#808080] dark:text-white">{formatNoteDate(note.updatedAt)}</span>
+        <span>
+          {tag?.name} / {note.title}
+        </span>
+        <span className="text-[#808080] dark:text-white">
+          {formatNoteDate(note.updatedAt)}
+        </span>
       </div>
       <div className="flex-1 pt-4 pb-3 px-20">
         <input

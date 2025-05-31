@@ -170,3 +170,30 @@ body {
     }
   }
 }
+
+.fc-timegrid-slot {
+  height: 60px !important;
+}
+.fc-timegrid-cols {
+  background-color: #f3f5f7;
+}
+.dark .fc-timegrid-cols {
+  background-color: #1a1a1a;
+}
+.fc .fc-timegrid-col.fc-day-today {
+  background-color: rgba(221, 217, 242, 20%);
+}
+.fc-timegrid-event {
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.milkdown {
+  position: relative;
+}
+.tooltip-menu {
+  pointer-events: auto;
+}
+.tooltip-menu:hover {
+  background: #f2f2f2 !important;
+}

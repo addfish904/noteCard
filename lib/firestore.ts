@@ -9,30 +9,31 @@ import {
   query,
   orderBy,
   Timestamp,
-  where
+  where,
+  setDoc,
 } from "firebase/firestore";
 import { Tag } from "@/types/tag";
-import { auth } from './firebase';
+import { auth } from "./firebase";
 import { signOut } from "firebase/auth";
 import { Note } from "@/types/note";
-
+import { CalendarEvent } from "@/types/event";
 
 const NOTES_COLLECTION = "notes";
 
 export const addNote = async (data: {
-    title: string;
-    content: string;
-    tags?: string[];
-    userId: string;
-    order: number
-  }) => {
-    return await addDoc(collection(db, NOTES_COLLECTION), {
-      ...data,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
-    });
-  };
-  
+  title: string;
+  content: string;
+  tags?: string[];
+  userId: string;
+  order: number;
+}) => {
+  return await addDoc(collection(db, NOTES_COLLECTION), {
+    ...data,
+    createdAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
+  });
+};
+
 export const updateNote = async (id: string, data: Partial<any>) => {
   const noteRef = doc(db, NOTES_COLLECTION, id);
   return await updateDoc(noteRef, {
@@ -45,7 +46,6 @@ export const deleteNote = async (id: string) => {
   return await deleteDoc(doc(db, NOTES_COLLECTION, id));
 };
 
-
 export const getAllNotes = async (userId: string) => {
   const q = query(
     collection(db, NOTES_COLLECTION),
@@ -54,7 +54,7 @@ export const getAllNotes = async (userId: string) => {
   );
   const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => {
-    const data = doc.data() as Omit<Note, "id">& { updatedAt: Timestamp };
+    const data = doc.data() as Omit<Note, "id"> & { updatedAt: Timestamp };
     return {
       id: doc.id,
       ...data,
@@ -63,14 +63,13 @@ export const getAllNotes = async (userId: string) => {
   });
 };
 
-
 export const getTags = async (userId: string) => {
   const q = query(collection(db, "tags"), where("userID", "==", userId));
   const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
-  })) as Tag[]; 
+  })) as Tag[];
 };
 
 //新增標籤
@@ -108,4 +107,45 @@ export async function logout() {
   } catch (error) {
     console.error("登出失敗", error);
   }
+}
+
+// getEvents.ts
+export async function getEvents(userId: string): Promise<CalendarEvent[]> {
+  const q = query(collection(db, "events"), where("userId", "==", userId));
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      title: data.title,
+      start: new Date(data.start),
+      end: new Date(data.end),
+      color: data.color,
+      userId: data.userId,
+    };
+  });
+}
+
+// addEvent.ts
+export async function addEvent(event: CalendarEvent) {
+  await setDoc(doc(db, "events", event.id), {
+    ...event,
+    start: event.start.toISOString(),
+    end: event.end.toISOString(),
+  });
+}
+
+// updateEvent.ts
+export async function updateEvent(event: CalendarEvent) {
+  await setDoc(doc(db, "events", event.id), {
+    ...event,
+    start: event.start.toISOString(),
+    end: event.end.toISOString(),
+  });
+}
+
+// deleteEvent.ts
+export async function deleteEvent(eventId: string) {
+  await deleteDoc(doc(db, "events", eventId));
 }
