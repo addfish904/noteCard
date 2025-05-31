@@ -76,7 +76,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col bg-[#f3f5f7] py-6 dark:bg-[var(--background)]">
-      <div className="flex items-center justify-between mb-3 px-16">
+      <div className="flex items-center justify-between mb-3 px-12">
         <h1 className="text-3xl font-bold ml-4">Welcome back! 🔮</h1>
         <button
           className="bg-[var(--color-primary)] text-white rounded-[8px] px-4 py-3 cursor-pointer mr-4 hover:bg-[#323153]"
@@ -112,7 +112,7 @@ export default function HomePage() {
           + New Note
         </button>
       </div>
-      <main className="w-full mx-auto px-16">
+      <main className="w-full mx-auto px-12">
         <ResponsiveGridLayout
           className="layout"
           layouts={gridlayouts}

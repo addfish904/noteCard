@@ -37,11 +37,11 @@ const containerVariants = {
         </motion.div>
   
         {/* 箭頭 */}
-        <motion.div variants={fromLeft} className="absolute top-7 right-14 dark:invert">
+        <motion.div variants={fromLeft} className="absolute top-7 right-11 dark:invert">
           <Image 
             src="/img/arrowSvg.svg"
-            width={45}
-            height={45}
+            width={42}
+            height={42}
             alt="arrow icon"
           />
         </motion.div>

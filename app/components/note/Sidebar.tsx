@@ -146,8 +146,8 @@ export default function Sidebar({
               <Image
                 src={iconSrc}
                 alt="page icon"
-                width={22}
-                height={22}
+                width={20}
+                height={20}
                 className={cn(
                   "transition-all filter",
                   isActive ? "invert-0" : "invert-[0.4] group-hover:invert-0",
@@ -181,8 +181,8 @@ export default function Sidebar({
             <Image 
               src="/icons/tag.svg" 
               alt="All tags" 
-              width={22} 
-              height={22}
+              width={20} 
+              height={20}
               className="invert-[0.4] dark:invert" />
             {!collapsed && (
               <span className="text-sm text-gray-600 dark:text-white">All</span>
@@ -203,8 +203,8 @@ export default function Sidebar({
                 <Image
                   src="/icons/tag.svg"
                   alt={`${tag.name} icon`}
-                  width={22}
-                  height={22}
+                  width={20}
+                  height={20}
                   className="invert-[0.4] dark:invert"
                 />
                 {!collapsed && (
@@ -225,8 +225,8 @@ export default function Sidebar({
               <Image
                 src="/icons/tag.svg"
                 alt="new tag"
-                width={22}
-                height={22}
+                width={20}
+                height={20}
                 className="opacity-50"
               />
               <input
@@ -279,8 +279,8 @@ export default function Sidebar({
           <Image
             src="/icons/Settings.svg"
             alt="setting icon"
-            width={20}
-            height={20}
+            width={18}
+            height={18}
             className="invert-[0.4] dark:invert"
           />
           {!collapsed && (
@@ -291,7 +291,7 @@ export default function Sidebar({
           onClick={handleLogout}
           className="inline-flex items-center justify-start gap-[20px] pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white rounded-md dark:hover:bg-[var(--color-secondary)]"
         >
-          <LogOut className="w-[20px] h-[20px] text-[#767676] dark:text-white" />
+          <LogOut className="w-[18px] h-[18px] text-[#767676] dark:text-white" />
           {!collapsed && (
             <span className="text-sm text-gray-600 dark:text-white">登出</span>
           )}

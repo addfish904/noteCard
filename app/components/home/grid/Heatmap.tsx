@@ -98,7 +98,7 @@ export default function Heatmap() {
   });
 
   return (
-    <Card className="flex justify-around items-center px-12 py-4 gap-7">
+    <Card className="flex justify-around items-center px-10 py-4 gap-7">
       <div className="flex flex-col items-start justify-center gap-7 text-left h-full rounded-md">
           <p>
             已連續記錄 <span className="font-semibold text-4xl">{streakDays}</span> 天

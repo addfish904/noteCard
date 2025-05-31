@@ -82,7 +82,7 @@ export default function Todolist({ userUid }: Props) {
 
   return (
     <Card className="p-6">
-      <h2 className="text-xl font-bold mb-4">Todolist ✅</h2>
+      <h2 className="text-base font-bold mb-4">Todolist ✅</h2>
 
       <div className="cancel-drag flex items-center mb-4 h-[40px]">
         <input
@@ -94,7 +94,7 @@ export default function Todolist({ userUid }: Props) {
         />
         <button
           onClick={handleAddTodo}
-          className="bg-[var(--color-primary)] text-white rounded-r-md text-lg h-full px-3 dark:bg-[#D9F275] dark:text-black"
+          className="bg-[var(--color-primary)] text-white rounded-r-md text-lg h-full px-3 hover:bg-[#323153] cursor-pointer dark:bg-[#D9F275] dark:text-black"
         >
           ＋
         </button>

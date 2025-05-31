@@ -20,7 +20,7 @@ export default function RecentlyNotes({
 
   return (
     <Card className="py-6 px-5">
-      <h2 className="text-xl font-bold mb-2">最近筆記 ✏️</h2>
+      <h2 className="text-base font-bold mb-2">最近筆記 ✏️</h2>
       {latestNotes.length === 0 ? (
         <p>No notes.</p>
       ) : (

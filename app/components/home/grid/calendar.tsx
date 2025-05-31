@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import Card from "../ui/card";
+import { useRouter } from "next/navigation";
 
 const WEEK_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -28,6 +29,7 @@ function getCalendarDays(year: number, month: number) {
 }
 
 export default function CustomCalendar() {
+  const router = useRouter();
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth();
@@ -38,7 +40,7 @@ export default function CustomCalendar() {
     month === today.getMonth() && year === today.getFullYear();
 
   return (
-    <Card className="p-4 flex flex-col justify-end">
+    <Card className="p-4 flex flex-col justify-center">
       {/* 星期列 */}
       <div className="grid grid-cols-7 text-xs text-center text-gray-500 font-medium uppercase mb-2 dark:text-gray-300">
         {WEEK_DAYS.map((day) => (
@@ -51,8 +53,9 @@ export default function CustomCalendar() {
         {days.map((day, idx) => (
           <div
             key={idx}
+            onClick={() => {router.push("/home/calendar")}}
             className={clsx(
-              "aspect-square rounded-md flex items-center justify-center",
+              "cancel-drag aspect-square rounded-md flex items-center justify-center",
               day
                 ? "text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-gray-200"
                 : ""
