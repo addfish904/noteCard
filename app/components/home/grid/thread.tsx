@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { FaArrowRight, FaSquareThreads } from 'react-icons/fa6';
 import Anchor from '../ui/anchor';
 import Card from '../ui/card';
+import Image from "next/image";
+
 
 export default function Thread() {
     const [url, setUrl] = useState('');
@@ -39,10 +41,12 @@ export default function Thread() {
 
             {url ? (
                 <Anchor href={url} target='_blank'>
-                    <img
+                    <Image
                         src={faviconUrl}
                         alt='Website Favicon'
-                        className='w-26 h-26 object-cover rounded-full'
+                        width={26}
+                        height={26}
+                        className='object-cover rounded-full'
                     />
                 </Anchor>
             ) : (

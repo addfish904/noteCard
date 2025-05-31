@@ -3,6 +3,7 @@ import { callCommand } from "@milkdown/kit/utils";
 import { toggleStrongCommand } from "@milkdown/kit/preset/commonmark";
 import type { EditorView } from "prosemirror-view";
 import type { Editor } from "@milkdown/core";
+import type { EditorState } from "prosemirror-state"; // ✅ 加上這行
 
 export function tooltipPluginView(editor: Editor, view: EditorView) {
   const content = document.createElement("div");
@@ -52,7 +53,7 @@ export function tooltipPluginView(editor: Editor, view: EditorView) {
   document.addEventListener("selectionchange", handleSelectionChange);
 
   return {
-    update(updatedView:any, prevState:any) {
+    update(updatedView: EditorView, prevState: EditorState) { // ✅ 指定正確型別
       const { from, to } = updatedView.state.selection;
       const shouldShow = from !== to;
 

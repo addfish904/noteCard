@@ -1,5 +1,7 @@
 import { motion } from "motion/react"
 import Card from "../ui/card";
+import Image from "next/image";
+
 
 const containerVariants = {
     hidden: {},
@@ -36,12 +38,21 @@ const containerVariants = {
   
         {/* 箭頭 */}
         <motion.div variants={fromLeft} className="absolute top-7 right-14">
-          <img src="/img/arrowSvg.svg"/>
+          <Image 
+            src="/img/arrowSvg.svg"
+            width={45}
+            height={45}
+            alt="arrow icon"
+          />
         </motion.div>
   
        {/* 人物圖 */}
         <motion.div variants={fromRight} className="w-[170px] object-contain absolute bottom-0 right-5">
-          <img src="/img/CharacterSvg.png"/>
+          <Image 
+            src="/img/CharacterSvg.png"
+            width={170}
+            height={137}
+            alt="Character image"/>
         </motion.div>
 
       </motion.div>

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Note } from "@/types/note";
-import { HTMLAttributes } from "react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -20,7 +19,9 @@ import { Trash2, Tag as TagIcon, Ellipsis } from "lucide-react";
 import { Tag } from "@/types/tag";
 import { formatNoteDate } from "@/lib/firestore";
 import type { DraggableAttributes } from "@dnd-kit/core";
+import { useDraggable } from "@dnd-kit/core";
 import Image from "next/image";
+
 
 interface NoteItemProps {
   note: Note;
@@ -31,7 +32,7 @@ interface NoteItemProps {
   setNodeRef?: (element: HTMLElement | null) => void;
   onUpdateTag: (noteId: string, tagId: string) => void;
   style?: React.CSSProperties;
-  listeners?: Record<string, any>;
+  listeners?: ReturnType<typeof useDraggable>["listeners"];
   attributes?: DraggableAttributes;
   isDragging?: boolean;
 }

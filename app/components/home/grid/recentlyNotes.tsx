@@ -4,6 +4,8 @@ import Card from "../ui/card";
 import { Tag } from "@/types/tag";
 import { formatNoteDate } from "@/lib/firestore";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+
 
 interface RecentlyNotesProps {
   latestNotes: Note[];
@@ -41,7 +43,11 @@ export default function RecentlyNotes({
 
                 <div className="mt-2 flex items-center gap-1 text-xs">
                 <div className="flex items-center gap-1 bg-[var(--color-secondary)] px-2 py-1 rounded">
-                    <img src="/icons/Edit.svg" className="w-[12px] h-[12px]" />
+                    <Image 
+                      src="/icons/Edit.svg" 
+                      alt="edit icon"
+                      width={12}
+                      height={12}/>
                   <span>
                     {formatNoteDate(note.updatedAt)}
                   </span>

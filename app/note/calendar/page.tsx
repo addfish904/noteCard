@@ -10,6 +10,7 @@ import { CalendarEvent } from "@/types/event";
 import { getEvents } from "@/lib/firestore";
 import { useAuth } from "@/hooks/useAuth";
 import { updateEvent } from "@/lib/firestore";
+import type { EventDropArg } from "@fullcalendar/core";
 
 export default function CalendarPage() {
   const calendarRef = useRef<FullCalendar | null>(null);
@@ -43,7 +44,7 @@ export default function CalendarPage() {
     }
   };
 
-  function handleEventDrop(info: any) {
+  function handleEventDrop(info: EventDropArg) {
     if (!user) return;
     const event = info.event;
   

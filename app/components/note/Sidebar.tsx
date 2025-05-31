@@ -40,7 +40,7 @@ export default function Sidebar({
   tags,
 }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
-  const [activeTagId, setActiveTagId] = useState<string | null>(null);
+  const [, setActiveTagId] = useState<string | null>(null);
   const [newTagName, setNewTagName] = useState<string | null>(null);
   const newTagInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedColor, setSelectedColor] = useState("#60A5FA");
