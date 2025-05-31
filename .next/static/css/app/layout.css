@@ -474,14 +474,8 @@
   .h-\[12px\] {
     height: 12px;
   }
-  .h-\[18px\] {
-    height: 18px;
-  }
   .h-\[20px\] {
     height: 20px;
-  }
-  .h-\[22px\] {
-    height: 22px;
   }
   .h-\[30px\] {
     height: 30px;
@@ -543,26 +537,17 @@
   .w-\[12px\] {
     width: 12px;
   }
-  .w-\[18\%\] {
-    width: 18%;
-  }
   .w-\[18px\] {
     width: 18px;
   }
   .w-\[20px\] {
     width: 20px;
   }
-  .w-\[22px\] {
-    width: 22px;
-  }
   .w-\[30\%\] {
     width: 30%;
   }
   .w-\[30px\] {
     width: 30px;
-  }
-  .w-\[36px\] {
-    width: 36px;
   }
   .w-\[40px\] {
     width: 40px;
@@ -753,6 +738,9 @@
   }
   .overflow-hidden {
     overflow: hidden;
+  }
+  .overflow-scroll {
+    overflow: scroll;
   }
   .overflow-x-hidden {
     overflow-x: hidden;
@@ -1406,6 +1394,13 @@
     &:hover {
       @media (hover: hover) {
         border-color: var(--card-outline);
+      }
+    }
+  }
+  .hover\:bg-\[\#323153\] {
+    &:hover {
+      @media (hover: hover) {
+        background-color: #323153;
       }
     }
   }
@@ -2313,6 +2308,7 @@ body {
 }
 .milkdown {
   position: relative;
+  padding-bottom: 40vh;
 }
 .tooltip-menu {
   pointer-events: auto;

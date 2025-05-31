@@ -190,6 +190,7 @@ body {
 
 .milkdown {
   position: relative;
+  padding-bottom: 40vh;
 }
 .tooltip-menu {
   pointer-events: auto;

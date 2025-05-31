@@ -11,7 +11,6 @@ export function SortableNoteItem({
   onSelect,
   onDelete,
   tags,
-  activeId,
   onUpdateTag
 }: {
   note: Note;
@@ -19,7 +18,6 @@ export function SortableNoteItem({
   onSelect: (id: string) => void;
   onDelete: (id: string) => void;
   tags: Tag[];
-  activeId: string | null;
   onUpdateTag: (noteId: string, tagId: string) => void;
 }) {
   const {

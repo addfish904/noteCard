@@ -13,7 +13,6 @@ import { nord } from "@milkdown/theme-nord";
 import { getMarkdown } from "@milkdown/utils";
 import { Tag } from "@/types/tag";
 import { formatNoteDate } from "@/lib/firestore";
-import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
 import { tooltipFactory } from "@milkdown/kit/plugin/tooltip";
 import { tooltipPluginView } from "./tooltipPluginView";
 
@@ -48,31 +47,23 @@ export default function Editor({ note, onUpdate, tags }: EditorProps) {
           ctx.set(rootCtx, root);
           ctx.set(defaultValueCtx, note.content || "");
 
-          const listenerInstance = ctx.get(listenerCtx);
-          listenerInstance.markdownUpdated((ctx, markdown, prevMarkdown) => {
-            if (markdown !== prevMarkdown) {
-              onUpdate({ content: markdown });
-            }
-          });
-
-          // 設定 tooltip plugin view
+          // ✅ 不再即時觸發 onUpdate，改為按下儲存時才同步 markdown
           ctx.set(tooltip.key, {
             view: (view) => tooltipPluginView(editor, view),
           });
         })
         .use(commonmark)
-        .use(listener)
         .use(tooltip);
 
       editorRef.current = editor;
       return editor;
-    },[]);
+    }, []); // ✅ 注意這裡的空依賴陣列，避免每次 render 都重新建立 editor
 
     return <Milkdown />;
   };
 
   return (
-    <div className="w-[70%] flex flex-col">
+    <div className="w-[70%] flex flex-col   overflow-scroll">
       <div className="flex justify-between border-b border-[var(--line)] px-20 py-3 text-xs">
         <span>
           {tag?.name} / {note.title}

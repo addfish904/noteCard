@@ -12,17 +12,16 @@ import { useAuth } from "@/hooks/useAuth";
 export default function NotesPage() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
-  const [userUid, setUserUid] = useState<string | null>(null);
   const { selectedTagId } = useSelectedTag();
   const { tags } = useTags();
   const { user, loading } = useAuth();  
 
   useEffect(() => {
-    if (user && !loading) {
+    if (user?.uid && !loading) {
       (async () => {
 
         const allNotes = await getAllNotes(user.uid);
-        const formattedNotes: Note[] = allNotes.map((note: any) => ({
+        const formattedNotes: Note[] = (allNotes as Note[]).map((note) => ({
           id: note.id,
           title: note.title,
           content: note.content,
@@ -61,13 +60,13 @@ const handleReorderNotes = async (newNotes: Note[]) => {
   };
 
   const handleAddNote = async () => {
-    if (!userUid) return;
+    if (!user?.uid) return;
     const maxOrder = notes.length > 0 ? Math.max(...notes.map(n => n.order)) : 0;
     const docRef = await addNote({
       title: "Untitled Note",
       content: "",
       tags: [],
-      userId: userUid,
+      userId: user?.uid,
       order: maxOrder + 1,
     });
     const newNote: Note = {
@@ -76,8 +75,8 @@ const handleReorderNotes = async (newNotes: Note[]) => {
       content: "輸入你的內容...",
       tagId: "",
       updatedAt: new Date(),
-      order: 0,
-      userId: userUid,
+      order: maxOrder + 1,
+      userId: user?.uid,
     };
     setNotes((prev) => [newNote, ...prev]);
     setSelectedNoteId(newNote.id);

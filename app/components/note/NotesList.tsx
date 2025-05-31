@@ -21,6 +21,9 @@ import NoteCard from "./NoteCard";
 import { SortableNoteItem } from "./SortableNoteItem";
 import { Tag } from "@/types/tag";
 import { Plus } from "lucide-react";
+import Image from "next/image";
+import type { DragEndEvent } from "@dnd-kit/core";
+
 
 interface NotesListProps {
   notes: Note[];
@@ -61,13 +64,13 @@ export default function NotesList({
     })
   );
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveId(null);
     if (!over || active.id === over.id) return;
 
-    const oldIndex = items.indexOf(active.id);
-    const newIndex = items.indexOf(over.id);
+    const oldIndex = items.indexOf(active.id as string);
+    const newIndex = items.indexOf(over.id as string);
     const newItems = arrayMove(items, oldIndex, newIndex);
     setItems(newItems);
 
@@ -105,7 +108,12 @@ export default function NotesList({
   return (
     <div className="flex flex-col w-[30%] bg-[#f3f5f7] overflow-y-auto p-6 dark:bg-[#2D2A2B] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="relative mb-6 flex gap-[14px]">
-          <img src="/icons/Search.svg" className="absolute text-[#333] -translate-x-2/4 -translate-y-2/4 top-2/4 left-6" />
+          <Image 
+          src="/icons/Search.svg" 
+          alt="search icon"
+          width={18}
+          height={18}
+          className="absolute text-[#333] -translate-x-2/4 -translate-y-2/4 top-2/4 left-6" />
           <input
             type="text"
             placeholder="Search"
@@ -115,7 +123,7 @@ export default function NotesList({
           />
           <button
             onClick={onAddNote}
-            className="flex justify-center items-center bg-[var(--color-primary)] w-[40px] h-[40px] rounded-md text-white text-2xl"
+            className="flex justify-center items-center bg-[var(--color-primary)] w-[40px] h-[40px] rounded-md text-white text-2xl hover:bg-[#323153]"
           >
             <Plus/>
           </button>

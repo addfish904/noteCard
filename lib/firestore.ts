@@ -34,7 +34,7 @@ export const addNote = async (data: {
   });
 };
 
-export const updateNote = async (id: string, data: Partial<any>) => {
+export const updateNote = async (id: string, data: Partial<Note>) => {
   const noteRef = doc(db, NOTES_COLLECTION, id);
   return await updateDoc(noteRef, {
     ...data,

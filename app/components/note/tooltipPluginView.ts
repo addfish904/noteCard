@@ -17,10 +17,6 @@ export function tooltipPluginView(editor: Editor, view: EditorView) {
   content.style.zIndex = "999";
   content.style.position = "absolute";
 
-  const buttons = [
-    { label: "B", command: toggleStrongCommand.key },
-  ];
-
   const btn = document.createElement("button");
   btn.textContent = "B";
   btn.style.border = "none";
@@ -45,19 +41,32 @@ export function tooltipPluginView(editor: Editor, view: EditorView) {
     offset: { mainAxis: 8, crossAxis: 0 },
   });
 
+  const handleSelectionChange = () => {
+    const selection = document.getSelection();
+    if (!selection) return;
+    if (selection.isCollapsed) {
+      provider.hide();
+    }
+  };
+
+  document.addEventListener("selectionchange", handleSelectionChange);
+
   return {
     update(updatedView:any, prevState:any) {
       const { from, to } = updatedView.state.selection;
-      if (from !== to) {
+      const shouldShow = from !== to;
+
+      if (shouldShow) {
         provider.show();
+        provider.update(updatedView, prevState);
       } else {
         provider.hide();
       }
-      provider.update(updatedView, prevState);
     },
     destroy() {
       provider.destroy();
       content.remove();
+      document.removeEventListener("selectionchange", handleSelectionChange);
     },
   };
 }

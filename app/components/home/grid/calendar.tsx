@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import clsx from "clsx";
 import Card from "../ui/card";
 
@@ -30,16 +30,16 @@ function getCalendarDays(year: number, month: number) {
 
 export default function CustomCalendar() {
   const today = new Date();
-  const [year, setYear] = useState(today.getFullYear());
-  const [month, setMonth] = useState(today.getMonth());
+  const year = today.getFullYear();
+  const month = today.getMonth();
   const days = getCalendarDays(year, month);
 
   const todayDate = today.getDate();
-  const isThisMonth = month === today.getMonth() && year === today.getFullYear();
+  const isThisMonth =
+    month === today.getMonth() && year === today.getFullYear();
 
   return (
     <Card className="p-4 flex flex-col justify-end">
-
       {/* 星期列 */}
       <div className="grid grid-cols-7 text-xs text-center text-gray-500 font-medium uppercase mb-2 dark:text-gray-300">
         {WEEK_DAYS.map((day) => (
@@ -63,7 +63,9 @@ export default function CustomCalendar() {
               <span
                 className={clsx(
                   "inline-block w-7 h-7 leading-7 rounded-full",
-                  isThisMonth && day === todayDate ? "bg-[#D9F273] text-black" : ""
+                  isThisMonth && day === todayDate
+                    ? "bg-[#D9F273] text-black"
+                    : ""
                 )}
               >
                 {day}

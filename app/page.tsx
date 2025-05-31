@@ -11,8 +11,7 @@ export default function HomePage() {
 
   const login = async () => {
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+      await signInWithPopup(auth, provider);
       router.push("/note")
     } catch (error) {
       console.error("登入失敗：", error);

@@ -7,13 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "./dropdown-menu";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "./dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
 import {
   Select,
   SelectTrigger,
@@ -25,6 +19,8 @@ import Button from "./Button";
 import { Trash2, Tag as TagIcon, Ellipsis } from "lucide-react";
 import { Tag } from "@/types/tag";
 import { formatNoteDate } from "@/lib/firestore";
+import type { DraggableAttributes } from "@dnd-kit/core";
+import Image from "next/image";
 
 interface NoteItemProps {
   note: Note;
@@ -35,8 +31,8 @@ interface NoteItemProps {
   setNodeRef?: (element: HTMLElement | null) => void;
   onUpdateTag: (noteId: string, tagId: string) => void;
   style?: React.CSSProperties;
-  listeners?: HTMLAttributes<any>;
-  attributes?: HTMLAttributes<any>;
+  listeners?: Record<string, any>;
+  attributes?: DraggableAttributes;
   isDragging?: boolean;
 }
 
@@ -94,7 +90,7 @@ export default function NoteCard({
               onClick={(e) => e.stopPropagation()}
               className="flex items-center justify-center bg-[var(--color-secondary)] w-[30px] h-[30px] rounded hover:bg-gray-100"
             >
-              <Ellipsis className="text-[#C8C8C8] w-[18px]"/>
+              <Ellipsis className="text-[#C8C8C8] w-[18px]" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent side="bottom" align="end">
@@ -149,7 +145,8 @@ export default function NoteCard({
       <p className="text-xs text-gray-500 overflow-hidden">{note.content}</p>
       <div className="flex gap-[10px]">
         <div className="flex items-end gap-3 bg-[var(--color-secondary)] px-[10px] py-[5px] rounded">
-          <img src="/icons/Edit.svg" className="w-[18px] h-[18px]" />
+          <Image src="/icons/Edit.svg" alt="edit icon" width={18} height={18} />
+
           <p className="text-xs">{formatNoteDate(note.updatedAt)}</p>
         </div>
         {tag?.name && (
