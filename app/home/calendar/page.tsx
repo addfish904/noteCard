@@ -11,6 +11,8 @@ import { getEvents } from "@/lib/firestore";
 import { useAuth } from "@/hooks/useAuth";
 import { updateEvent } from "@/lib/firestore";
 import type { EventDropArg } from "@fullcalendar/core";
+import type { EventResizeDoneArg } from "@fullcalendar/interaction";
+
 
 export default function CalendarPage() {
   const calendarRef = useRef<FullCalendar | null>(null);
@@ -69,7 +71,7 @@ export default function CalendarPage() {
       });
   }
 
-  function handleEventResize(info: any) {
+  function handleEventResize(info: EventResizeDoneArg) {
     if (!user) return;
     const event = info.event;
   
