@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useRef, useEffect } from "react";
 import { Note } from "@/types/note";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import {
@@ -15,6 +15,7 @@ import { Tag } from "@/types/tag";
 import { formatNoteDate } from "@/lib/firestore";
 import { tooltipFactory } from "@milkdown/kit/plugin/tooltip";
 import { tooltipPluginView } from "./tooltipPluginView";
+import { gfm } from "@milkdown/preset-gfm";
 
 interface EditorProps {
   note: Note;
@@ -37,6 +38,17 @@ export default function Editor({ note, onUpdate, tags }: EditorProps) {
     onUpdate({ content: markdown });
   };
 
+  // 自動儲存
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!editorRef.current) return;
+      const markdown = getMarkdown()(editorRef.current.ctx);
+      onUpdate({ content: markdown });
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [onUpdate]);
+
   const MilkdownEditor: React.FC = () => {
     useEditor((root) => {
       const tooltip = tooltipFactory("selection-tooltip");
@@ -46,24 +58,23 @@ export default function Editor({ note, onUpdate, tags }: EditorProps) {
         .config((ctx) => {
           ctx.set(rootCtx, root);
           ctx.set(defaultValueCtx, note.content || "");
-
-          // ✅ 不再即時觸發 onUpdate，改為按下儲存時才同步 markdown
           ctx.set(tooltip.key, {
             view: (view) => tooltipPluginView(editor, view),
           });
         })
         .use(commonmark)
+        .use(gfm)
         .use(tooltip);
 
       editorRef.current = editor;
       return editor;
-    }, []); // ✅ 注意這裡的空依賴陣列，避免每次 render 都重新建立 editor
+    }, []);
 
     return <Milkdown />;
   };
 
   return (
-    <div className="w-[70%] flex flex-col   overflow-scroll">
+    <div className="w-[70%] flex flex-col overflow-scroll">
       <div className="flex justify-between border-b border-[var(--line)] px-20 py-3 text-xs">
         <span>
           {tag?.name} / {note.title}
@@ -84,7 +95,7 @@ export default function Editor({ note, onUpdate, tags }: EditorProps) {
         </MilkdownProvider>
         <button
           onClick={handleSave}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition dark:bg-white"
+          className="mt-4 px-4 py-2 bg-[var(--color-primary)] text-white rounded hover:bg-[#323153] transition dark:bg-white"
         >
           儲存
         </button>

@@ -46,7 +46,7 @@ export default function Heatmap() {
       });
 
       setDailyCounts(countMap);
-      setTotalNotes(notes.length); //設定總共筆記數
+      setTotalNotes(notes.length);
 
       //計算連續記錄天數
       let streak = 0;

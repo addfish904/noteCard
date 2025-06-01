@@ -21,7 +21,7 @@ import { formatNoteDate } from "@/lib/firestore";
 import type { DraggableAttributes } from "@dnd-kit/core";
 import { useDraggable } from "@dnd-kit/core";
 import Image from "next/image";
-
+import removeMarkdown from "remove-markdown";
 
 interface NoteItemProps {
   note: Note;
@@ -143,15 +143,18 @@ export default function NoteCard({
           </DialogContent>
         </Dialog>
       </div>
-      <p className="text-xs text-gray-500 overflow-hidden">{note.content}</p>
+      <p className="text-xs text-gray-500 overflow-hidden">
+        {removeMarkdown(note.content).slice(0, 60)}
+      </p>
       <div className="flex gap-[10px]">
         <div className="flex items-end gap-3 bg-[var(--color-secondary)] px-[10px] py-[5px] rounded">
-          <Image 
-            src="/icons/Edit.svg" 
-            alt="edit icon" 
-            width={18} 
+          <Image
+            src="/icons/Edit.svg"
+            alt="edit icon"
+            width={18}
             height={18}
-            className="dark:invert"/>
+            className="dark:invert"
+          />
 
           <p className="text-xs">{formatNoteDate(note.updatedAt)}</p>
         </div>

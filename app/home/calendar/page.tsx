@@ -65,9 +65,35 @@ export default function CalendarPage() {
       })
       .catch((error) => {
         console.error("事件更新失敗：", error);
-        info.revert(); // 如果更新失敗則還原事件位置
+        info.revert();
       });
   }
+
+  function handleEventResize(info: any) {
+    if (!user) return;
+    const event = info.event;
+  
+    const updatedEvent: CalendarEvent = {
+      id: event.id,
+      title: event.title,
+      start: event.start!,
+      end: event.end || new Date(event.start!.getTime() + 30 * 60 * 1000),
+      color: event.backgroundColor,
+      userId: user.uid,
+    };
+  
+    updateEvent(updatedEvent)
+      .then(() => {
+        setEvents((prev) =>
+          prev.map((e) => (e.id === updatedEvent.id ? updatedEvent : e))
+        );
+      })
+      .catch((error) => {
+        console.error("事件更新失敗：", error);
+        info.revert();
+      });
+  }
+  
 
   return (
     <>
@@ -84,6 +110,7 @@ export default function CalendarPage() {
         select={handleSelect}
         eventClick={handleEventClick}
         eventDrop={handleEventDrop}
+        eventResize={handleEventResize}
         events={events.map((event) => ({
             ...event,
             start: event.start instanceof Date ? event.start.toISOString() : event.start,

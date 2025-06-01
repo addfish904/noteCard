@@ -64,7 +64,7 @@ const handleReorderNotes = async (newNotes: Note[]) => {
     const maxOrder = notes.length > 0 ? Math.max(...notes.map(n => n.order)) : 0;
     const docRef = await addNote({
       title: "Untitled Note",
-      content: "",
+      content: "輸入你的內容...",
       tags: [],
       userId: user?.uid,
       order: maxOrder + 1,
