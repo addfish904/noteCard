@@ -39,15 +39,15 @@ export default function Editor({ note, onUpdate, tags }: EditorProps) {
   };
 
   // 自動儲存
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!editorRef.current) return;
-      const markdown = getMarkdown()(editorRef.current.ctx);
-      onUpdate({ content: markdown });
-    }, 10000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (!editorRef.current) return;
+  //     const markdown = getMarkdown()(editorRef.current.ctx);
+  //     onUpdate({ content: markdown });
+  //   }, 10000);
 
-    return () => clearInterval(interval);
-  }, [onUpdate]);
+  //   return () => clearInterval(interval);
+  // }, [onUpdate]);
 
   const MilkdownEditor: React.FC = () => {
     useEditor((root) => {
