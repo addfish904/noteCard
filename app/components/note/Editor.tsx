@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useRef, useEffect } from "react";
+import { ChangeEvent, useRef } from "react";
 import { Note } from "@/types/note";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import {
