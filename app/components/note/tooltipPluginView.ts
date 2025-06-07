@@ -17,7 +17,7 @@ export function tooltipPluginView(editor: Editor, view: EditorView) {
   content.className = "tooltip-menu";
   content.style.display = "flex";
   content.style.gap = "12px";
-  content.style.padding = "8px 12px";
+  content.style.padding = "10px 14px";
   content.style.border = "1px solid #ccc";
   content.style.borderRadius = "6px";
   content.style.background = "white";

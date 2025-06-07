@@ -11,6 +11,7 @@ import {
   Timestamp,
   where,
   setDoc,
+  onSnapshot
 } from "firebase/firestore";
 import { Tag } from "@/types/tag";
 import { auth } from "./firebase";
@@ -149,3 +150,24 @@ export async function updateEvent(event: CalendarEvent) {
 export async function deleteEvent(eventId: string) {
   await deleteDoc(doc(db, "events", eventId));
 }
+
+export const listenToNotes = (
+  userId: string,
+  callback: (notes: Note[]) => void
+) => {
+  const notesQuery = query(
+    collection(db, "notes"),
+    where("userId", "==", userId),
+    orderBy("order", "asc")
+  );
+
+  const unsubscribe = onSnapshot(notesQuery, (snapshot) => {
+    const notes = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Note[];
+    callback(notes);
+  });
+
+  return unsubscribe;
+};

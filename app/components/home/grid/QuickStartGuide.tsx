@@ -32,7 +32,10 @@ const containerVariants = {
         animate="show"
       >
         {/* 左上文字 */}
-        <motion.div variants={fromLeft} className="absolute top-8 left-6 text-center rotate-[-6deg] text-black dark:text-white">
+        <motion.div 
+          variants={fromLeft} 
+          className="absolute top-8 left-6 text-center rotate-[-6deg] text-base text-black dark:text-white 
+            max-[620px]:text-xl max-[620px]:top-16 max-[620px]:left-12">
           quickly create<br />your notes!
         </motion.div>
   
@@ -47,7 +50,7 @@ const containerVariants = {
         </motion.div>
   
        {/* 人物圖 */}
-        <motion.div variants={fromRight} className="w-[170px] object-contain absolute bottom-0 right-5">
+        <motion.div variants={fromRight} className="object-contain absolute bottom-0 right-5">
           <Image 
             src="/img/CharacterSvg.png"
             width={170}

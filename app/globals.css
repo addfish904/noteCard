@@ -11,6 +11,11 @@
   outline: none;
 }
 
+@theme {
+  --breakpoint-lg: 996px;
+  --breakpoint-md: 768px;
+}
+
 :root {
   --color-secondary: #f5f4fa;
   --color-primary: #14133d;

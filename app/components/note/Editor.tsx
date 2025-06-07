@@ -74,7 +74,7 @@ export default function Editor({ note, onUpdate, tags }: EditorProps) {
   };
 
   return (
-    <div className="w-[70%] flex flex-col overflow-scroll">
+    <div className="w-full flex flex-col overflow-scroll">
       <div className="flex justify-between border-b border-[var(--line)] px-20 py-3 text-xs">
         <span>
           {tag?.name} / {note.title}
