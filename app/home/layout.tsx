@@ -3,9 +3,8 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { db } from "@/lib/firebase";
+import { useTags } from "@/hooks/useTags";
 import { Tag } from "@/types/tag";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
 import Sidebar from "@/app/components/note/Sidebar";
 import { TagContext } from "@/app/context/TagContext";
 import { SelectedTagProvider, useSelectedTag } from "@/app/context/SelectedTagContext";
@@ -131,26 +130,17 @@ function MobileSidebar({ tags }: { tags: Tag[] }) {
 export default function NotesLayout({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [tags, setTags] = useState<Tag[]>([]);
+  const tags = useTags(user?.uid);
+
+  if (!loading && !user) {
+    router.replace("/");
+  }
 
   useEffect(() => {
     if (!loading && !user) {
       router.replace("/");
     }
-
-    if (user) {
-      const q = query(collection(db, "tags"), where("userId", "==", user.uid));
-      const unsubscribeTags = onSnapshot(q, (snapshot) => {
-        const fetchedTags: Tag[] = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Tag[];
-        setTags(fetchedTags);
-      });
-
-      return () => unsubscribeTags();
-    }
-  }, [user, loading, router]);
+  }, [loading, user, router]);
 
   if (loading || !user) {
     return null;

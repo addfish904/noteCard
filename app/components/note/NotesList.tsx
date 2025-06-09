@@ -115,7 +115,7 @@ export default function NotesList({
       {/* 側欄本體 */}
       <div
         className={`
-          flex flex-col bg-[#f3f5f7] overflow-y-auto p-6 
+          flex flex-col h-screen bg-[#f3f5f7] overflow-y-auto scrollbar-hide p-6 
           dark:bg-[#2D2A2B]
           ${isCollapsed ? "hidden" : "block flex-1"}
         `}

@@ -74,7 +74,7 @@ export default function Editor({ note, onUpdate, tags }: EditorProps) {
   };
 
   return (
-    <div className="w-full flex flex-col overflow-scroll">
+    <div className="flex flex-col w-full h-full overflow-scroll">
       <div className="flex justify-between border-b border-[var(--line)] px-20 py-3 text-xs">
         <span>
           {tag?.name} / {note.title}
@@ -83,7 +83,7 @@ export default function Editor({ note, onUpdate, tags }: EditorProps) {
           {formatNoteDate(note.updatedAt)}
         </span>
       </div>
-      <div className="flex-1 pt-4 pb-3 px-20">
+      <div className="pt-4 pb-3 px-20">
         <input
           value={note.title}
           onChange={handleChange("title")}

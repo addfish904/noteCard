@@ -64,6 +64,7 @@ export const getAllNotes = async (userId: string) => {
   });
 };
 
+//取得標籤
 export const getTags = async (userId: string) => {
   const q = query(collection(db, "tags"), where("userID", "==", userId));
   const snapshot = await getDocs(q);

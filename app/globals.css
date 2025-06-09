@@ -204,3 +204,13 @@ body {
 .tooltip-menu:hover {
   background: #f2f2f2 !important;
 }
+
+/* 隱藏 scrollbar（仍可滾動） */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
