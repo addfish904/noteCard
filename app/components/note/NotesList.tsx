@@ -120,7 +120,7 @@ export default function NotesList({
           ${isCollapsed ? "hidden" : "block flex-1"}
         `}
       >
-        <div className="relative mb-6 flex gap-[14px]">
+        <div className="relative mb-8 flex gap-[14px]">
           <Image 
             src="/icons/Search.svg" 
             alt="search icon"

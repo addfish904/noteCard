@@ -91,7 +91,7 @@ export default function Sidebar({
   return (
     <div
       className={cn(
-        "flex flex-col bg-white dark:bg-black transition-all duration-300 ease-in-out border-r border-[var(--line)]",
+        "flex flex-col transition-all duration-300 ease-in-out",
         collapsed ? "w-[64px]" : "w-[240px]"
       )}
     >
@@ -125,7 +125,7 @@ export default function Sidebar({
       {/* 功能選單 */}
       <div 
         className={cn(
-          "flex flex-col px-2 py-5 border-t border-[var(--line)]",
+          "flex flex-col px-3 py-5 border-t border-[var(--line)]",
           collapsed ? "gap-4" : "gap-2",
         )}>
         {pages.map((page) => {

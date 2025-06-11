@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "@milkdown/theme-nord/style.css";
 import { ThemeProvider } from 'next-themes'
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,17 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         {children}
+        <Toaster richColors position="top-right" duration={2000} 
+          toastOptions={{
+            style: {
+              background: "#E8F5E9",
+              border: "1px solid #43A047",
+              color: "#43A047",
+              marginTop: "60px",
+              maxWidth: "280px",
+              borderRadius: "8px",
+            }
+          }} />
         </ThemeProvider>
       </body>
     </html>

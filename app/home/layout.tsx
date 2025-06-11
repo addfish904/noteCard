@@ -3,18 +3,18 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { useTags } from "@/hooks/useTags";
-import { Tag } from "@/types/tag";
-import Sidebar from "@/app/components/note/Sidebar";
-import { TagContext } from "@/app/context/TagContext";
+import { TagProvider, useTags } from "@/app/context/TagContext";
+import { NoteProvider } from "@/app/context/NoteContext";
 import { SelectedTagProvider, useSelectedTag } from "@/app/context/SelectedTagContext";
+import Sidebar from "@/app/components/note/Sidebar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, LogOut } from "lucide-react";
 import Image from "next/image";
 import { logout } from "@/lib/firestore";
 
-function MobileSidebar({ tags }: { tags: Tag[] }) {
+function MobileSidebar() {
   const router = useRouter();
+  const { tags } = useTags();
   const { setSelectedTagId } = useSelectedTag();
   const [, setActiveTagId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
@@ -57,6 +57,7 @@ function MobileSidebar({ tags }: { tags: Tag[] }) {
             </button>
           ))}
         </div>
+
         {/* tag標籤 */}
         <div className="flex flex-col gap-8 p-6 border-b border-[var(--line)]">
           <button
@@ -100,28 +101,27 @@ function MobileSidebar({ tags }: { tags: Tag[] }) {
             </button>
           ))}
         </div>
+
         {/* 設定/登出 */}
         <div className="flex flex-col gap-8 p-6">
-        <button className="flex items-center gap-[22px] justify-start cursor-pointer">
-          <Image
-            src="/icons/Settings.svg"
-            alt="setting icon"
-            width={18}
-            height={18}
-            className="dark:invert"
-          />
-          <span className="dark:text-white">設定</span>
-        </button>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-[22px] justify-start cursor-pointer"
-        >
-          <LogOut className="w-[18px] h-[18px] dark:text-white" />
-          <span className="dark:text-white">登出</span>
-        </button>
+          <button className="flex items-center gap-[22px] justify-start cursor-pointer">
+            <Image
+              src="/icons/Settings.svg"
+              alt="setting icon"
+              width={18}
+              height={18}
+              className="dark:invert"
+            />
+            <span className="dark:text-white">設定</span>
+          </button>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-[22px] justify-start cursor-pointer"
+          >
+            <LogOut className="w-[18px] h-[18px] dark:text-white" />
+            <span className="dark:text-white">登出</span>
+          </button>
         </div>
-
-        
       </SheetContent>
     </Sheet>
   );
@@ -130,11 +130,6 @@ function MobileSidebar({ tags }: { tags: Tag[] }) {
 export default function NotesLayout({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const tags = useTags(user?.uid);
-
-  if (!loading && !user) {
-    router.replace("/");
-  }
 
   useEffect(() => {
     if (!loading && !user) {
@@ -147,32 +142,48 @@ export default function NotesLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <TagContext.Provider value={{ tags }}>
+    <TagProvider userId={user.uid}>
       <SelectedTagProvider>
-        <div className="flex flex-col">
-          <div className="flex items-center justify-between border-b border-[var(--line)]">
-            <header className="h-[54px] shrink-0 text-xl font-semibold flex items-center px-6 pt-1">
-              Notecard
-            </header>
-            {/* 手機版漢堡選單 */}
-            <div className="px-6 flex md:hidden">
-              <MobileSidebar tags={tags} />
-            </div>
-          </div>
-          <div className="flex flex-1">
-            <aside className="hidden md:block">
-              <Sidebar
-                userName={user.displayName}
-                userEmail={user.email}
-                userAvatar={user.photoURL}
-                userId={user.uid}
-                tags={tags}
-              />
-            </aside>
-            <div className="flex-1">{children}</div>
-          </div>
-        </div>
+        <NoteProvider>
+          <LayoutContent user={user}>{children}</LayoutContent>
+        </NoteProvider>
       </SelectedTagProvider>
-    </TagContext.Provider>
+    </TagProvider>
+  );
+}
+
+function LayoutContent({
+  user,
+  children,
+}: {
+  user: any;
+  children: ReactNode;
+}) {
+  const { tags } = useTags();
+
+  return (
+    <div className="flex flex-col">
+      <div className="flex items-center justify-between border-b border-[var(--line)]">
+        <header className="h-[54px] shrink-0 text-xl font-semibold flex items-center px-6 pt-1">
+          Notecard
+        </header>
+        {/* 手機版漢堡選單 */}
+        <div className="px-6 flex md:hidden">
+          <MobileSidebar />
+        </div>
+      </div>
+      <div className="flex flex-1">
+        <aside className="hidden md:block bg-white dark:bg-black border-r border-[var(--line)]">
+          <Sidebar
+            userName={user.displayName}
+            userEmail={user.email}
+            userAvatar={user.photoURL}
+            userId={user.uid}
+            tags={tags}
+          />
+        </aside>
+        <div className="flex-1">{children}</div>
+      </div>
+    </div>
   );
 }

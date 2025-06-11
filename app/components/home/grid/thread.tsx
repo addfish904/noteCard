@@ -38,6 +38,9 @@ export default function Thread() {
                     <span className='sr-only'>Edit Link</span>
                 </Anchor>
             </div>
+            <div className='absolute top-3 right-3'>
+                <button>...</button>
+            </div>
 
             {url ? (
                 <Anchor href={url} target='_blank'>
