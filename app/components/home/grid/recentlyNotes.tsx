@@ -20,7 +20,7 @@ export default function RecentlyNotes({
 
   return (
     <Card className="py-6 px-5">
-      <h2 className="text-base font-bold mb-2">最近筆記 ✏️</h2>
+      <h2 className="relative text-base font-bold mb-4 w-fit mx-auto before:content-[''] before:absolute before:w-2 before:h-2 before:rounded-full before:bg-orange-400 before:top-1/2 before:-translate-y-1/2 before:-left-4">最近筆記</h2>
       {latestNotes.length === 0 ? (
         <p>No notes.</p>
       ) : (
@@ -32,7 +32,7 @@ export default function RecentlyNotes({
             return (
               <li 
                 key={note.id} 
-                onClick={() => router.push(`/note?id=${note.id}`)}
+                onClick={() => router.push('home/note')}
                 className={`cancel-drag cursor-pointer flex flex-col gap-2 py-4 mb-2 p-2 rounded transition ${
                   !isLast ? "border-b border-gray-300" : ""
               }`}>

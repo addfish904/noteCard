@@ -176,7 +176,7 @@ export default function Sidebar({
               setActiveTagId(null);
               router.push("/home/note");
             }}
-            className="inline-flex items-center justify-start gap-[20px] rounded-md text-sm transition-colors dark:text-white pl-5 pr-4 py-2 dark:hover:bg-[var(--color-secondary)]"
+            className="inline-flex items-center justify-start cursor-pointer gap-[20px] rounded-md text-sm transition-colors dark:text-white pl-5 pr-4 py-2 dark:hover:bg-[var(--color-secondary)]"
           >
             <Image 
               src="/icons/tag.svg" 
@@ -198,7 +198,7 @@ export default function Sidebar({
                   setActiveTagId(tag.id);
                   router.push("/home/note");
                 }}
-                className="inline-flex items-center justify-start gap-[20px] rounded-md text-sm transition-colors dark:text-white pl-5 pr-4 py-2 dark:hover:bg-[var(--color-secondary)]"
+                className="inline-flex items-center justify-start cursor-pointer gap-[20px] rounded-md text-sm transition-colors dark:text-white pl-5 pr-4 py-2 dark:hover:bg-[var(--color-secondary)]"
               >
                 <Image
                   src="/icons/tag.svg"

@@ -4,6 +4,7 @@ export interface Note {
     content: string;
     tagId: string;
     updatedAt: Date,
+    createdAt: Date,
     order: number; 
     userId: string;
   }

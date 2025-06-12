@@ -30,21 +30,38 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
     const fetchNotes = async () => {
       if (user?.uid) {
         const userNotes = await getAllNotes(user.uid);
-        setNotes(userNotes);
-        if (userNotes.length > 0) {
-          setSelectedNote(userNotes[0]);
+  
+        const toValidDate = (value: any): Date => {
+          const date = new Date(value);
+          return isNaN(date.getTime()) ? new Date() : date;
+        };
+  
+        const parsedNotes = userNotes.map((note) => {
+          return {
+            ...note,
+            createdAt: note.createdAt,
+            updatedAt: toValidDate(note.updatedAt),
+          };
+        });
+  
+        setNotes(parsedNotes);
+  
+        if (parsedNotes.length > 0) {
+          setSelectedNote(parsedNotes[0]);
         }
       }
     };
     fetchNotes();
   }, [user]);
+  
 
   const addNote = async () => {
     if (!user) {
       alert("請先登入");
       return;
     }
-    const maxOrder = notes.length > 0 ? Math.max(...notes.map((n) => n.order || 0)) : 0;
+    const maxOrder =
+      notes.length > 0 ? Math.max(...notes.map((n) => n.order || 0)) : 0;
 
     const newNote = {
       title: "Untitled Note",
@@ -60,6 +77,7 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
       ...newNote,
       tagId: "",
       updatedAt: new Date(),
+      createdAt: new Date(),
     };
 
     setNotes((prev) => [newNoteWithId, ...prev]);
@@ -69,7 +87,9 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
   const updateNote = async (id: string, data: Partial<Note>) => {
     await updateNoteInFirestore(id, data);
     setNotes((prev) =>
-      prev.map((note) => (note.id === id ? { ...note, ...data, updatedAt: new Date() } : note))
+      prev.map((note) =>
+        note.id === id ? { ...note, ...data, updatedAt: new Date() } : note
+      )
     );
     setSelectedNote((prev) => {
       if (prev && prev.id === id) {
@@ -78,7 +98,6 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
       return prev;
     });
   };
-  
 
   const deleteNote = async (id: string) => {
     await deleteNoteFromFirestore(id);

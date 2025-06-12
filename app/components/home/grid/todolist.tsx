@@ -82,7 +82,7 @@ export default function Todolist({ userUid }: Props) {
 
   return (
     <Card className="p-6">
-      <h2 className="text-base font-bold mb-4">Todolist ✅</h2>
+      <h2 className="relative text-base font-bold mb-4 w-fit mx-auto before:content-[''] before:absolute before:w-2 before:h-2 before:rounded-full before:bg-blue-500 before:top-1/2 before:-translate-y-1/2 before:-left-4">Todolist</h2>
 
       <div className="cancel-drag flex items-center mb-4 h-[40px]">
         <input

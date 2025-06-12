@@ -125,6 +125,7 @@ export async function getEvents(userId: string): Promise<CalendarEvent[]> {
       end: new Date(data.end),
       color: data.color,
       userId: data.userId,
+      noteId: data.noteId ?? [],
     };
   });
 }
@@ -144,6 +145,7 @@ export async function updateEvent(event: CalendarEvent) {
     ...event,
     start: event.start.toISOString(),
     end: event.end.toISOString(),
+    noteId: event.noteId ?? [],
   });
 }
 

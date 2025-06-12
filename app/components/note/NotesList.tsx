@@ -25,34 +25,24 @@ import { Tag } from "@/types/tag";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import type { DragEndEvent } from "@dnd-kit/core";
+import { useNoteContext } from "@/app/context/NoteContext";
 
 interface NotesListProps {
-  notes: Note[];
   selectedId: string | null;
   onAddNote: () => void;
-  onSelect: (id: string) => void;
-  onDelete: (id: string) => void;
-  onReorder: (newNotes: Note[]) => void;
-  onUpdateTag: (noteId: string, tagId: string) => void;
-  tags: Tag[];
   selectedTagId: string | null;
   isCollapsed: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
 }
 
 export default function NotesList({
-  notes,
   selectedId,
   onAddNote,
-  onSelect,
-  onDelete,
-  onReorder,
-  onUpdateTag,
-  tags,
   selectedTagId,
   isCollapsed,
   setIsCollapsed,
 }: NotesListProps) {
+  const { notes, reorderNotes } = useNoteContext();
   const [items, setItems] = useState<string[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [search, setSearch] = useState<string>("");
@@ -67,13 +57,13 @@ export default function NotesList({
     })
   );
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = (event: any) => {
     const { active, over } = event;
     setActiveId(null);
     if (!over || active.id === over.id) return;
 
-    const oldIndex = items.indexOf(active.id as string);
-    const newIndex = items.indexOf(over.id as string);
+    const oldIndex = items.indexOf(active.id);
+    const newIndex = items.indexOf(over.id);
     const newItems = arrayMove(items, oldIndex, newIndex);
     setItems(newItems);
 
@@ -85,7 +75,7 @@ export default function NotesList({
       };
     });
 
-    onReorder(newNotes);
+    reorderNotes(newNotes);
   };
 
   const filteredItems = items.filter((id) => {
@@ -98,13 +88,13 @@ export default function NotesList({
     const matchesTag = note.tagId === selectedTagId;
 
     if (!hasSearch && !hasTag) return true;
+    if (hasSearch && hasTag) return matchesSearch && matchesTag;
     if (hasSearch) return matchesSearch;
     return matchesTag;
   });
 
   return (
     <>
-      {/* 手機版：控制 Notelist收合 */}
       <div
         className="h-full bg-[#f3f5f7] w-[30px] flex items-center justify-center border-r border-[var(--line)] md:hidden"
         onClick={() => setIsCollapsed(!isCollapsed)}
@@ -112,7 +102,6 @@ export default function NotesList({
         {isCollapsed ? ">" : "<"}
       </div>
 
-      {/* 側欄本體 */}
       <div
         className={`
           flex flex-col h-screen bg-[#f3f5f7] overflow-y-auto scrollbar-hide p-6 
@@ -121,12 +110,12 @@ export default function NotesList({
         `}
       >
         <div className="relative mb-8 flex gap-[14px]">
-          <Image 
-            src="/icons/Search.svg" 
+          <Image
+            src="/icons/Search.svg"
             alt="search icon"
             width={18}
             height={18}
-            className="absolute invert-[0.4] -translate-x-2/4 -translate-y-2/4 top-2/4 left-6 dark:invert" 
+            className="absolute invert-[0.4] -translate-x-2/4 -translate-y-2/4 top-2/4 left-6 dark:invert"
           />
           <input
             type="text"
@@ -152,35 +141,14 @@ export default function NotesList({
         >
           <SortableContext items={items} strategy={verticalListSortingStrategy}>
             <div className="flex flex-col gap-[20px]">
-              {filteredItems.map((id) => {
-                const note = notes.find((n) => n.id === id);
-                if (!note) return null;
-                return (
-                  <SortableNoteItem
-                    key={note.id}
-                    note={note}
-                    isSelected={selectedId === note.id}
-                    onSelect={onSelect}
-                    onDelete={onDelete}
-                    tags={tags}
-                    onUpdateTag={onUpdateTag}
-                  />
-                );
-              })}
+              {filteredItems.map((id) => (
+                <SortableNoteItem key={id} noteId={id} />
+              ))}
             </div>
           </SortableContext>
 
           <DragOverlay>
-            {activeId ? (
-              <NoteCard
-                note={notes.find((n) => n.id === activeId)!}
-                isSelected={true}
-                onSelect={() => {}}
-                onDelete={() => {}}
-                tags={tags}
-                onUpdateTag={onUpdateTag}
-              />
-            ) : null}
+            {activeId ? <NoteCard noteId={activeId} /> : null}
           </DragOverlay>
         </DndContext>
       </div>

@@ -1,5 +1,6 @@
+"use client";
+
 import { useState } from "react";
-import { Note } from "@/types/note";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -16,21 +17,17 @@ import {
 } from "./select";
 import Button from "./Button";
 import { Trash2, Tag as TagIcon, Ellipsis } from "lucide-react";
-import { Tag } from "@/types/tag";
+import Image from "next/image";
+import removeMarkdown from "remove-markdown";
+import { useNoteContext } from "@/app/context/NoteContext";
+import { useTags } from "@/app/context/TagContext";
 import { formatNoteDate } from "@/lib/firestore";
 import type { DraggableAttributes } from "@dnd-kit/core";
 import { useDraggable } from "@dnd-kit/core";
-import Image from "next/image";
-import removeMarkdown from "remove-markdown";
 
-interface NoteItemProps {
-  note: Note;
-  isSelected: boolean;
-  onSelect: (id: string) => void;
-  onDelete: (id: string) => void;
-  tags: Tag[];
+interface NoteCardProps {
+  noteId: string;
   setNodeRef?: (element: HTMLElement | null) => void;
-  onUpdateTag: (noteId: string, tagId: string) => void;
   style?: React.CSSProperties;
   listeners?: ReturnType<typeof useDraggable>["listeners"];
   attributes?: DraggableAttributes;
@@ -38,21 +35,23 @@ interface NoteItemProps {
 }
 
 export default function NoteCard({
-  note,
-  isSelected,
-  onSelect,
-  onDelete,
-  tags,
+  noteId,
   setNodeRef,
-  onUpdateTag,
   style,
   listeners,
   attributes,
   isDragging = false,
-}: NoteItemProps) {
-  const [selectedTag, setSelectedTag] = useState("");
+}: NoteCardProps) {
+  const { notes, selectedNote, setSelectedNote, deleteNote, updateNote } = useNoteContext();
+  const { tags } = useTags();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const tag = tags.find((t) => t.id === note.tagId);
+  const [selectedTag, setSelectedTag] = useState("");
+
+  const note = notes.find((n) => n.id === noteId);
+  const isSelected = selectedNote?.id === noteId;
+  const tag = tags.find((t) => t.id === note?.tagId);
+
+  if (!note) return null;
 
   return (
     <div
@@ -64,7 +63,7 @@ export default function NoteCard({
       }}
       {...listeners}
       {...attributes}
-      onClick={() => onSelect(note.id)}
+      onClick={() => setSelectedNote(note)}
       className={`flex flex-col justify-between bg-white h-[160px] cursor-pointer rounded-lg border-[1.5px] py-[18px] px-[20px] transition-shadow duration-200
         shadow-[0_2px_5px_0px_rgba(0,0,0,0.1)] dark:bg-[var(--background)]
         ${
@@ -77,7 +76,7 @@ export default function NoteCard({
     >
       <div className="flex items-center justify-between gap-[10px]">
         <p
-          className={`text-lg dark:text-white${
+          className={`text-lg dark:text-white ${
             isSelected
               ? "text-[#242584] font-semibold"
               : "text-black font-semibold"
@@ -85,6 +84,7 @@ export default function NoteCard({
         >
           {note.title}
         </p>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
@@ -95,7 +95,7 @@ export default function NoteCard({
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent side="bottom" align="end">
-            <DropdownMenuItem onClick={() => onDelete(note.id)}>
+            <DropdownMenuItem onClick={() => deleteNote(note.id)}>
               <div className="flex items-center gap-2">
                 <Trash2 />
                 <span>刪除</span>
@@ -103,6 +103,7 @@ export default function NoteCard({
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
+                setSelectedTag(note.tagId || "");
                 setDialogOpen(true);
               }}
             >
@@ -134,8 +135,10 @@ export default function NoteCard({
             <Button
               className="mt-4"
               onClick={() => {
-                onUpdateTag(note.id, selectedTag);
-                setDialogOpen(false);
+                if (selectedTag) {
+                  updateNote(note.id, { tagId: selectedTag });
+                  setDialogOpen(false);
+                }
               }}
             >
               儲存標籤
@@ -143,9 +146,11 @@ export default function NoteCard({
           </DialogContent>
         </Dialog>
       </div>
+
       <p className="text-xs text-gray-500 overflow-hidden">
         {removeMarkdown(note.content).slice(0, 60)}
       </p>
+
       <div className="flex gap-[10px]">
         <div className="flex items-end gap-3 bg-[var(--color-secondary)] px-[10px] py-[5px] rounded">
           <Image
@@ -155,8 +160,7 @@ export default function NoteCard({
             height={18}
             className="dark:invert"
           />
-
-          <p className="text-xs">{formatNoteDate(note.updatedAt)}</p>
+          <p className="text-xs">{formatNoteDate(note.createdAt)}</p>
         </div>
         {tag?.name && (
           <p

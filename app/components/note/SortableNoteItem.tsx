@@ -1,25 +1,11 @@
+"use client";
+
+"use client";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Note } from "@/types/note";
 import NoteCard from "./NoteCard";
-import { Tag } from "@/types/tag";
 
-
-export function SortableNoteItem({
-  note,
-  isSelected,
-  onSelect,
-  onDelete,
-  tags,
-  onUpdateTag
-}: {
-  note: Note;
-  isSelected: boolean;
-  onSelect: (id: string) => void;
-  onDelete: (id: string) => void;
-  tags: Tag[];
-  onUpdateTag: (noteId: string, tagId: string) => void;
-}) {
+export function SortableNoteItem({ noteId }: { noteId: string }) {
   const {
     attributes,
     listeners,
@@ -27,7 +13,7 @@ export function SortableNoteItem({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: note.id });
+  } = useSortable({ id: noteId });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -37,16 +23,12 @@ export function SortableNoteItem({
 
   return (
     <NoteCard
-      note={note}
-      isSelected={isSelected}
-      onSelect={onSelect}
-      onDelete={onDelete}
+      noteId={noteId}
       setNodeRef={setNodeRef}
       style={style}
       listeners={listeners}
       attributes={attributes}
-      tags={tags}
-      onUpdateTag={onUpdateTag}
+      isDragging={isDragging}
     />
   );
 }

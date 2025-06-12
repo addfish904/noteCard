@@ -43,6 +43,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "dropdown-menu": "^0.1.1",
     "firebase": "^11.7.3",
     "framer-motion": "^12.14.0",
     "gsap": "^3.13.0",

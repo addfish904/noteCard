@@ -5,5 +5,6 @@ export type CalendarEvent = {
     end: Date;
     color: string;
     userId: string | null;
+    noteId?: string[];
   };
   

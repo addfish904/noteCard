@@ -36,7 +36,6 @@
 //   return () => window.removeEventListener("resize", handleResize);
 // }, []);
 
-
 //   // 取得筆記
 //   useEffect(() => {
 //     if (user?.uid && !loading) {
@@ -55,7 +54,7 @@
 //         if (formattedNotes.length > 0 && !selectedNoteId) {
 //           setSelectedNoteId(formattedNotes[0].id);
 //         }
-        
+
 //       })();
 //     }
 //   }, [user, loading]);
@@ -213,17 +212,8 @@ export default function NotesPage() {
         )}
       >
         <NotesList
-          notes={notes}
           selectedId={selectedNote?.id ?? null}
-          onSelect={(id) => {
-            const note = notes.find((n) => n.id === id) || null;
-            setSelectedNote(note);
-          }}
           onAddNote={addNote}
-          onDelete={deleteNote}
-          onReorder={reorderNotes}
-          onUpdateTag={handleUpdateTag}
-          tags={tags}
           selectedTagId={selectedTagId}
           isCollapsed={isCollapsed}
           setIsCollapsed={setIsCollapsed}

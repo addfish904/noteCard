@@ -2,19 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
-import { Note } from "@/types/note";
-import { getAllNotes, addNote } from "@/lib/firestore";
-import { db } from "@/lib/firebase";
-import { Tag } from "@/types/tag";
-import {
-  collection,
-  onSnapshot,
-  query,
-  where,
-  orderBy,
-  limit,
-  getDocs,
-} from "firebase/firestore";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { useNoteContext } from "../context/NoteContext";
+import { useTags } from "../context/TagContext";
 
 import Article from "@/app/components/home/grid/article";
 import Calendar from "@/app/components/home/grid/calendar";
@@ -25,8 +16,6 @@ import Todolist from "@/app/components/home/grid/todolist";
 import Theme from "@/app/components/home/grid/theme";
 import QuickStartGuide from "@/app/components/home/grid/QuickStartGuide";
 
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { gridlayouts } from "../components/home/config/gridLayouts";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -35,44 +24,26 @@ export default function HomePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
-  const [latestNotes, setLatestNotes] = useState<Note[]>([]);
-  const [tags, setTags] = useState<Tag[]>([]);
+  const { notes, addNote } = useNoteContext();
+  const { tags } = useTags();
 
   useEffect(() => {
     if (!loading && !user) {
       router.replace("/");
-    }
-
-    if (user) {
-      (async () => {
-        const allNotes = await getAllNotes(user.uid);
-
-        const sortedNotes = allNotes
-          .sort(
-            (a, b) =>
-              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-          )
-          .slice(0, 3);
-
-        setLatestNotes(sortedNotes);
-
-        const q = query(collection(db, "tags"), where("userId", "==", user.uid));
-        const unsubscribeTags = onSnapshot(q, (snapshot) => {
-          const fetchedTags: Tag[] = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          })) as Tag[];
-          setTags(fetchedTags);
-        });
-
-        return () => unsubscribeTags();
-      })();
     }
   }, [user, loading, router]);
 
   if (loading || !user) {
     return null;
   }
+
+  // 取最新三筆筆記
+  const latestNotes = notes
+    .sort(
+      (a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    )
+    .slice(0, 3);
 
   return (
     <div className="flex flex-col bg-[#f3f5f7] py-6 dark:bg-[var(--background)]">
@@ -81,28 +52,8 @@ export default function HomePage() {
         <button
           className="bg-[var(--color-primary)] text-white rounded-[8px] px-4 py-3 cursor-pointer mr-4 hover:bg-[#323153]"
           onClick={async () => {
-            if (!user) return;
-
             try {
-              const q = query(
-                collection(db, "notes"),
-                where("userId", "==", user.uid),
-                orderBy("order", "asc"),
-                limit(1)
-              );
-              const snapshot = await getDocs(q);
-
-              const minOrder = snapshot.empty
-                ? 0
-                : (snapshot.docs[0].data().order as number) - 1;
-
-              await addNote({
-                title: "Untitled Note",
-                content: "請輸入內容...",
-                userId: user.uid,
-                order: minOrder,
-              });
-
+              await addNote();
               router.push(`/home/note`);
             } catch (err) {
               console.error("新增筆記失敗", err);
@@ -134,7 +85,7 @@ export default function HomePage() {
             <RecentlyNotes latestNotes={latestNotes} tags={tags} />
           </div>
           <div key="thread">
-            <Thread />
+            <Thread/>
           </div>
           <div key="chart">
             <Chart />

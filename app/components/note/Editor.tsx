@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState, useEffect } from "react";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import {
   Editor as MdEditor,
@@ -26,6 +26,10 @@ export default function Editor() {
   const { selectedNote, updateNote } = useNoteContext();
   const { tags } = useTags();
   const [localTitle, setLocalTitle] = useState(selectedNote?.title || "");
+
+  useEffect(() => {
+    setLocalTitle(selectedNote?.title || "");
+  }, [selectedNote]);
 
   if (!selectedNote) return null;
 
