@@ -80,6 +80,16 @@ export const addTag = async (name: string, color: string, userId: string) => {
   return await addDoc(tagRef, { name, color, userId });
 };
 
+//刪除標籤
+export async function deleteTag(tagId: string) {
+  try {
+    await deleteDoc(doc(db, "tags", tagId));
+  } catch (err) {
+    console.error("刪除標籤失敗", err);
+    throw err;
+  }
+}
+
 // 轉換時間格式
 export function formatNoteDate(input: Date | string | Timestamp): string {
   let date: Date;

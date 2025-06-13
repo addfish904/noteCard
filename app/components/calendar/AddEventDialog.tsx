@@ -16,7 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../note/dropdown-menu";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { addEvent, updateEvent, deleteEvent } from "@/lib/firestore";
 import { CalendarEvent } from "@/types/event";
 import { useNoteContext } from "@/app/context/NoteContext";
@@ -58,6 +58,7 @@ export default function AddEventDialog({
   const { notes, reorderNotes, setSelectedNote } = useNoteContext();
   const [selectedNoteIds, setSelectedNoteIds] = useState<string[]>([]);
   const router = useRouter();
+  const editMenuRef = useRef<HTMLDivElement | null>(null);
 
   const isEditing = Boolean(editingEvent);
 

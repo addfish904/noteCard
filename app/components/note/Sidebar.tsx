@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Button from "./Button";
 import { cn } from "@/lib/utils";
 import { Tag } from "@/types/tag";
-import { addTag, logout as userLogout } from "@/lib/firestore";
+import { addTag, logout as userLogout, deleteTag } from "@/lib/firestore";
 import { useRouter, usePathname } from "next/navigation";
 import { LogOut, ChevronLeft, ChevronRight } from "lucide-react";
 import { useSelectedTag } from "@/app/context/SelectedTagContext";
@@ -18,18 +18,20 @@ interface SidebarProps {
   tags: Tag[];
 }
 
-const pages = ["Home", "Notes", "Calendar"];
+const pages = ["Home", "Notes", "Calendar", "Canvas"];
 
 const iconMap: Record<string, string> = {
   Home: "/icons/Home.svg",
   Notes: "/icons/Note.svg",
   Calendar: "/icons/Calendar.svg",
+  Canvas: "/icons/draw.svg"
 };
 
 const pagePathMap: Record<string, string> = {
   Home: "/home",
   Notes: "/home/note",
   Calendar: "/home/calendar",
+  Canvas: "/home/canvas",
 };
 
 export default function Sidebar({
@@ -45,6 +47,10 @@ export default function Sidebar({
   const newTagInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedColor, setSelectedColor] = useState("#60A5FA");
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [hoveredTagId, setHoveredTagId] = useState<string | null>(null);
+  const [editingTagId, setEditingTagId] = useState<string | null>(null);
+  const editMenuRef = useRef<HTMLDivElement | null>(null); // 追蹤選單元素
+
   const router = useRouter();
   const pathname = usePathname();
   const { setSelectedTagId } = useSelectedTag();
@@ -70,6 +76,7 @@ export default function Sidebar({
     router.push("/");
   };
 
+  // 點擊外部關閉新增標籤輸入框
   useEffect(() => {
     if (newTagName === null) return;
 
@@ -87,6 +94,23 @@ export default function Sidebar({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [newTagName]);
+
+  // 點擊外部自動關閉編輯選單
+  useEffect(() => {
+    if (!editingTagId) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        editMenuRef.current &&
+        !editMenuRef.current.contains(e.target as Node)
+      ) {
+        setEditingTagId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [editingTagId]);
 
   return (
     <div
@@ -123,11 +147,12 @@ export default function Sidebar({
       )}
 
       {/* 功能選單 */}
-      <div 
+      <div
         className={cn(
           "flex flex-col px-3 py-5 border-t border-[var(--line)]",
-          collapsed ? "gap-4" : "gap-2",
-        )}>
+          collapsed ? "gap-4" : "gap-2"
+        )}
+      >
         {pages.map((page) => {
           const iconSrc = iconMap[page];
           const targetPath = pagePathMap[page];
@@ -140,7 +165,7 @@ export default function Sidebar({
               onClick={() => router.push(targetPath)}
               className={cn(
                 "flex items-center gap-[22px] group justify-start",
-                collapsed ? "py-2 px-0 justify-center" : "",
+                collapsed ? "py-2 px-0 justify-center" : ""
               )}
             >
               <Image
@@ -161,11 +186,12 @@ export default function Sidebar({
       </div>
 
       {/* 標籤欄 */}
-      <div 
+      <div
         className={cn(
           "py-5 px-3 border-t border-[var(--line)]",
           collapsed ? "hidden" : ""
-        )}>
+        )}
+      >
         {!collapsed && (
           <p className="text-sm font-semibold mt-1 mb-3 pl-3">TAGS</p>
         )}
@@ -178,57 +204,97 @@ export default function Sidebar({
             }}
             className="inline-flex items-center justify-start cursor-pointer gap-[20px] rounded-md text-sm transition-colors dark:text-white pl-5 pr-4 py-2 dark:hover:bg-[var(--color-secondary)]"
           >
-            <Image 
-              src="/icons/tag.svg" 
-              alt="All tags" 
-              width={20} 
+            <Image
+              src="/icons/tag.svg"
+              alt="All tags"
+              width={20}
               height={20}
-              className="invert-[0.4] dark:invert" />
+              className="invert-[0.4] dark:invert"
+            />
             {!collapsed && (
               <span className="text-sm text-gray-600 dark:text-white">All</span>
             )}
           </button>
 
           {tags.map((tag) => {
+            const isHovered = hoveredTagId === tag.id;
+            const isEditing = editingTagId === tag.id;
+
             return (
-              <button
+              <div
                 key={tag.id}
-                onClick={() => {
-                  setSelectedTagId(tag.id);
-                  setActiveTagId(tag.id);
-                  router.push("/home/note");
-                }}
-                className="inline-flex items-center justify-start cursor-pointer gap-[20px] rounded-md text-sm transition-colors dark:text-white pl-5 pr-4 py-2 dark:hover:bg-[var(--color-secondary)]"
+                className="relative"
+                onMouseEnter={() => setHoveredTagId(tag.id)}
+                onMouseLeave={() => setHoveredTagId(null)}
               >
-                <Image
-                  src="/icons/tag.svg"
-                  alt={`${tag.name} icon`}
-                  width={20}
-                  height={20}
-                  className="invert-[0.4] dark:invert"
-                />
-                {!collapsed && (
-                  <span className="text-sm text-gray-600 dark:text-white">
-                    {tag.name}
-                  </span>
+                <button
+                  onClick={() => {
+                    setSelectedTagId(tag.id);
+                    setActiveTagId(tag.id);
+                    router.push("/home/note");
+                  }}
+                  className="inline-flex items-center justify-start w-full gap-[20px] rounded-md text-sm transition-colors dark:text-white pl-5 pr-4 py-2 dark:hover:bg-[var(--color-secondary)]"
+                >
+                  <span
+                    className="rounded-full w-[10px] h-[10px]"
+                    style={{ backgroundColor: tag.color }}
+                  />
+                  {!collapsed && (
+                    <span className="text-sm text-gray-600 dark:text-white">
+                      {tag.name}
+                    </span>
+                  )}
+                </button>
+
+                {!collapsed && isHovered && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditingTagId(tag.id);
+                    }}
+                    className="absolute right-2 top-2 text-xs text-gray-400 hover:text-black dark:text-white"
+                  >
+                    ⋮
+                  </button>
                 )}
-              </button>
+
+                {isEditing && (
+                  <div
+                    ref={editMenuRef}
+                    className="absolute right-2 top-8 z-10 bg-white dark:bg-[#1f1f1f] border border-gray-200 dark:border-gray-600 rounded shadow"
+                  >
+                    <button
+                      onClick={async () => {
+                        try {
+                          await deleteTag(tag.id);
+                          setEditingTagId(null);
+                        } catch (err) {
+                          alert("刪除失敗");
+                        }
+                      }}
+                      className="px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900 w-full text-left"
+                    >
+                      刪除標籤
+                    </button>
+                  </div>
+                )}
+              </div>
             );
           })}
 
-          {/* 新增標籤輸入欄 */}
           {newTagName !== null && !collapsed && (
             <div
               ref={newTagInputRef}
               className="relative flex items-center gap-[10px] pl-5 pr-4 py-2"
             >
-              <Image
-                src="/icons/tag.svg"
-                alt="new tag"
-                width={20}
-                height={20}
-                className="opacity-50"
-              />
+              <button
+                className="rounded-full w-[10px] h-[10px] cursor-pointer"
+                style={{ backgroundColor: selectedColor }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowColorPicker((prev) => !prev);
+                }}
+              ></button>
               <input
                 autoFocus
                 type="text"
@@ -238,21 +304,13 @@ export default function Sidebar({
                 placeholder="Tag Name"
                 className="text-sm py-1 border-b border-gray-300 bg-transparent text-center"
               />
-              <button
-                className="rounded-full w-[10px] h-[10px] cursor-pointer"
-                style={{ backgroundColor: selectedColor }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowColorPicker((prev) => !prev);
-                }}
-              ></button>
 
               {showColorPicker && (
                 <input
                   type="color"
                   value={selectedColor}
                   onChange={(e) => setSelectedColor(e.target.value)}
-                  className="absolute right-0 top-[40px] z-10 w-[120px] h-[36px] p-0 border-none bg-transparent cursor-pointer"
+                  className="absolute left-0 top-[40px] z-10 w-[120px] h-[36px] p-0 border-none bg-transparent cursor-pointer"
                 />
               )}
             </div>
@@ -270,11 +328,12 @@ export default function Sidebar({
       </div>
 
       {/* 設定 / 登出 */}
-      <div 
+      <div
         className={cn(
           "flex flex-col gap-2 py-5 px-3 border-t border-[var(--line)]",
           collapsed ? "hidden" : ""
-        )}>
+        )}
+      >
         <button className="inline-flex items-center justify-start gap-[20px] pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white rounded-md dark:hover:bg-[var(--color-secondary)]">
           <Image
             src="/icons/Settings.svg"

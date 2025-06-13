@@ -141,15 +141,15 @@ export default function CalendarPage() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-wrap items-center justify-between w-full px-8 py-2 my-2 bg-white rounded-full">
+      <div className="flex flex-wrap items-center justify-between w-full px-8 py-2 my-2">
         <div className="flex items-center gap-10">
-          <span className="text-2xl font-medium text-gray-800 min-w-[180px]">
+          <span className="text-2xl font-medium min-w-[180px]">
             {format(currentDate, "MMMM yyyy")}
           </span>
           <div className="flex gap-4">
             <button
               onClick={handleToday}
-              className="text-sm px-6 py-2 border border-gray-200/45 rounded-full bg-[#F4F6F8] hover:bg-gray-100 cursor-pointer"
+              className="text-sm px-6 py-2 border border-gray-200/45 rounded-full bg-[#F4F6F8] hover:bg-gray-100 cursor-pointer dark:bg-black text-gray-800 dark:text-white" 
             >
               Today
             </button>
@@ -157,14 +157,14 @@ export default function CalendarPage() {
               <button
                 onClick={handlePrev}
                 className="group items-center justify-center gap-3 overflow-hidden whitespace-nowrap rounded-full bg-white p-2 transition-all duration-300
-           ring-2 ring-gray-200/45 hover-within:ring-4 hover:ring-4 dark:text-black dark:ring-gray-200/30 cursor-pointer"
+           ring-2 ring-gray-200/45 hover-within:ring-4 hover:ring-4 dark:ring-gray-200/30 dark:bg-black cursor-pointer"
               >
                 <ChevronLeft size={20} />
               </button>
               <button
                 onClick={handleNext}
                 className="group items-center justify-center gap-3 overflow-hidden whitespace-nowrap rounded-full bg-white p-2 transition-all duration-300
-          ring-2 ring-gray-200/45 hover-within:ring-4 hover:ring-4 dark:text-black dark:ring-gray-200/30 cursor-pointer"
+           ring-2 ring-gray-200/45 hover-within:ring-4 hover:ring-4 dark:ring-gray-200/30 dark:bg-black cursor-pointer"
               >
                 <ChevronRight size={20} />
               </button>
@@ -172,7 +172,7 @@ export default function CalendarPage() {
           </div>
         </div>
 
-        <div className="flex gap-1 px-4 py-2 m-2 bg-[#F4F6F8] rounded-full">
+        <div className="flex gap-1 px-4 py-2 m-2 bg-[#F4F6F8] rounded-full dark:bg-black">
           {["Month", "Week", "Day"].map((label, idx) => {
             const value = ["dayGridMonth", "timeGridWeek", "timeGridDay"][
               idx
@@ -193,7 +193,7 @@ export default function CalendarPage() {
                 )}
                 <span
                   className={`relative z-10 ${
-                    isActive ? "text-white" : "text-gray-800"
+                    isActive ? "text-white" : "text-gray-800 dark:text-white"
                   }`}
                 >
                   {label}

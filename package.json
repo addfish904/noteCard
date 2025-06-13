@@ -17,6 +17,7 @@
     "@editorjs/list": "^2.0.8",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@excalidraw/excalidraw": "^0.18.0",
     "@fullcalendar/core": "^6.1.17",
     "@fullcalendar/daygrid": "^6.1.17",
     "@fullcalendar/interaction": "^6.1.17",

@@ -18,8 +18,12 @@ export default function HomePage() {
   const blackSection = useRef(null);
   const heroImage = useRef(null);
 
+  const pinSection = useRef(null);
+  const pinImage = useRef(null);
+  const textSections = useRef<(HTMLDivElement | null)[]>([]);
+  const images = useRef<(HTMLImageElement | null)[]>([]);
+
   useEffect(() => {
-    // 頁面載入時圖片依序淡入動畫
     const introTl = gsap.timeline();
     introTl
       .fromTo(
@@ -40,7 +44,7 @@ export default function HomePage() {
         "+=0.2"
       );
 
-    // 下面是滾動觸發動畫，不受淡入影響
+    // scrollTrigger animation for folder and memo
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: scrollSection.current,
@@ -50,10 +54,10 @@ export default function HomePage() {
       },
     });
 
-    tl.fromTo(folderWrapper.current, { x: 0 }, { x: 200, duration: 1 }).fromTo(
+    tl.fromTo(folderWrapper.current, { x: 0 }, { x: 200 }).fromTo(
       memoWrapper.current,
       { x: 0 },
-      { x: 50, duration: 1 },
+      { x: 50 },
       "<"
     );
 
@@ -68,11 +72,76 @@ export default function HomePage() {
       },
     });
 
+    // 文字切換 + 圖片固定效果
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 768px)", () => {
+      // 固定圖片
+      ScrollTrigger.create({
+        trigger: pinSection.current,
+        start: "top top",
+        end: "bottom bottom",
+        pin: pinImage.current,
+        pinSpacing: true,
+      });
+
+      // 每段文字進場與出場動畫（滑入＋淡出）
+      textSections.current.forEach((section, index) => {
+        gsap.fromTo(
+          section,
+          { autoAlpha: 0, y: 100 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            scrollTrigger: {
+              trigger: section,
+              start: "top 80%",
+              end: "top 30%",
+              scrub: true,
+            },
+          }
+        );
+
+        // 滑出時淡出
+        gsap.to(section, {
+          autoAlpha: 0,
+          y: -100,
+          scrollTrigger: {
+            trigger: section,
+            start: "bottom 40%",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+
+        // 切換圖片
+        
+          ScrollTrigger.create({
+            trigger: section,
+            start: "top center",
+            end: "bottom center",
+            onEnter: () => showImage(index),
+            onEnterBack: () => showImage(index),
+          });
+          
+      }
+    );
+    });
+
     return () => {
-      tl.kill();
+      mm.revert();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
+
+  const showImage = (index: number) => {
+    images.current.forEach((img, i) => {
+      if (img) {
+        gsap.to(img, { autoAlpha: i === index ? 1 : 0, duration: 0.3 });
+      }
+    });
+  };
+  
 
   const login = async () => {
     try {
@@ -101,14 +170,16 @@ export default function HomePage() {
                 ))}
               </ul>
               <button
-            onClick={login}
-            className="border px-[16px] py-[8px] rounded-full cursor-pointer"
-          >
-            使用 Google 登入
-          </button>
+                onClick={login}
+                className="border px-[16px] py-[8px] rounded-full cursor-pointer"
+              >
+                使用 Google 登入
+              </button>
             </div>
           </header>
         </nav>
+
+        {/* hero section */}
         <div ref={scrollSection} className="relative text-center">
           <div className="relative z-20">
             <p className="text-[30px] text-[var(--color-primary)]">
@@ -153,6 +224,8 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+
+      {/* black section */}
       <div
         ref={blackSection}
         className="bg-black w-full relative top-full z-30 rounded-[80px_80px_0_0] py-24 px-10 flex flex-col items-center gap-12"
@@ -164,7 +237,72 @@ export default function HomePage() {
           alt="page img"
           width={1000}
           height={700}
-          className="p-8 bg-[#21C7FF] rounded-2xl"></Image>
+          className="p-8 bg-[#21C7FF] rounded-2xl"
+        />
+      </div>
+
+      {/* 第三段：圖片固定＋文字滑動 */}
+      <div
+        ref={pinSection}
+        className="flex flex-col md:flex-row pt-5 gap-20 px-10 bg-[#F7F6F9] h-full -m-[200px]"
+      >
+        {/* 左側固定圖片容器 */}
+        <div
+          ref={pinImage}
+          className="sticky top-[20vh] w-1/2 h-[60vh] flex items-center justify-center"
+        >
+          <Image
+            ref={(el) => {
+              images.current[0] = el!;
+            }}
+            src="/landing/note-tutorial1.jpg"
+            alt="Step 1"
+            width={400}
+            height={500}
+            className="absolute opacity-0 transition-opacity duration-500"
+          />
+          <Image
+            ref={(el) => {
+              images.current[1] = el!;
+            }}
+            src="/landing/note-tutorial2.jpg"
+            alt="Step 2"
+            width={400}
+            height={500}
+            className="absolute opacity-0 transition-opacity duration-500"
+          />
+          <Image
+            ref={(el) => {
+              images.current[2] = el!;
+            }}
+            src="/landing/note-tutorial1.jpg"
+            alt="Step 3"
+            width={400}
+            height={500}
+            className="absolute opacity-0 transition-opacity duration-500"
+          />
+        </div>
+
+        {/* 右側文字內容 */}
+        <div className="w-1/2 flex flex-col gap-[50vh] mt-[20vh]">
+          {["Step 1: Capture", "Step 2: Organize", "Step 3: Review"].map(
+            (text, i) => (
+              <div
+                key={i}
+                ref={(el) => {
+                  textSections.current[i] = el!;
+                }}
+                className="text-[36px] font-bold opacity-0"
+              >
+                {text}
+                <p className="text-[16px] font-normal mt-2">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
+                  vel sit omnis porro inventore.
+                </p>
+              </div>
+            )
+          )}
+          </div>
       </div>
     </>
   );
