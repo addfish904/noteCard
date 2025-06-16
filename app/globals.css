@@ -198,6 +198,16 @@ body {
   position: relative;
   padding-bottom: 40vh;
 }
+
+.milkdown-theme-nord code {
+  padding: 8px 12px !important;
+  color: #6eb4e6 !important;
+}
+
+.milkdown-theme-nord p {
+  margin: 10px 0;
+}
+
 .tooltip-menu {
   pointer-events: auto;
 }
