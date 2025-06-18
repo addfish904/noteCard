@@ -228,3 +228,17 @@ body {
 .excalidraw.theme--dark canvas {
   filter: none !important;
 }
+
+/* landing page footer 按鈕 */
+.arrow-clip {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1s ease;
+}
+
+.group:hover .arrow-clip {
+  clip-path: inset(0 0% 0 0);
+}
+
+html {
+  scroll-behavior: smooth;
+}
