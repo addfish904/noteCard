@@ -35,170 +35,6 @@ export default function HomePage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showProgress, setShowProgress] = useState(false);
 
-  // useEffect(() => {
-  //   const introTl = gsap.timeline();
-  //   introTl
-  //     .fromTo(
-  //       heroImage.current,
-  //       { opacity: 0, y: 20 },
-  //       { opacity: 1, y: 0, duration: 0.3 }
-  //     )
-  //     .fromTo(
-  //       memoWrapper.current,
-  //       { opacity: 0, y: 20 },
-  //       { opacity: 1, y: 0, duration: 0.3 },
-  //       "+=0.1"
-  //     )
-  //     .fromTo(
-  //       folderWrapper.current,
-  //       { opacity: 0, y: 20 },
-  //       { opacity: 1, y: 0, duration: 0.3 },
-  //       "+=0.1"
-  //     )
-  //     .fromTo(
-  //       checkWrapper.current,
-  //       { opacity: 0, y: 20 },
-  //       { opacity: 1, y: 0, duration: 0.3 },
-  //       "+=0.1"
-  //     )
-  //     .fromTo(
-  //       noteWrapper.current,
-  //       { opacity: 0, y: 20 },
-  //       { opacity: 1, y: 0, duration: 0.3 },
-  //       "+=0.1"
-  //     )
-  //     .fromTo(
-  //       clockWrapper.current,
-  //       { opacity: 0, y: 20 },
-  //       { opacity: 1, y: 0, duration: 0.3 },
-  //       "+=0.1"
-  //     );
-
-  //   const tl = gsap.timeline({
-  //     scrollTrigger: {
-  //       trigger: scrollSection.current,
-  //       start: "top center",
-  //       end: "bottom center",
-  //       scrub: true,
-  //     },
-  //   });
-
-  //   tl.fromTo(folderWrapper.current, { x: 0 }, { x: 200 })
-  //     .fromTo(memoWrapper.current, { x: 0 }, { x: 50 }, "<")
-  //     .fromTo(checkWrapper.current, { x: 0 }, { x: 10 }, "<")
-  //     .fromTo(noteWrapper.current, { x: 0 }, { x: -50 }, "<")
-  //     .fromTo(clockWrapper.current, { x: 0 }, { x: -100 }, "<");
-
-  //   gsap.to(blackSection.current, {
-  //     y: -400,
-  //     ease: "none",
-  //     scrollTrigger: {
-  //       trigger: scrollSection.current,
-  //       start: "bottom bottom",
-  //       end: "+=500",
-  //       scrub: true,
-  //     },
-  //   });
-
-  //   headingsRef.current.forEach((el) => {
-  //     if (!el) return;
-  //     const split = new SplitType(el, { types: "chars", tagName: "span" });
-  //     gsap.fromTo(
-  //       split.chars,
-  //       { y: 40, opacity: 0 },
-  //       {
-  //         y: 0,
-  //         opacity: 1,
-  //         ease: "power3.out",
-  //         stagger: 0.05,
-  //         duration: 0.6,
-  //         scrollTrigger: {
-  //           trigger: el,
-  //           start: "top 80%",
-  //           toggleActions: "play none none none",
-  //         },
-  //       }
-  //     );
-  //   });
-
-  //   const mm = gsap.matchMedia();
-
-  //   mm.add("(min-width: 768px)", () => {
-  //     ScrollTrigger.create({
-  //       trigger: pinSection.current,
-  //       start: "top top",
-  //       end: "bottom bottom",
-  //       pin: pinImage.current,
-  //       pinSpacing: true,
-  //     });
-
-  //     textSections.current.forEach((section, index) => {
-  //       gsap.fromTo(
-  //         section,
-  //         { autoAlpha: 1, y: 100 },
-  //         {
-  //           autoAlpha: 1,
-  //           y: 0,
-  //           scrollTrigger: {
-  //             trigger: section,
-  //             start: "top 80%",
-  //             end: "top -40%",
-  //             scrub: true,
-  //           },
-  //         }
-  //       );
-
-  //       gsap.to(section, {
-  //         autoAlpha: 0,
-  //         y: -100,
-  //         scrollTrigger: {
-  //           trigger: section,
-  //           start: "bottom center",
-  //           end: "bottom top",
-  //           scrub: true,
-  //         },
-  //       });
-
-  //       ScrollTrigger.create({
-  //         trigger: section,
-  //         start: "top 70%",
-  //         end: "bottom center",
-  //         onEnter: () => showImage(index),
-  //         onEnterBack: () => showImage(index),
-  //       });
-  //     });
-  //   });
-
-  //   // IntersectionObserver for progress indicator
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       entries.forEach((entry) => {
-  //         const index = textSections.current.indexOf(
-  //           entry.target as HTMLDivElement
-  //         );
-  //         if (entry.isIntersecting) {
-  //           setActiveIndex(index);
-  //         }
-  //       });
-  //     },
-  //     {
-  //       root: null,
-  //       rootMargin: "0px",
-  //       threshold: 0.6,
-  //     }
-  //   );
-
-  //   textSections.current.forEach((el) => {
-  //     if (el) observer.observe(el);
-  //   });
-
-  //   return () => {
-  //     mm.revert();
-  //     ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-  //     observer.disconnect();
-  //   };
-  // }, []);
-
   useEffect(() => {
     const introTl = gsap.timeline();
     introTl
@@ -253,8 +89,11 @@ export default function HomePage() {
       .fromTo(noteWrapper.current, { x: 0 }, { x: -50 }, "<")
       .fromTo(clockWrapper.current, { x: 0 }, { x: -100 }, "<");
 
+    const yValue =
+      window.innerWidth < 576 ? -30 : window.innerWidth < 768 ? -160 : -400;
+
     gsap.to(blackSection.current, {
-      y: -400,
+      y: yValue,
       ease: "none",
       scrollTrigger: {
         trigger: scrollSection.current,
@@ -398,9 +237,10 @@ export default function HomePage() {
       <div className="bg-[#F7F6F9] overflow-hidden scroll-smooth">
         <nav>
           <header>
-            <div className="flex justify-between p-6">
-              <h1 id="logo">Logo</h1>
-              <ul className="flex gap-4 list-none">
+            <div className="grid md:grid-cols-3 grid-cols-2 items-center py-6 px-6 sm:px-8">
+              <Image src="/logo.svg" alt="logo" width={30} height={20} />
+
+              <ul className="justify-center gap-4 list-none md:flex hidden">
                 <li
                   key={"about"}
                   className="bg-white rounded-full px-7 py-3 flex justify-center items-center shadow-[0px_0px_20px_0px_rgba(0,0,0,0.1)]"
@@ -420,18 +260,21 @@ export default function HomePage() {
                   <a href="#contact">Contact</a>
                 </li>
               </ul>
-              <button
-                onClick={login}
-                className="border px-[16px] py-[8px] rounded-full cursor-pointer"
-              >
-                使用 Google 登入
-              </button>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={login}
+                  className="border px-[16px] py-[8px] rounded-full cursor-pointer"
+                >
+                  使用 Google 登入
+                </button>
+              </div>
             </div>
           </header>
         </nav>
 
         {/* hero section */}
-        <div ref={scrollSection} className="relative text-center">
+        <div ref={scrollSection} className="relative text-center mt-6">
           <div className="relative z-20">
             <p className="text-[30px] text-[var(--color-primary)]">
               Welcome To
@@ -440,7 +283,7 @@ export default function HomePage() {
               ref={(el) => {
                 headingsRef.current[0] = el!;
               }}
-              className="text-[200px] text-[var(--color-primary)] mt-[-50px]"
+              className="lg:text-[200px] md:text-[120px] text-[70px] text-[var(--color-primary)] md:mt-[-50px] mt-[-20px]"
             >
               NoteCard
             </h1>
@@ -451,7 +294,7 @@ export default function HomePage() {
             alt="hero img"
             width={1200}
             height={825}
-            className="relative z-30 m-auto -mt-50 opacity-0"
+            className="relative z-30 m-auto lg:-mt-50 md:-mt-20 sm:-mt-8 opacity-0"
           />
           <div
             ref={folderWrapper}
@@ -462,6 +305,7 @@ export default function HomePage() {
               alt="folder img"
               width={320}
               height={250}
+              className="md:w-[320px] w-[220px]"
             />
           </div>
           <div
@@ -473,6 +317,7 @@ export default function HomePage() {
               alt="memo img"
               width={210}
               height={210}
+              className="md:w-[210px] w-[180px]"
             />
           </div>
           <div
@@ -484,6 +329,7 @@ export default function HomePage() {
               alt="check icon"
               width={110}
               height={110}
+              className="md:w-[110px] w-[90px]"
             />
           </div>
 
@@ -496,7 +342,7 @@ export default function HomePage() {
               alt="note img"
               width={360}
               height={290}
-              className="z-2"
+              className="z-2 md:w-[360px] w-[260px]"
             />
           </div>
           <div
@@ -508,6 +354,7 @@ export default function HomePage() {
               alt="clock icon"
               width={120}
               height={120}
+              className="md:w-[120px] w-[100px]"
             />
           </div>
           <Image
@@ -523,7 +370,8 @@ export default function HomePage() {
       <div
         ref={blackSection}
         id="about"
-        className="bg-black w-full relative top-full z-30 rounded-[80px_80px_0_0] pt-24 pb-40 px-10 flex flex-col items-center gap-12"
+        className="bg-black w-full relative top-full z-30 pb-40 px-10 flex flex-col items-center
+        lg:rounded-[80px_80px_0_0] md:rounded-[60px_60px_0_0] rounded-[20px_20px_0_0] md:pt-24 pt-18 md:gap-12 gap-8"
       >
         <span className="bg-white rounded-full px-7 py-3">About</span>
         <div className="flex flex-col items-center -gap-4">
@@ -531,11 +379,13 @@ export default function HomePage() {
             ref={(el) => {
               headingsRef.current[1] = el!;
             }}
-            className="text-white text-[58px]"
+            className="text-white sm:text-[40px] md:text-[58px] text-[30px]"
           >
             Think, plan and write
           </h3>
-          <h4 className="text-gray-500 text-[40px]">in one place</h4>
+          <h4 className="text-gray-500 sm:text-[30px] md:text-[40px] text-[24px]">
+            in one place
+          </h4>
         </div>
         <Image
           src={"/landing/notes-page.png"}
@@ -547,7 +397,7 @@ export default function HomePage() {
       </div>
 
       {/* 第三段：圖片固定＋文字滑動 */}
-      <div className="relative flex justify-center">
+      <div className="relative md:flex justify-center hidden">
         {/* 左側進度指示器 */}
         {showProgress && (
           <div className="fixed left-[4%] top-[40%] flex flex-col gap-6 z-10">
@@ -564,14 +414,14 @@ export default function HomePage() {
 
         <div
           ref={pinSection}
-          className="flex flex-col md:flex-row p-5 bg-[#F7F6F9] min-h-[300vh] -mt-[400px] w-full"
+          className="flex flex-col md:flex-row gap-14 p-5 bg-[#F7F6F9] min-h-[300vh] -mt-[400px] w-full px-25"
         >
           {/* 左側固定圖片容器 */}
           <div
             ref={pinImage}
-            className="sticky top-[15vh] w-[55%] h-[60vh] flex items-center justify-center"
+            className="sticky top-[15vh] w-[55%] h-[60vh] items-center justify-center hidden md:flex"
           >
-            <div className="bg-[#F1F0F3] rounded-2xl w-[580px] h-[380px] border border-gray-300">
+            <div className="bg-[#F1F0F3] rounded-2xl w-full max-w-[580px] h-[380px] border border-gray-300">
               <Image
                 ref={(el) => {
                   images.current[0] = el!;
@@ -580,7 +430,8 @@ export default function HomePage() {
                 alt="note"
                 width={380}
                 height={240}
-                className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 opacity-0 transition-opacity duration-500"
+                className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 opacity-0 transition-opacity duration-500
+                w-[300px] lg:w-[380px]"
               />
               <Image
                 ref={(el) => {
@@ -605,7 +456,7 @@ export default function HomePage() {
             </div>
           </div>
           {/* 右側文字內容 */}
-          <div className="w-[45%] flex flex-col gap-[50vh] pt-[20vh] pr-30">
+          <div className="w-[45%] flex flex-col gap-[50vh] pt-[20vh]">
             <div
               key={0}
               ref={(el) => {
@@ -739,7 +590,8 @@ export default function HomePage() {
       {/* 第四段：元件介紹 */}
       <div
         id="features"
-        className="h-full bg-[#F7F6F9] flex flex-col justify-center items-center gap-12 pt-24 pb-40 px-24"
+        className="h-full bg-[#F7F6F9] flex flex-col justify-center items-center gap-12 pt-24 overflow-hidden 
+        sm:pb-40 pb-10 lg:px-24 sm:px-12 px-6 md:mt-0 -mt-[400px]"
       >
         <span className="bg-white rounded-full px-7 py-3 shadow-[0px_0px_20px_0px_rgba(0,0,0,0.1)]">
           Features
@@ -748,13 +600,13 @@ export default function HomePage() {
           ref={(el) => {
             headingsRef.current[4] = el!;
           }}
-          className="text-[58px]"
+          className="sm:text-[40px] lg:text-[58px] md:text-[48px] text-[30px] text-center break-normal"
         >
-          Organizer your life in NoteCard
+          Organize your life in NoteCard
         </h3>
         <div className="w-full flex flex-col gap-4">
-          <div className="flex gap-4">
-            <div className="w-1/3 h-full p-8 rounded-2xl bg-white flex flex-col gap-4 overflow-hidden group relative">
+          <div className="flex gap-4 md:flex-nowrap flex-wrap">
+            <div className="md:w-1/3 w-full h-full p-8 rounded-2xl bg-white flex flex-col gap-4 overflow-hidden group relative">
               <div className="relative w-full h-[360px]">
                 {/* 左上 */}
                 <Image
@@ -795,7 +647,7 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
-            <div className="w-2/3 bg-white rounded-2xl group overflow-hidden">
+            <div className="md:w-2/3 w-full bg-white rounded-2xl group overflow-hidden hidden md:block">
               <div className="relative h-full flex items-end">
                 <Image
                   src="/landing/3/3-04.png"
@@ -821,7 +673,7 @@ export default function HomePage() {
                   height={100}
                   className="absolute top-15 left-15"
                 ></Image>
-                <div className="flex flex-col items-start gap-4 p-8 w-90">
+                <div className="flex flex-col items-start gap-4 p-8 md:w-90 w-full">
                   <h4 className="text-xl font-semibold">行事曆</h4>
                   <p className="text-gray-600">
                     支援週、日、月多種視圖切換，新增事件並串聯筆記內容，將行程與想法無縫整合。
@@ -830,8 +682,8 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          <div className="flex gap-4">
-            <div className="w-2/3 h-full p-8 rounded-2xl bg-white flex flex-col gap-4 overflow-hidden group relative">
+          <div className="flex gap-4 md:flex-nowrap flex-wrap">
+            <div className="md:w-2/3 w-full h-full p-8 rounded-2xl bg-white flex flex-col gap-4 overflow-hidden group relative">
               <div className="relative w-full h-[360px]">
                 <Image
                   src="/landing/3/3-07.png"
@@ -876,7 +728,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="w-1/3 bg-white rounded-2xl overflow-hidden flex flex-col justify-between group">
+            <div className="md:w-1/3 w-full bg-white rounded-2xl overflow-hidden flex flex-col justify-between group">
               <div className="relative w-full h-[300px]">
                 <Image
                   src="/landing/3/3-11.svg"
@@ -906,65 +758,73 @@ export default function HomePage() {
       {/* 第五段：contact */}
       <section
         id="contact"
-        className="bg-black text-white h-full flex flex-col gap-8 justify-center items-center py-20 px-6"
+        className="bg-black text-white h-full flex flex-col gap-8 justify-center items-start py-20 md:px-16 px-8 overflow-hidden"
       >
-        {/* start now */}
-        <div
-          onClick={login}
-          className="group flex items-center gap-6 transition-all duration-300 hover:translate-x-2 cursor-pointer"
-        >
-          <p className="text-[60px] font-light">Start Now</p>
-          <button className="relative flex items-center gap-2 px-3 py-1 rounded-full border border-white bg-[#000c12] transition-colors duration-300 group-hover:bg-white group-hover:border-[#000c12]">
-            <div className="relative w-8 h-4 overflow-hidden">
-              {/* 白色箭頭（底層） */}
-              <svg
-                className="absolute inset-0 w-full h-full text-white"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M5 12h20M18 6l6 6-6 6" />
-              </svg>
-
-              {/* 黑色箭頭（上層） */}
-              <svg
-                className="absolute inset-0 w-full h-full text-black arrow-clip"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M5 12h20M18 6l6 6-6 6" />
-              </svg>
-            </div>
-          </button>
+        <div className="flex items-center gap-3">
+          <Image src="/logo-white.svg" alt="logo" width={34} height={20} />
+          <h1 id="logo" className="text-xl font-semibold text-white">
+            NoteCard
+          </h1>
         </div>
-        <hr className="w-full text-gray-700 p-6" />
-        <div className="flex items-center justify-center gap-8">
-          <Link
-            href="#"
-            className="flex items-center gap-4 px-10 py-4 border border-white rounded-full cursor-pointer transition-all duration-300 bg-transparent hover:bg-[#0C64C5] hover:border-[#0C64C5]"
-          >
-            <FaLinkedin />
-            Linkin
-          </Link>
+        <hr className="w-full text-gray-700" />
+        <div className="w-full flex justify-between">
+          <div className="flex sm:flex-row sm:w-fit w-full flex-col items-center justify-center gap-4">
+            <Link
+              href="#"
+              className="sm:w-fit w-full flex justify-center items-center gap-4 px-10 py-4 border border-gray-500 rounded-full cursor-pointer transition-all duration-300 bg-transparent hover:bg-[#0C64C5] hover:border-[#0C64C5]"
+            >
+              <FaLinkedin />
+              Linkin
+            </Link>
 
-          <Link
-            href="#"
-            className="flex items-center gap-4 px-10 py-4 border border-white rounded-full cursor-pointer transition-all duration-300 bg-transparent hover:bg-[#622783] hover:border-[#622783]"
-          >
-            <FaGithub />
-            Github
-          </Link>
+            <Link
+              href="#"
+              className="sm:w-fit w-full flex justify-center items-center gap-4 px-10 py-4 border border-gray-500 rounded-full cursor-pointer transition-all duration-300 bg-transparent hover:bg-[#622783] hover:border-[#622783]"
+            >
+              <FaGithub />
+              Github
+            </Link>
 
-          <Link
-            href="mailto:rain21509517@gmail.com"
-            className="flex items-center gap-4 px-10 py-4 border border-white rounded-full cursor-pointer transition-all duration-300 bg-transparent hover:bg-[#201F60] hover:border-[#201F60]"
+            <Link
+              href="mailto:rain21509517@gmail.com"
+              className="sm:w-fit w-full flex justify-center items-center gap-4 px-10 py-4 border border-gray-500 rounded-full cursor-pointer transition-all duration-300 bg-transparent hover:bg-[#201F60] hover:border-[#201F60]"
+            >
+              <IoMail />
+              Email
+            </Link>
+          </div>
+          {/* start now */}
+          <div
+            onClick={login}
+            className="group md:flex hidden items-center gap-6 transition-all duration-300 hover:translate-x-2 cursor-pointer"
           >
-            <IoMail />
-            Email
-          </Link>
+            <p className="text-[40px] font-light">Start Now</p>
+            <button className="relative flex items-center gap-2 px-3 py-1 rounded-full border border-white bg-[#000c12] transition-colors duration-300 group-hover:bg-white group-hover:border-[#000c12]">
+              <div className="relative w-8 h-4 overflow-hidden">
+                {/* 白色箭頭（底層） */}
+                <svg
+                  className="absolute inset-0 w-full h-full text-white"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M5 12h20M18 6l6 6-6 6" />
+                </svg>
+
+                {/* 黑色箭頭（上層） */}
+                <svg
+                  className="absolute inset-0 w-full h-full text-black arrow-clip"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M5 12h20M18 6l6 6-6 6" />
+                </svg>
+              </div>
+            </button>
+          </div>
         </div>
       </section>
     </>
