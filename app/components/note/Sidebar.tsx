@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Tag } from "@/types/tag";
 import { addTag, logout as userLogout, deleteTag } from "@/lib/firestore";
 import { useRouter, usePathname } from "next/navigation";
-import { LogOut, ChevronLeft, ChevronRight } from "lucide-react";
+import { LogOut, ChevronLeft, ChevronRight, Ellipsis } from "lucide-react";
 import { useSelectedTag } from "@/app/context/SelectedTagContext";
 import Image from "next/image";
 
@@ -24,7 +24,7 @@ const iconMap: Record<string, string> = {
   Home: "/icons/Home.svg",
   Notes: "/icons/Note.svg",
   Calendar: "/icons/Calendar.svg",
-  Canvas: "/icons/draw.svg"
+  Canvas: "/icons/draw.svg",
 };
 
 const pagePathMap: Record<string, string> = {
@@ -233,12 +233,14 @@ export default function Sidebar({
                     setActiveTagId(tag.id);
                     router.push("/home/note");
                   }}
-                  className="inline-flex items-center justify-start w-full gap-[20px] rounded-md text-sm transition-colors dark:text-white pl-5 pr-4 py-2 dark:hover:bg-[var(--color-secondary)]"
+                  className="inline-flex items-center justify-start w-full gap-[20px] rounded-md text-sm transition-colors dark:text-white pl-5 pr-4 py-2 dark:hover:bg-[var(--color-secondary)] cursor-pointer"
                 >
-                  <span
-                    className="rounded-full w-[10px] h-[10px]"
-                    style={{ backgroundColor: tag.color }}
-                  />
+                  <div className="w-[20px] h-[20px] flex items-center justify-center">
+                    <span
+                      className="rounded-full w-[10px] h-[10px]"
+                      style={{ backgroundColor: tag.color }}
+                    />
+                  </div>
                   {!collapsed && (
                     <span className="text-sm text-gray-600 dark:text-white">
                       {tag.name}
@@ -252,16 +254,16 @@ export default function Sidebar({
                       e.stopPropagation();
                       setEditingTagId(tag.id);
                     }}
-                    className="absolute right-2 top-2 text-xs text-gray-400 hover:text-black dark:text-white"
+                    className="absolute right-2 top-2 text-xs text-gray-400 hover:text-black dark:text-white cursor-pointer"
                   >
-                    ⋮
+                    <Ellipsis className="w-4 h-4 text-[#C8C8C8]" />
                   </button>
                 )}
 
                 {isEditing && (
                   <div
                     ref={editMenuRef}
-                    className="absolute right-2 top-8 z-10 bg-white dark:bg-[#1f1f1f] border border-gray-200 dark:border-gray-600 rounded shadow"
+                    className="absolute right-2 top-8 z-10 bg-white dark:bg-[#1f1f1f] border border-gray-200 dark:border-gray-600 rounded shadow "
                   >
                     <button
                       onClick={async () => {
@@ -272,7 +274,7 @@ export default function Sidebar({
                           alert("刪除失敗");
                         }
                       }}
-                      className="px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900 w-full text-left"
+                      className="px-4 py-2 text-sm hover:bg-gray-50 w-full text-left p-1 cursor-pointer"
                     >
                       刪除標籤
                     </button>
@@ -287,14 +289,16 @@ export default function Sidebar({
               ref={newTagInputRef}
               className="relative flex items-center gap-[10px] pl-5 pr-4 py-2"
             >
-              <button
-                className="rounded-full w-[10px] h-[10px] cursor-pointer"
-                style={{ backgroundColor: selectedColor }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowColorPicker((prev) => !prev);
-                }}
-              ></button>
+              <div className="w-[20px] h-[20px] flex items-center justify-center">
+                <button
+                  className="rounded-full w-[10px] h-[10px] cursor-pointer"
+                  style={{ backgroundColor: selectedColor }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowColorPicker((prev) => !prev);
+                  }}
+                ></button>
+              </div>
               <input
                 autoFocus
                 type="text"
@@ -320,7 +324,7 @@ export default function Sidebar({
         {!collapsed && newTagName === null && (
           <button
             onClick={() => setNewTagName("")}
-            className="mt-4 w-full text-gray-700 text-xs dark:text-white"
+            className="mt-6 w-full text-gray-700 text-xs dark:text-white cursor-pointer"
           >
             + 新增標籤
           </button>
@@ -334,7 +338,7 @@ export default function Sidebar({
           collapsed ? "hidden" : ""
         )}
       >
-        <button className="inline-flex items-center justify-start gap-[20px] pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white rounded-md dark:hover:bg-[var(--color-secondary)]">
+        {/* <button className="inline-flex items-center justify-start gap-[20px] pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white rounded-md dark:hover:bg-[var(--color-secondary)]">
           <Image
             src="/icons/Settings.svg"
             alt="setting icon"
@@ -345,7 +349,7 @@ export default function Sidebar({
           {!collapsed && (
             <span className="text-sm text-gray-600 dark:text-white">設定</span>
           )}
-        </button>
+        </button> */}
         <button
           onClick={handleLogout}
           className="inline-flex items-center justify-start gap-[20px] pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white rounded-md dark:hover:bg-[var(--color-secondary)]"

@@ -44,7 +44,7 @@ export default function Editor() {
 
     setIsSaving(true);
     const markdown = getMarkdown()(editorRef.current.ctx);
-    console.log("儲存的 markdown:", markdown); 
+    console.log("儲存的 markdown:", markdown);
 
     try {
       await updateNote(selectedNote.id, {
@@ -83,7 +83,7 @@ export default function Editor() {
 
   return (
     <div className="flex flex-col w-full h-full overflow-scroll">
-      <div className="flex justify-between border-b border-[var(--line)] px-20 py-3 text-xs">
+      <div className="flex justify-between border-b border-[var(--line)] sm:px-20 px-8 py-3 text-xs">
         <span>
           {tag?.name} / {selectedNote.title}
         </span>
@@ -91,7 +91,7 @@ export default function Editor() {
           {formatNoteDate(selectedNote.updatedAt)}
         </span>
       </div>
-      <div className="pt-4 pb-3 px-20">
+      <div className="pt-4 pb-3 sm:px-20 px-8">
         <input
           value={localTitle}
           onChange={handleTitleChange}
@@ -99,7 +99,7 @@ export default function Editor() {
           placeholder="請輸入標題"
         />
         <MilkdownProvider>
-          <MilkdownEditor/>
+          <MilkdownEditor />
         </MilkdownProvider>
         <button
           onClick={handleSave}

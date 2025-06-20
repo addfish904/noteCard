@@ -140,16 +140,16 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex flex-wrap items-center justify-between w-full px-8 py-2 my-2">
+    <div className="flex flex-col items-center h-[calc(100dvh-50px)] sm:h-auto">
+      <div className="flex flex-wrap items-center sm:justify-between justify-center w-full px-8 py-2 sm:gap-0 gap-4">
         <div className="flex items-center gap-10">
-          <span className="text-2xl font-medium min-w-[180px]">
+          <span className="text-xl font-medium sm:min-w-[180px] min-w-0">
             {format(currentDate, "MMMM yyyy")}
           </span>
           <div className="flex gap-4">
             <button
               onClick={handleToday}
-              className="text-sm px-6 py-2 border border-gray-200/45 rounded-full bg-[#F4F6F8] hover:bg-gray-100 cursor-pointer dark:bg-black text-gray-800 dark:text-white" 
+              className="text-sm px-6 py-2 border border-gray-200/45 rounded-full bg-[#F4F6F8] hover:bg-gray-100 cursor-pointer dark:bg-black text-gray-800 dark:text-white"
             >
               Today
             </button>
@@ -172,7 +172,7 @@ export default function CalendarPage() {
           </div>
         </div>
 
-        <div className="flex gap-1 px-4 py-2 m-2 bg-[#F4F6F8] rounded-full dark:bg-black">
+        <div className="flex justify-between gap-1 px-4 py-2 m-2 bg-[#F4F6F8] rounded-full dark:bg-black sm:w-fit w-full">
           {["Month", "Week", "Day"].map((label, idx) => {
             const value = ["dayGridMonth", "timeGridWeek", "timeGridDay"][
               idx
@@ -204,8 +204,10 @@ export default function CalendarPage() {
         </div>
       </div>
 
-      <div className="w-full">
+      <div className="flex-1">
         <FullCalendar
+          height="100%"
+          contentHeight="auto"
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView={calendarView}

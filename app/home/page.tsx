@@ -47,10 +47,10 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col bg-[#f3f5f7] py-6 dark:bg-[var(--background)]">
-      <div className="flex items-center justify-between mb-3 px-12">
+      <div className="flex items-center justify-between mb-3 sm:px-8 px-6 sm:flex-row flex-col sm:gap-0 gap-4">
         <h1 className="text-3xl font-bold ml-4">Welcome back! 🔮</h1>
         <button
-          className="bg-[var(--color-primary)] text-white rounded-[8px] px-4 py-3 cursor-pointer mr-4 hover:bg-[#323153]"
+          className="bg-[var(--color-primary)] text-white rounded-[8px] px-4 py-3 cursor-pointer sm:mr-4 mr-0 hover:bg-[#323153] w-full sm:w-fit"
           onClick={async () => {
             try {
               await addNote();
@@ -63,7 +63,7 @@ export default function HomePage() {
           + New Note
         </button>
       </div>
-      <main className="w-full mx-auto px-12">
+      <main className="w-full mx-auto sm:px-8 px-4">
         <ResponsiveGridLayout
           className="layout"
           layouts={gridlayouts}
@@ -85,7 +85,7 @@ export default function HomePage() {
             <RecentlyNotes latestNotes={latestNotes} tags={tags} />
           </div>
           <div key="thread">
-            <Thread/>
+            <Thread />
           </div>
           <div key="chart">
             <Chart />

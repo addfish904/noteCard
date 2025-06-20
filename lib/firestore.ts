@@ -6,6 +6,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  getDoc,
   query,
   orderBy,
   Timestamp,
@@ -183,4 +184,46 @@ export const listenToNotes = (
   });
 
   return unsubscribe;
+};
+
+
+
+export type DrawingData = {
+  userId: string; 
+  elements: any[]; 
+  appState: any; 
+  files?: Record<string, any>;
+  updatedAt: Timestamp;
+};
+
+
+const DRAWING_COLLECTION = "excalidraw";
+
+export const saveDrawing = async (
+  userId: string,
+  data: Omit<DrawingData, "updatedAt">
+) => {
+  const ref = doc(db, DRAWING_COLLECTION, userId);
+  return await setDoc(ref, {
+    ...data,
+    updatedAt: Timestamp.now(),
+  });
+};
+
+export const loadDrawing = async (userId: string) => {
+  const docRef = doc(db, "excalidraw", userId);
+  const snapshot = await getDoc(docRef);
+
+  if (!snapshot.exists()) return null;
+
+  const data = snapshot.data();
+
+  return {
+    id: snapshot.id,
+    userId: data.userId,
+    elements: JSON.parse(data.elements || "[]"),
+    appState: JSON.parse(data.appState || "{}"),
+    files: JSON.parse(data.files || "{}"),
+    updatedAt: data.updatedAt?.toDate?.() ?? null,
+  };
 };

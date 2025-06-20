@@ -5,7 +5,8 @@ import { FaArrowRight, FaSquareThreads } from "react-icons/fa6";
 import Anchor from "../ui/anchor";
 import Card from "../ui/card";
 import Image from "next/image";
-import { SquarePen } from "lucide-react";
+import { SquarePen, Images } from "lucide-react";
+import { Undo2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +31,6 @@ export default function Thread() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [open, setOpen] = useState(false);
-
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -77,41 +77,45 @@ export default function Thread() {
                 className="cancel-drag cursor-pointer"
                 onClick={(e) => e.stopPropagation()}
               >
-                <SquarePen className="w-[22px] h-[22px] text-gray-500" />
+                <SquarePen className="w-[20px] h-[20px] text-gray-500" />
               </button>
             )}
           </DialogTrigger>
           <DialogContent
-            className="sm:max-w-md cancel-drag !max-w-[26rem]"
+            className="sm:max-w-md cancel-drag !max-w-[26rem] border-0"
             onClick={(e) => e.stopPropagation()}
           >
-            <DialogHeader>
-              <DialogTitle>編輯快速連結與圖片</DialogTitle>
-            </DialogHeader>
-            <div className="flex flex-col gap-4 mt-4">
-              <Input
-                type="url"
-                placeholder="輸入網站連結"
-                value={inputUrl}
-                onChange={(e) => setInputUrl(e.target.value)}
-              />
-              <div className="flex gap-2 items-center">
-                <Button
-                  variant="outline"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  選擇圖片
-                </Button>
-                <input
-                  type="file"
-                  accept="image/*"
-                  ref={fileInputRef}
-                  onChange={handleFileUpload}
-                  className="hidden"
+            <div className="flex flex-col gap-10 mt-2">
+              <DialogHeader>
+                <DialogTitle>編輯快速連結</DialogTitle>
+              </DialogHeader>
+              <div className="flex flex-col gap-4">
+                <Input
+                  type="url"
+                  placeholder="輸入網站連結"
+                  value={inputUrl}
+                  onChange={(e) => setInputUrl(e.target.value)}
                 />
-                <Button variant="outline" onClick={handleReset}>
-                  恢復預設
-                </Button>
+                <div className="flex gap-2 items-center">
+                  <Button
+                    variant="outline"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <Images />
+                    選擇圖片
+                  </Button>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                  <Button variant="outline" onClick={handleReset}>
+                    <Undo2 />
+                    恢復預設
+                  </Button>
+                </div>
               </div>
               {inputIcon && (
                 <Image
@@ -122,10 +126,15 @@ export default function Thread() {
                   className="rounded-full"
                 />
               )}
+              <DialogFooter className="mt-4">
+                <Button
+                  onClick={handleSave}
+                  className="bg-[var(--color-primary)] w-full"
+                >
+                  儲存
+                </Button>
+              </DialogFooter>
             </div>
-            <DialogFooter className="mt-4">
-              <Button onClick={handleSave} className="bg-[var(--color-primary)]">儲存</Button>
-            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>

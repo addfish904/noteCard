@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><style>
+    #light-icon {
+      display: inline;
+    }
+    #dark-icon {
+      display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #light-icon {
+        display: none;
+      }
+      #dark-icon {
+        display: inline;
+      }
+    }
+  </style><g id="light-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g><g transform="matrix(34.48275862068966,0,0,34.48275862068966,-5.684341886080802e-14,172.41379310344826)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="29" height="19"><svg width="29" height="19" viewBox="0 0 29 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.18457 8.64222L11.0747 0.997696C12.9858 0.544679 16.1784 3.97703 17.9284 7.01332C19.8854 10.4089 20.8907 7.89065 21.2255 7.01332L22.6547 0.997696H28.031C27.3023 4.44423 26.1063 12.5604 24.0727 15.5986C21.3532 19.6614 17.9284 18.7129 14.5827 12.9879C12.4174 9.28277 10.3859 8.78859 9.18457 8.64222Z" fill="#1D164B"></path>
+<path d="M3.0708 10.4462C4.19702 8.56847 6.72463 8.33891 9.18883 8.63384L6.685 18.002L0.505859 18.0019C0.807562 16.2773 1.94459 12.3239 3.0708 10.4462Z" fill="#1D164B"></path>
+</svg></svg></g></g></svg></g><g id="dark-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g><g transform="matrix(32.25806451612903,0,0,32.25806451612903,0,177.4193548387097)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="31" height="20"><svg width="31" height="20" viewBox="0 0 31 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.67188 9.06763L11.8096 0.916407C13.9712 0.433363 17.582 4.09322 19.5613 7.33076C21.7747 10.9514 22.9117 8.26624 23.2904 7.33076L24.9069 0.916407H30.9875C30.1634 4.59139 28.8106 13.2456 26.5106 16.4851C23.4348 20.8172 19.5613 19.8058 15.7772 13.7014C13.3282 9.75063 11.0306 9.2237 9.67188 9.06763Z" fill="white"></path>
+<path d="M3.57486 11.028C4.84863 9.02578 6.88983 8.74372 9.67688 9.0582L6.845 19.0473L0.987305 19.0472C1.32854 17.2083 2.30109 13.0301 3.57486 11.028Z" fill="white"></path>
+</svg></svg></g></g></svg></g></svg>

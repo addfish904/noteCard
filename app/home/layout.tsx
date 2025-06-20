@@ -5,12 +5,16 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { TagProvider, useTags } from "@/app/context/TagContext";
 import { NoteProvider } from "@/app/context/NoteContext";
-import { SelectedTagProvider, useSelectedTag } from "@/app/context/SelectedTagContext";
+import {
+  SelectedTagProvider,
+  useSelectedTag,
+} from "@/app/context/SelectedTagContext";
 import Sidebar from "@/app/components/note/Sidebar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, LogOut } from "lucide-react";
 import Image from "next/image";
 import { logout } from "@/lib/firestore";
+import { cn } from "@/lib/utils";
 
 function MobileSidebar() {
   const router = useRouter();
@@ -18,13 +22,17 @@ function MobileSidebar() {
   const { setSelectedTagId } = useSelectedTag();
   const [, setActiveTagId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNavigate = (callback: () => void) => {
+    setIsLoading(true);
     callback();
+    setTimeout(() => setIsLoading(false), 800); // fake loading timeout
     setOpen(false);
   };
 
   const handleLogout = async () => {
+    setIsLoading(true);
     await logout();
     router.push("/");
   };
@@ -35,11 +43,18 @@ function MobileSidebar() {
         <Menu className="w-6 h-6 text-black dark:text-white" />
       </SheetTrigger>
       <SheetContent side="right" className="px-6 py-12 w-[40%]">
-        <div className="flex flex-col gap-8 p-6 border-b border-[var(--line)]">
+        {isLoading && (
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white/60 dark:bg-black/60">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--color-primary)]" />
+          </div>
+        )}
+
+        <div className="flex flex-col gap-8 p-0 sm:p-6">
           {[
             { href: "/home", label: "Home", icon: "Home.svg" },
             { href: "/home/note", label: "Notes", icon: "Note.svg" },
             { href: "/home/calendar", label: "Calendar", icon: "Calendar.svg" },
+            { href: "/home/canvas", label: "Canvas", icon: "draw.svg" },
           ].map((item) => (
             <button
               key={item.href}
@@ -57,9 +72,10 @@ function MobileSidebar() {
             </button>
           ))}
         </div>
+        <hr className="my-2 text-gray-200" />
 
         {/* tag標籤 */}
-        <div className="flex flex-col gap-8 p-6 border-b border-[var(--line)]">
+        <div className="flex flex-col gap-8 p-0 sm:p-6">
           <button
             onClick={() =>
               handleNavigate(() => {
@@ -84,9 +100,11 @@ function MobileSidebar() {
             <button
               key={tag.id}
               onClick={() => {
-                setSelectedTagId(tag.id);
-                setActiveTagId(tag.id);
-                router.push("/home/note");
+                handleNavigate(() => {
+                  setSelectedTagId(tag.id);
+                  setActiveTagId(tag.id);
+                  router.push("/home/note");
+                });
               }}
               className="flex items-center gap-[22px] justify-start cursor-pointer"
             >
@@ -101,19 +119,10 @@ function MobileSidebar() {
             </button>
           ))}
         </div>
+        <hr className="my-2 text-gray-200" />
 
         {/* 設定/登出 */}
-        <div className="flex flex-col gap-8 p-6">
-          <button className="flex items-center gap-[22px] justify-start cursor-pointer">
-            <Image
-              src="/icons/Settings.svg"
-              alt="setting icon"
-              width={18}
-              height={18}
-              className="dark:invert"
-            />
-            <span className="dark:text-white">設定</span>
-          </button>
+        <div className="flex flex-col gap-8 p-0 sm:p-6">
           <button
             onClick={handleLogout}
             className="flex items-center gap-[22px] justify-start cursor-pointer"
@@ -138,7 +147,11 @@ export default function NotesLayout({ children }: { children: ReactNode }) {
   }, [loading, user, router]);
 
   if (loading || !user) {
-    return null;
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-black">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--color-primary)]" />
+      </div>
+    );
   }
 
   return (
@@ -152,20 +165,15 @@ export default function NotesLayout({ children }: { children: ReactNode }) {
   );
 }
 
-function LayoutContent({
-  user,
-  children,
-}: {
-  user: any;
-  children: ReactNode;
-}) {
+function LayoutContent({ user, children }: { user: any; children: ReactNode }) {
   const { tags } = useTags();
 
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between border-b border-[var(--line)]">
-        <header className="h-[54px] shrink-0 text-xl font-semibold flex items-center px-6 pt-1">
-          Notecard
+        <header className="h-[50px] shrink-0 text-xl font-semibold flex gap-3 items-center px-6 pt-1">
+          <Image src="/logo.svg" alt="logo" width={26} height={26} />
+          <p>Notecard</p>
         </header>
         {/* 手機版漢堡選單 */}
         <div className="px-6 flex md:hidden">
@@ -173,7 +181,7 @@ function LayoutContent({
         </div>
       </div>
       <div className="flex flex-1">
-        <aside className="hidden md:block bg-white dark:bg-black border-r border-[var(--line)]">
+        <aside className="hidden md:block bg-white dark:bg-black border-r border-[var(--line)] h-screen">
           <Sidebar
             userName={user.displayName}
             userEmail={user.email}
@@ -182,7 +190,7 @@ function LayoutContent({
             tags={tags}
           />
         </aside>
-        <div className="flex-1">{children}</div>
+        <div className="flex-1 overflow-hidden">{children}</div>
       </div>
     </div>
   );
