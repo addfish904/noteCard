@@ -66,7 +66,7 @@ export default function ExcalidrawWrapper() {
 
     const docRef = doc(db, "excalidraw", user.uid);
 
-    const { collaborators: _collaborators, ...cleanAppState } = appState;
+    const { collaborators, ...cleanAppState } = appState;
 
     queueMicrotask(() => {
       setDoc(docRef, {
