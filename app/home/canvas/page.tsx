@@ -7,7 +7,10 @@ import { useTheme } from "next-themes";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "@/hooks/useAuth";
-import type { ExcalidrawProps } from "@excalidraw/excalidraw/types";
+import type {
+  ExcalidrawProps,
+  ExcalidrawInitialDataState,
+} from "@excalidraw/excalidraw/types";
 
 type OnChangeHandler = NonNullable<ExcalidrawProps["onChange"]>;
 
@@ -16,7 +19,8 @@ export default function ExcalidrawWrapper() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
 
-  const [initialData, setInitialData] = useState<any>(null);
+  const [initialData, setInitialData] =
+    useState<ExcalidrawInitialDataState | null>(null);
 
   useEffect(() => {
     if (!user || loading) return;
@@ -29,12 +33,6 @@ export default function ExcalidrawWrapper() {
         const data = docSnap.data();
 
         try {
-          const appState = {
-            viewBackgroundColor: isDark ? "#292929" : "#f3f5f7",
-            collaborators: {},
-            ...JSON.parse(data.appState || "{}"),
-          };
-
           setInitialData({
             elements: JSON.parse(data.elements || "[]"),
             appState: {
@@ -53,7 +51,7 @@ export default function ExcalidrawWrapper() {
           elements: [],
           appState: {
             viewBackgroundColor: isDark ? "#292929" : "#f3f5f7",
-            collaborators: {},
+            collaborators: new Map(),
           },
           files: {},
         });
@@ -68,8 +66,7 @@ export default function ExcalidrawWrapper() {
 
     const docRef = doc(db, "excalidraw", user.uid);
 
-    // collaborators 再存
-    const { collaborators, ...cleanAppState } = appState;
+    const { collaborators: _collaborators, ...cleanAppState } = appState;
 
     queueMicrotask(() => {
       setDoc(docRef, {

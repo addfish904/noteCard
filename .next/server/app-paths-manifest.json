@@ -1,6 +1,4 @@
 {
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/icon0.svg/route": "app/icon0.svg/route.js",
   "/home/canvas/page": "app/home/canvas/page.js",
   "/home/calendar/page": "app/home/calendar/page.js",
   "/home/page": "app/home/page.js",
