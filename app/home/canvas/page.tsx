@@ -66,6 +66,7 @@ export default function ExcalidrawWrapper() {
 
     const docRef = doc(db, "excalidraw", user.uid);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { collaborators, ...cleanAppState } = appState;
 
     queueMicrotask(() => {
