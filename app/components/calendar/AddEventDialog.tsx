@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -58,7 +58,6 @@ export default function AddEventDialog({
   const { notes, reorderNotes, setSelectedNote } = useNoteContext();
   const [selectedNoteIds, setSelectedNoteIds] = useState<string[]>([]);
   const router = useRouter();
-  const editMenuRef = useRef<HTMLDivElement | null>(null);
 
   const isEditing = Boolean(editingEvent);
 
@@ -201,53 +200,58 @@ export default function AddEventDialog({
                   );
                 })} */}
                 {selectedNoteIds.map((noteId) => {
-  const note = notes.find((n) => n.id === noteId);
-  if (!note) return null;
+                  const note = notes.find((n) => n.id === noteId);
+                  if (!note) return null;
 
-  return (
-    <div
-      key={note.id}
-      className="flex justify-between items-center px-4 py-1 bg-[#f3f5f7] rounded cursor-pointer border border-transparent hover:bg-[#e5e7eb] hover:border-[#2196F3]"
-      onClick={async () => {
-        // 1. 將此筆記設為第一，其餘往後排
-        const updatedNotes = notes.map((n) =>
-          n.id === note.id
-            ? { ...n, order: 0 }
-            : { ...n, order: (n.order ?? 0) + 1 }
-        );
+                  return (
+                    <div
+                      key={note.id}
+                      className="flex justify-between items-center px-4 py-1 bg-[#f3f5f7] rounded cursor-pointer border border-transparent hover:bg-[#e5e7eb] hover:border-[#2196F3]"
+                      onClick={async () => {
+                        // 1. 將此筆記設為第一，其餘往後排
+                        const updatedNotes = notes.map((n) =>
+                          n.id === note.id
+                            ? { ...n, order: 0 }
+                            : { ...n, order: (n.order ?? 0) + 1 }
+                        );
 
-        // 2. 更新排序
-        await reorderNotes(updatedNotes);
+                        // 2. 更新排序
+                        await reorderNotes(updatedNotes);
 
-        // 3. 設為目前選中的筆記
-        setSelectedNote(note);
+                        // 3. 設為目前選中的筆記
+                        setSelectedNote(note);
 
-        // 4. 跳轉到筆記頁
-        router.push("/home/note");
-      }}
-    >
-      <p className="truncate">📝 {note.title || "無標題"}</p>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button size="icon" variant="ghost" onClick={(e) => e.stopPropagation()}>
-            ...
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedNoteIds(selectedNoteIds.filter((id) => id !== note.id));
-            }}
-          >
-            移除關聯
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  );
-})}
-
+                        // 4. 跳轉到筆記頁
+                        router.push("/home/note");
+                      }}
+                    >
+                      <p className="truncate">📝 {note.title || "無標題"}</p>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            ...
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedNoteIds(
+                                selectedNoteIds.filter((id) => id !== note.id)
+                              );
+                            }}
+                          >
+                            移除關聯
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -258,9 +262,7 @@ export default function AddEventDialog({
               刪除
             </Button>
           )}
-          <Button onClick={handleSubmit}>
-            {isEditing ? "更新" : "新增"}
-          </Button>
+          <Button onClick={handleSubmit}>{isEditing ? "更新" : "新增"}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -7,6 +7,7 @@ import {
   deleteNote as deleteNoteFromFirestore,
   getAllNotes,
 } from "@/lib/firestore";
+import { Timestamp } from "firebase/firestore";
 
 interface NoteContextType {
   notes: Note[];
@@ -30,30 +31,15 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
     const fetchNotes = async () => {
       if (user?.uid) {
         const userNotes = await getAllNotes(user.uid);
-  
-        const toValidDate = (value: any): Date => {
-          const date = new Date(value);
-          return isNaN(date.getTime()) ? new Date() : date;
-        };
-  
-        const parsedNotes = userNotes.map((note) => {
-          return {
-            ...note,
-            createdAt: note.createdAt,
-            updatedAt: toValidDate(note.updatedAt),
-          };
-        });
-  
-        setNotes(parsedNotes);
-  
-        if (parsedNotes.length > 0) {
-          setSelectedNote(parsedNotes[0]);
+        setNotes(userNotes);
+
+        if (userNotes.length > 0) {
+          setSelectedNote(userNotes[0]);
         }
       }
     };
     fetchNotes();
   }, [user]);
-  
 
   const addNote = async () => {
     if (!user) {

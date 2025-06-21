@@ -20,6 +20,9 @@ import { signOut } from "firebase/auth";
 import { Note } from "@/types/note";
 import { CalendarEvent } from "@/types/event";
 
+
+
+
 const NOTES_COLLECTION = "notes";
 
 export const addNote = async (data: {
@@ -188,16 +191,60 @@ export const listenToNotes = (
 
 
 
-export type DrawingData = {
-  userId: string; 
-  elements: any[]; 
-  appState: any; 
-  files?: Record<string, any>;
-  updatedAt: Timestamp;
+// excalidraw 自訂型別
+
+export type ExcalidrawElement = {
+  id: string;
+  type: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  angle: number;
+  strokeColor: string;
+  backgroundColor: string;
+  fillStyle: string;
+  strokeWidth: number;
+  roughness: number;
+  opacity: number;
+  groupIds: string[];
+  roundness?: number | null;
 };
+
+export type AppState = {
+  viewBackgroundColor: string;
+  zoom?: { value: number };
+  scrollX?: number;
+  scrollY?: number;
+};
+
+export type BinaryFiles = Record<string, {
+  id: string;
+  dataURL: string;
+  mimeType: string;
+  created: number;
+  lastRetrieved: number;
+}>;
+
 
 
 // canvas
+// export type DrawingData = {
+//   userId: string; 
+//   elements: any[]; 
+//   appState: any; 
+//   files?: Record<string, any>;
+//   updatedAt: Timestamp;
+// };
+
+export type DrawingData = {
+  userId: string;
+  elements: ExcalidrawElement[];
+  appState: Partial<AppState>;
+  files?: BinaryFiles;
+  updatedAt: Timestamp;
+};
+
 const DRAWING_COLLECTION = "excalidraw";
 
 export const saveDrawing = async (

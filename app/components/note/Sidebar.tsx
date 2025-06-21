@@ -271,6 +271,7 @@ export default function Sidebar({
                           await deleteTag(tag.id);
                           setEditingTagId(null);
                         } catch (err) {
+                          console.error("刪除標籤失敗", err);
                           alert("刪除失敗");
                         }
                       }}

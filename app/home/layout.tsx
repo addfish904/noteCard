@@ -14,6 +14,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, LogOut } from "lucide-react";
 import Image from "next/image";
 import { logout } from "@/lib/firestore";
+import type { User } from "firebase/auth";
 
 function MobileSidebar() {
   const router = useRouter();
@@ -164,7 +165,13 @@ export default function NotesLayout({ children }: { children: ReactNode }) {
   );
 }
 
-function LayoutContent({ user, children }: { user: any; children: ReactNode }) {
+function LayoutContent({
+  user,
+  children,
+}: {
+  user: User;
+  children: ReactNode;
+}) {
   const { tags } = useTags();
 
   return (

@@ -28,7 +28,7 @@ export default function ExcalidrawWrapper() {
         try {
           const appState = {
             viewBackgroundColor: isDark ? "#292929" : "#f3f5f7",
-            collaborators: {}, // ✅ 一定要加
+            collaborators: {},
             ...JSON.parse(data.appState || "{}"),
           };
 
@@ -69,7 +69,7 @@ export default function ExcalidrawWrapper() {
 
     const docRef = doc(db, "excalidraw", user.uid);
 
-    // ⛔️ 移除 collaborators 再存
+    // collaborators 再存
     const { collaborators, ...cleanAppState } = appState;
 
     queueMicrotask(() => {

@@ -7,7 +7,7 @@ import {
   subMonths,
   isSameMonth,
 } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Card from "../ui/card";
 import clsx from "clsx";
 import { ArrowDown, ArrowUp } from "lucide-react";
@@ -24,11 +24,9 @@ function getColorByCount(count: number): string {
 
 function toDate(input: Date | string | Timestamp): Date | null {
   if (!input) return null;
-
   if (input instanceof Timestamp) return input.toDate();
   if (typeof input === "string") return new Date(input);
   if (input instanceof Date) return input;
-
   return null;
 }
 
@@ -39,9 +37,15 @@ export default function Heatmap() {
   const [thisMonthTotal, setThisMonthTotal] = useState(0);
   const [lastMonthTotal, setLastMonthTotal] = useState(0);
 
-  const today = endOfToday();
-  const startDate = startOfMonth(subMonths(today, 2)); // 顯示2個月
-  const allDates = eachDayOfInterval({ start: startDate, end: today });
+  const today = useMemo(() => endOfToday(), []);
+  const allDates = useMemo(
+    () =>
+      eachDayOfInterval({
+        start: startOfMonth(subMonths(today, 2)),
+        end: today,
+      }),
+    [today]
+  );
 
   useEffect(() => {
     if (!notes) return;
@@ -55,7 +59,6 @@ export default function Heatmap() {
       if (!createdDate) return;
 
       const dateStr = format(createdDate, "yyyy-MM-dd");
-
       countMap[dateStr] = (countMap[dateStr] || 0) + 1;
 
       if (isSameMonth(createdDate, today)) {
@@ -80,14 +83,16 @@ export default function Heatmap() {
       }
     }
     setStreakDays(streak);
-  }, [notes]);
+  }, [notes, today, allDates]);
 
-  const percentChange =
-    lastMonthTotal === 0
-      ? null
-      : Math.round(((thisMonthTotal - lastMonthTotal) / lastMonthTotal) * 100);
+  const percentChange = useMemo(() => {
+    if (lastMonthTotal === 0) return null;
+    return Math.round(
+      ((thisMonthTotal - lastMonthTotal) / lastMonthTotal) * 100
+    );
+  }, [thisMonthTotal, lastMonthTotal]);
 
-  // heatmap
+  // heatmap weekly layout
   const weeks: ReactElement[][] = [];
   for (let i = 0; i < allDates.length; i += 7) {
     const week = allDates.slice(i, i + 7);
@@ -154,7 +159,6 @@ export default function Heatmap() {
         </div>
       </div>
 
-      {/* Heatmap 區域（不變） */}
       <div className="m-auto">
         <div className="flex flex-col">
           <div className="flex justify-center text-xs text-gray-500">

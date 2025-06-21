@@ -18,17 +18,14 @@ import {
   restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
 import { useEffect, useState } from "react";
-import { Note } from "@/types/note";
 import NoteCard from "./NoteCard";
 import { SortableNoteItem } from "./SortableNoteItem";
-import { Tag } from "@/types/tag";
 import { Plus } from "lucide-react";
 import Image from "next/image";
-import type { DragEndEvent } from "@dnd-kit/core";
 import { useNoteContext } from "@/app/context/NoteContext";
+import type { DragEndEvent } from "@dnd-kit/core";
 
 interface NotesListProps {
-  selectedId: string | null;
   onAddNote: () => void;
   selectedTagId: string | null;
   isCollapsed: boolean;
@@ -36,7 +33,6 @@ interface NotesListProps {
 }
 
 export default function NotesList({
-  selectedId,
   onAddNote,
   selectedTagId,
   isCollapsed,
@@ -57,13 +53,13 @@ export default function NotesList({
     })
   );
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveId(null);
     if (!over || active.id === over.id) return;
 
-    const oldIndex = items.indexOf(active.id);
-    const newIndex = items.indexOf(over.id);
+    const oldIndex = items.indexOf(active.id as string);
+    const newIndex = items.indexOf(over.id as string);
     const newItems = arrayMove(items, oldIndex, newIndex);
     setItems(newItems);
 
@@ -84,7 +80,9 @@ export default function NotesList({
 
     const hasSearch = search.trim() !== "";
     const hasTag = selectedTagId !== null;
-    const matchesSearch = note.title.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = note.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
     const matchesTag = note.tagId === selectedTagId;
 
     if (!hasSearch && !hasTag) return true;
