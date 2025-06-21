@@ -18,6 +18,7 @@ import { useNoteContext } from "@/app/context/NoteContext";
 import { useTags } from "@/app/context/TagContext";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { history } from "@milkdown/plugin-history";
 
 export default function Editor() {
   const editorRef = useRef<MdEditor | null>(null);
@@ -72,6 +73,7 @@ export default function Editor() {
         })
         .use(commonmark)
         .use(gfm)
+        .use(history)
         .use(tooltip);
 
       editorRef.current = editor;

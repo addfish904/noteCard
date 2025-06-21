@@ -14,7 +14,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, LogOut } from "lucide-react";
 import Image from "next/image";
 import { logout } from "@/lib/firestore";
-import { cn } from "@/lib/utils";
 
 function MobileSidebar() {
   const router = useRouter();

@@ -352,7 +352,7 @@ export default function Sidebar({
         </button> */}
         <button
           onClick={handleLogout}
-          className="inline-flex items-center justify-start gap-[20px] pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white rounded-md dark:hover:bg-[var(--color-secondary)]"
+          className="inline-flex items-center justify-start gap-[20px] pl-5 pr-4 py-2 text-sm transition-colors group hover:text-black dark:text-white rounded-md dark:hover:bg-[var(--color-secondary)] cursor-pointer"
         >
           <LogOut className="w-[18px] h-[18px] text-[#767676] dark:text-white" />
           {!collapsed && (

@@ -197,6 +197,7 @@ export type DrawingData = {
 };
 
 
+// canvas
 const DRAWING_COLLECTION = "excalidraw";
 
 export const saveDrawing = async (
@@ -227,3 +228,47 @@ export const loadDrawing = async (userId: string) => {
     updatedAt: data.updatedAt?.toDate?.() ?? null,
   };
 };
+
+// home / article
+export async function getArticle(userId: string) {
+  const docRef = doc(db, "articles", userId);
+  const snap = await getDoc(docRef);
+  if (snap.exists()) {
+    return snap.data();
+  }
+  return null;
+}
+
+export async function saveArticle(
+  userId: string,
+  data: { title: string; content: string; link: string }
+) {
+  const docRef = doc(db, "articles", userId);
+  return await setDoc(docRef, {
+    ...data,
+    userId,
+    updatedAt: new Date(),
+  });
+}
+
+// home / Link(Thread)
+export async function getLink(userId: string) {
+  const docRef = doc(db, "links", userId);
+  const snap = await getDoc(docRef);
+  if (snap.exists()) {
+    return snap.data();
+  }
+  return null;
+}
+
+export async function saveLink(
+  userId: string,
+  data: { url: string; icon: string | null }
+) {
+  const docRef = doc(db, "links", userId);
+  await setDoc(docRef, {
+    ...data,
+    userId,
+    updatedAt: new Date(),
+  });
+}

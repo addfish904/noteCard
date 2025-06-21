@@ -40,20 +40,22 @@ export default function CustomCalendar() {
     month === today.getMonth() && year === today.getFullYear();
 
   return (
-    <Card className="p-4 flex flex-col justify-center">
+    <Card className="p-6 flex flex-col justify-center">
       {/* 星期列 */}
-      <div className="grid grid-cols-7 text-xs text-center text-gray-500 font-medium uppercase mb-2 dark:text-gray-300">
+      <div className="grid grid-cols-7 text-xs text-center text-gray-500 font-medium uppercase dark:text-gray-300">
         {WEEK_DAYS.map((day) => (
           <div key={day}>{day}</div>
         ))}
       </div>
 
       {/* 日期格 */}
-      <div className="grid grid-cols-7 gap-1 text-sm text-center">
+      <div className="grid grid-cols-7 gap-0 text-sm text-center">
         {days.map((day, idx) => (
           <div
             key={idx}
-            onClick={() => {router.push("/home/calendar")}}
+            onClick={() => {
+              router.push("/home/calendar");
+            }}
             className={clsx(
               "cancel-drag aspect-square rounded-md flex items-center justify-center",
               day
@@ -64,7 +66,7 @@ export default function CustomCalendar() {
             {day && (
               <span
                 className={clsx(
-                  "inline-block w-7 h-7 leading-7 rounded-full",
+                  "inline-block w-6 h-6 leading-6 rounded-full",
                   isThisMonth && day === todayDate
                     ? "bg-[#D9F273] text-black"
                     : ""

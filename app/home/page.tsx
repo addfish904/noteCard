@@ -50,7 +50,7 @@ export default function HomePage() {
       <div className="flex items-center justify-between mb-3 sm:px-8 px-6 sm:flex-row flex-col sm:gap-0 gap-4">
         <h1 className="text-3xl font-bold ml-4">Welcome back! 🔮</h1>
         <button
-          className="bg-[var(--color-primary)] text-white rounded-[8px] px-4 py-3 cursor-pointer sm:mr-4 mr-0 hover:bg-[#323153] w-full sm:w-fit"
+          className="bg-[var(--color-primary)] text-white rounded-[8px] px-4 py-3 cursor-pointer sm:mr-4 mr-0 hover:bg-[#201F45] w-full sm:w-fit"
           onClick={async () => {
             try {
               await addNote();
@@ -76,7 +76,7 @@ export default function HomePage() {
           draggableCancel=".cancel-drag"
         >
           <div key="article">
-            <Article />
+            <Article userUid={user.uid} />
           </div>
           <div key="calendar">
             <Calendar />
@@ -85,7 +85,7 @@ export default function HomePage() {
             <RecentlyNotes latestNotes={latestNotes} tags={tags} />
           </div>
           <div key="thread">
-            <Thread />
+            <Thread userUid={user.uid} />
           </div>
           <div key="chart">
             <Chart />
