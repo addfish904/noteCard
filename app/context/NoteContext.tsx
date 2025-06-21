@@ -7,7 +7,6 @@ import {
   deleteNote as deleteNoteFromFirestore,
   getAllNotes,
 } from "@/lib/firestore";
-import { Timestamp } from "firebase/firestore";
 
 interface NoteContextType {
   notes: Note[];

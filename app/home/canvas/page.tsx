@@ -7,6 +7,9 @@ import { useTheme } from "next-themes";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "@/hooks/useAuth";
+import type { ExcalidrawProps } from "@excalidraw/excalidraw/types";
+
+type OnChangeHandler = NonNullable<ExcalidrawProps["onChange"]>;
 
 export default function ExcalidrawWrapper() {
   const { user, loading } = useAuth();
@@ -60,11 +63,7 @@ export default function ExcalidrawWrapper() {
     fetchDrawing();
   }, [user, loading, isDark]);
 
-  const handleChange = (
-    elements: readonly any[],
-    appState: any,
-    files: any
-  ) => {
+  const handleChange: OnChangeHandler = (elements, appState, files) => {
     if (!user) return;
 
     const docRef = doc(db, "excalidraw", user.uid);

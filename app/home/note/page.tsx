@@ -12,7 +12,7 @@ export default function NotesPage() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { selectedTagId } = useSelectedTag();
 
-  const { selectedNote, addNote, updateNote } = useNoteContext();
+  const { selectedNote, addNote } = useNoteContext();
 
   // 手機版 NotesList 收合邏輯
   useEffect(() => {

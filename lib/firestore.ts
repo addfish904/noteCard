@@ -19,7 +19,7 @@ import { auth } from "./firebase";
 import { signOut } from "firebase/auth";
 import { Note } from "@/types/note";
 import { CalendarEvent } from "@/types/event";
-
+import { ExcalidrawElement, AppState, BinaryFiles } from "@/types/excalidraw";
 
 
 
@@ -191,44 +191,8 @@ export const listenToNotes = (
 
 
 
-// excalidraw 自訂型別
-
-export type ExcalidrawElement = {
-  id: string;
-  type: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  angle: number;
-  strokeColor: string;
-  backgroundColor: string;
-  fillStyle: string;
-  strokeWidth: number;
-  roughness: number;
-  opacity: number;
-  groupIds: string[];
-  roundness?: number | null;
-};
-
-export type AppState = {
-  viewBackgroundColor: string;
-  zoom?: { value: number };
-  scrollX?: number;
-  scrollY?: number;
-};
-
-export type BinaryFiles = Record<string, {
-  id: string;
-  dataURL: string;
-  mimeType: string;
-  created: number;
-  lastRetrieved: number;
-}>;
-
-
-
 // canvas
+
 // export type DrawingData = {
 //   userId: string; 
 //   elements: any[]; 

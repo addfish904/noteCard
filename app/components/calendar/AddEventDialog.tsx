@@ -16,7 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../note/dropdown-menu";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { addEvent, updateEvent, deleteEvent } from "@/lib/firestore";
 import { CalendarEvent } from "@/types/event";
 import { useNoteContext } from "@/app/context/NoteContext";
