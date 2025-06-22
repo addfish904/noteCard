@@ -45,36 +45,36 @@ export default function HomePage() {
       .fromTo(
         heroImage.current,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.3 }
+        { opacity: 1, y: 0, duration: 0.2 }
       )
       .fromTo(
         memoWrapper.current,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.3 },
+        { opacity: 1, y: 0, duration: 0.2 },
         "+=0.1"
       )
       .fromTo(
         folderWrapper.current,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.3 },
+        { opacity: 1, y: 0, duration: 0.2 },
         "+=0.1"
       )
       .fromTo(
         checkWrapper.current,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.3 },
+        { opacity: 1, y: 0, duration: 0.2 },
         "+=0.1"
       )
       .fromTo(
         noteWrapper.current,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.3 },
+        { opacity: 1, y: 0, duration: 0.2 },
         "+=0.1"
       )
       .fromTo(
         clockWrapper.current,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.3 },
+        { opacity: 1, y: 0, duration: 0.2 },
         "+=0.1"
       );
 
@@ -284,7 +284,7 @@ export default function HomePage() {
   };
 
   return (
-    <>
+    <div className="bg-[#F7F6F9]">
       <div className="bg-[#F7F6F9] overflow-hidden scroll-smooth">
         <nav>
           <header>
@@ -321,7 +321,7 @@ export default function HomePage() {
               <div className="flex justify-end">
                 <button
                   onClick={login}
-                  className="border px-[16px] py-[8px] rounded-full cursor-pointer"
+                  className="border px-7 py-3 rounded-full cursor-pointer whitespace-nowrap"
                 >
                   使用 Google 登入
                 </button>
@@ -331,7 +331,7 @@ export default function HomePage() {
         </nav>
 
         {/* hero section */}
-        <div ref={scrollSection} className="relative text-center mt-6">
+        <div ref={scrollSection} className="relative text-center sm:mt-6 mt-0">
           <div className="relative z-20">
             <p className="text-[30px] text-[var(--color-primary)]">
               Welcome To
@@ -351,7 +351,7 @@ export default function HomePage() {
             alt="hero img"
             width={1200}
             height={825}
-            className="relative z-30 m-auto lg:-mt-50 md:-mt-20 sm:-mt-8 opacity-0"
+            className="relative z-30 m-auto lg:-mt-50 md:-mt-20 -mt-8 opacity-0"
           />
           <div
             ref={folderWrapper}
@@ -367,14 +367,14 @@ export default function HomePage() {
           </div>
           <div
             ref={memoWrapper}
-            className="absolute top-[40%] right-[10%] z-2 opacity-0"
+            className="absolute top-[40%] sm:right-[10%] right-[20%] z-2 opacity-0"
           >
             <Image
               src="/landing/memo.png"
               alt="memo img"
               width={210}
               height={210}
-              className="md:w-[210px] w-[180px]"
+              className="md:w-[210px] sm:w-[180px] w-[100px]"
             />
           </div>
           <div
@@ -386,32 +386,32 @@ export default function HomePage() {
               alt="check icon"
               width={110}
               height={110}
-              className="md:w-[110px] w-[90px]"
+              className="md:w-[110px] sm:w-[90px] w-[70px]"
             />
           </div>
 
           <div
             ref={noteWrapper}
-            className="absolute top-[40%] left-0 z-1 opacity-0"
+            className="absolute sm:top-[40%] top-[52%] sm:left-0 left-6 z-1 opacity-0"
           >
             <Image
               src="/landing/hero-note.png"
               alt="note img"
               width={360}
               height={290}
-              className="z-2 md:w-[360px] w-[260px]"
+              className="z-2 md:w-[360px] sm:w-[260px] w-[140px]"
             />
           </div>
           <div
             ref={clockWrapper}
-            className="absolute top-[35%] left-[17%] z-1 opacity-0"
+            className="absolute top-[35%] sm:left-[17%] left-[25%] z-1 opacity-0"
           >
             <Image
               src="/landing/clock.png"
               alt="clock icon"
               width={120}
               height={120}
-              className="md:w-[120px] w-[100px]"
+              className="md:w-[120px] sm:w-[100px] w-[80px]"
             />
           </div>
           <Image
@@ -427,8 +427,8 @@ export default function HomePage() {
       <div
         ref={blackSection}
         id="about"
-        className="bg-black w-full relative top-full z-30 pb-40 px-10 flex flex-col items-center
-        lg:rounded-[80px_80px_0_0] md:rounded-[60px_60px_0_0] rounded-[20px_20px_0_0] md:pt-24 pt-18 md:gap-12"
+        className="bg-black w-full relative top-full z-30 px-10 flex flex-col items-center
+        lg:rounded-[80px_80px_0_0] md:rounded-[60px_60px_0_0] rounded-[20px_20px_0_0] md:gap-12 gap-6 md:pt-24 sm:pt-18 pt-12 sm:pb-40 pb-18"
       >
         <span className="bg-white rounded-full px-7 py-3">About</span>
         <div className="flex flex-col items-center -gap-12">
@@ -455,7 +455,7 @@ export default function HomePage() {
           alt="page img"
           width={1000}
           height={700}
-          className="p-8 bg-[#21C7FF] rounded-2xl"
+          className="rounded-2xl sm:p-8 p-4 bg-[linear-gradient(150deg,rgba(228,225,238,1)_0%,rgba(199,178,201,1)_100%)]"
         />
         <Image
           ref={penRef}
@@ -463,7 +463,7 @@ export default function HomePage() {
           alt="pen icon"
           width={120}
           height={120}
-          className="absolute top-1/2 right-40"
+          className="absolute top-1/2 right-40 sm:block hidden"
         />
         <Image
           ref={tagRef}
@@ -471,7 +471,7 @@ export default function HomePage() {
           alt="tag icon"
           width={100}
           height={100}
-          className="absolute top-2/3 left-35"
+          className="absolute top-2/3 left-35 sm:block hidden"
         />
       </div>
 
@@ -493,7 +493,7 @@ export default function HomePage() {
 
         <div
           ref={pinSection}
-          className="flex flex-col md:flex-row bg-[#F7F6F9] min-h-[300vh] -mt-[400px] w-full px-25"
+          className="flex flex-col md:flex-row bg-[#F7F6F9] min-h-[300vh] sm:-mt-[400px] mt-0 w-full px-25"
         >
           {/* 左側固定圖片容器 */}
           <div
@@ -681,7 +681,7 @@ export default function HomePage() {
             >
               <div className="flex items-center justify-center w-fit gap-2 bg-white rounded-full px-7 py-3">
                 <Image
-                  src="/icons/edit.svg"
+                  src="/icons/Edit.svg"
                   alt="edit icon"
                   width={16}
                   height={16}
@@ -736,8 +736,8 @@ export default function HomePage() {
       {/* 第四段：元件介紹 */}
       <div
         id="features"
-        className="h-full bg-[#F7F6F9] flex flex-col justify-center items-center gap-12 pt-2 overflow-hidden 
-        sm:pb-40 pb-10 lg:px-24 sm:px-12 px-6 md:mt-0 -mt-[400px]"
+        className="h-full bg-[#F7F6F9] flex flex-col justify-center items-center sm:pt-2 pt-6 overflow-hidden 
+        sm:pb-40 pb-10 lg:px-24 sm:px-12 px-6 md:mt-0 sm:-mt-[400px] mt-0 md:gap-12 gap-6"
       >
         <span className="bg-white rounded-full px-7 py-3 shadow-[0px_0px_20px_0px_rgba(0,0,0,0.1)]">
           Features
@@ -926,15 +926,17 @@ export default function HomePage() {
         <div className="w-full flex justify-between">
           <div className="flex sm:flex-row sm:w-fit w-full flex-col items-center justify-center gap-4">
             <Link
-              href="#"
+              href="https://www.linkedin.com/"
+              target="_blank"
               className="sm:w-fit w-full flex justify-center items-center gap-4 px-10 py-4 border border-gray-500 rounded-full cursor-pointer transition-all duration-300 bg-transparent hover:bg-[#0C64C5] hover:border-[#0C64C5]"
             >
               <FaLinkedin />
-              Linkin
+              Linkedin
             </Link>
 
             <Link
-              href="#"
+              href="https://github.com/addfish904/noteCard"
+              target="_blank"
               className="sm:w-fit w-full flex justify-center items-center gap-4 px-10 py-4 border border-gray-500 rounded-full cursor-pointer transition-all duration-300 bg-transparent hover:bg-[#622783] hover:border-[#622783]"
             >
               <FaGithub />
@@ -983,6 +985,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
