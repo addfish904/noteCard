@@ -6,7 +6,13 @@ import { cn } from "@/lib/utils";
 import { Tag } from "@/types/tag";
 import { addTag, logout as userLogout, deleteTag } from "@/lib/firestore";
 import { useRouter, usePathname } from "next/navigation";
-import { LogOut, ChevronLeft, ChevronRight, Ellipsis } from "lucide-react";
+import {
+  LogOut,
+  ChevronLeft,
+  ChevronRight,
+  Ellipsis,
+  Trash2,
+} from "lucide-react";
 import { useSelectedTag } from "@/app/context/SelectedTagContext";
 import Image from "next/image";
 
@@ -119,32 +125,37 @@ export default function Sidebar({
         collapsed ? "w-[64px]" : "w-[240px]"
       )}
     >
-      {/* 收合按鈕 */}
-      <div className="flex justify-end p-2">
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="text-gray-500 hover:text-black"
-        >
-          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-        </button>
-      </div>
-
       {/* 使用者資料 */}
-      {!collapsed && (
-        <div className="flex items-center justify-start gap-[16px] px-5 py-2">
-          <Image
-            src={userAvatar || "/default-avatar.png"}
-            alt="avatar"
-            width={36}
-            height={36}
-            className="rounded-full"
-          />
-          <div>
-            <p className="text-[14px] font-semibold">{userName}</p>
-            <p className="text-xs text-[#9E9E9E]">{userEmail}</p>
+      <div
+        className={`flex items-center ${
+          collapsed ? "justify-center" : "justify-between"
+        }`}
+      >
+        {/* 使用者資訊 */}
+        {!collapsed && (
+          <div className="flex items-center justify-start gap-[16px] px-6 py-3">
+            <Image
+              src={userAvatar || "/default-avatar.png"}
+              alt="avatar"
+              width={36}
+              height={36}
+              className="rounded-full"
+            />
+            <div>
+              <p className="text-[14px] font-semibold">{userName}</p>
+            </div>
           </div>
+        )}
+        {/* 收合按鈕 */}
+        <div className="flex px-2 py-3">
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="text-gray-500 hover:text-black"
+          >
+            {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          </button>
         </div>
-      )}
+      </div>
 
       {/* 功能選單 */}
       <div
@@ -254,7 +265,7 @@ export default function Sidebar({
                       e.stopPropagation();
                       setEditingTagId(tag.id);
                     }}
-                    className="absolute right-2 top-2 text-xs text-gray-400 hover:text-black dark:text-white cursor-pointer"
+                    className="absolute right-2 top-2 text-xs text-gray-400 hover:text-black dark:text-white cursor-pointer w-6 h-6 bg-[var(--color-secondary)] rounded flex items-center justify-center"
                   >
                     <Ellipsis className="w-4 h-4 text-[#C8C8C8]" />
                   </button>
@@ -263,7 +274,7 @@ export default function Sidebar({
                 {isEditing && (
                   <div
                     ref={editMenuRef}
-                    className="absolute right-2 top-8 z-10 bg-white dark:bg-[#1f1f1f] border border-gray-200 dark:border-gray-600 rounded shadow "
+                    className="absolute right-2 top-8 z-10 bg-white dark:bg-[#1f1f1f] border border-gray-300 dark:border-gray-600 rounded shadow "
                   >
                     <button
                       onClick={async () => {
@@ -275,9 +286,12 @@ export default function Sidebar({
                           alert("刪除失敗");
                         }
                       }}
-                      className="px-4 py-2 text-sm hover:bg-gray-50 w-full text-left p-1 cursor-pointer"
+                      className="px-4 py-2 text-sm w-full text-left p-1 cursor-pointer bg-white hover:bg-gray-50"
                     >
-                      刪除標籤
+                      <div className="flex items-center justify-center gap-2">
+                        <Trash2 className="text-gray-600 w-[16px]" />
+                        <p>刪除標籤</p>
+                      </div>
                     </button>
                   </div>
                 )}

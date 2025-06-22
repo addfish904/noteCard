@@ -321,7 +321,7 @@ export default function HomePage() {
               <div className="flex justify-end">
                 <button
                   onClick={login}
-                  className="border px-7 py-3 rounded-full cursor-pointer whitespace-nowrap"
+                  className="border px-7 py-3 rounded-full cursor-pointer whitespace-nowrap bg-transparent hover:bg-white transition"
                 >
                   使用 Google 登入
                 </button>
@@ -463,7 +463,7 @@ export default function HomePage() {
           alt="pen icon"
           width={120}
           height={120}
-          className="absolute top-1/2 right-40 sm:block hidden"
+          className="absolute top-1/2 lg:right-40 right-8 sm:block hidden"
         />
         <Image
           ref={tagRef}
@@ -471,7 +471,7 @@ export default function HomePage() {
           alt="tag icon"
           width={100}
           height={100}
-          className="absolute top-2/3 left-35 sm:block hidden"
+          className="absolute top-2/3 lg:left-35 left-0 sm:block hidden"
         />
       </div>
 
@@ -493,7 +493,7 @@ export default function HomePage() {
 
         <div
           ref={pinSection}
-          className="flex flex-col md:flex-row bg-[#F7F6F9] min-h-[300vh] sm:-mt-[400px] mt-0 w-full px-25"
+          className="flex flex-col md:flex-row bg-[#F7F6F9] min-h-[280vh] sm:-mt-[400px] mt-0 w-full px-25"
         >
           {/* 左側固定圖片容器 */}
           <div

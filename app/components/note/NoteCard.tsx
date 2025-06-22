@@ -42,7 +42,8 @@ export default function NoteCard({
   attributes,
   isDragging = false,
 }: NoteCardProps) {
-  const { notes, selectedNote, setSelectedNote, deleteNote, updateNote } = useNoteContext();
+  const { notes, selectedNote, setSelectedNote, deleteNote, updateNote } =
+    useNoteContext();
   const { tags } = useTags();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedTag, setSelectedTag] = useState("");
@@ -116,7 +117,10 @@ export default function NoteCard({
         </DropdownMenu>
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent onClick={(e) => e.stopPropagation()}>
+          <DialogContent
+            onClick={(e) => e.stopPropagation()}
+            className="!max-w-[20rem]"
+          >
             <DialogHeader>
               <DialogTitle>選擇標籤</DialogTitle>
             </DialogHeader>
@@ -133,13 +137,13 @@ export default function NoteCard({
               </SelectContent>
             </Select>
             <Button
-              className="mt-4"
               onClick={() => {
                 if (selectedTag) {
                   updateNote(note.id, { tagId: selectedTag });
                   setDialogOpen(false);
                 }
               }}
+              className="bg-[var(--color-primary)] w-full !text-white flex justify-center mt-4 hover:bg-[#201F45]"
             >
               儲存標籤
             </Button>

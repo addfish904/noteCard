@@ -21,6 +21,7 @@ import { addEvent, updateEvent, deleteEvent } from "@/lib/firestore";
 import { CalendarEvent } from "@/types/event";
 import { useNoteContext } from "@/app/context/NoteContext";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 type Props = {
   open: boolean;
@@ -58,6 +59,7 @@ export default function AddEventDialog({
   const { notes, reorderNotes, setSelectedNote } = useNoteContext();
   const [selectedNoteIds, setSelectedNoteIds] = useState<string[]>([]);
   const router = useRouter();
+  const [isSaving, setIsSaving] = useState(false);
 
   const isEditing = Boolean(editingEvent);
 
@@ -78,6 +80,12 @@ export default function AddEventDialog({
   }, [editingEvent, start, end]);
 
   const handleSubmit = async () => {
+    if (!title.trim()) {
+      alert("請輸入標題！");
+      return;
+    }
+
+    setIsSaving(true);
     const event: CalendarEvent = {
       id: editingEvent?.id || crypto.randomUUID(),
       title,
@@ -88,15 +96,20 @@ export default function AddEventDialog({
       noteId: selectedNoteIds,
     };
 
-    if (isEditing && onUpdate) {
-      await updateEvent(event);
-      onUpdate(event);
-    } else {
-      await addEvent(event);
-      onAdd(event);
+    try {
+      if (isEditing && onUpdate) {
+        await updateEvent(event);
+        onUpdate(event);
+      } else {
+        await addEvent(event);
+        onAdd(event);
+      }
+      setOpen(false);
+    } catch (err) {
+      console.error("儲存事件失敗", err);
+    } finally {
+      setIsSaving(false);
     }
-
-    setOpen(false);
   };
 
   const handleDelete = async () => {
@@ -168,37 +181,6 @@ export default function AddEventDialog({
             </select>
             {selectedNoteIds.length > 0 && (
               <div className="mt-3 space-y-2">
-                {/* {selectedNoteIds.map((noteId) => {
-                  const note = notes.find((n) => n.id === noteId);
-                  if (!note) return null;
-
-                  return (
-                    <div
-                      key={note.id}
-                      className="flex justify-between items-center px-4 py-1 bg-[#f3f5f7] rounded cursor-pointer"
-                    >
-                      <p className="truncate">📝 {note.title || "無標題"}</p>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button size="icon" variant="ghost">
-                            ...
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() =>
-                              setSelectedNoteIds(
-                                selectedNoteIds.filter((id) => id !== note.id)
-                              )
-                            }
-                          >
-                            移除關聯
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  );
-                })} */}
                 {selectedNoteIds.map((noteId) => {
                   const note = notes.find((n) => n.id === noteId);
                   if (!note) return null;
@@ -206,7 +188,7 @@ export default function AddEventDialog({
                   return (
                     <div
                       key={note.id}
-                      className="flex justify-between items-center px-4 py-1 bg-[#f3f5f7] rounded cursor-pointer border border-transparent hover:bg-[#e5e7eb] hover:border-[#2196F3]"
+                      className="flex justify-between items-center px-4 py-1 bg-[var(--color-secondary)] rounded cursor-pointer border border-transparent hover:border-[#8384C9]"
                       onClick={async () => {
                         // 1. 將此筆記設為第一，其餘往後排
                         const updatedNotes = notes.map((n) =>
@@ -214,14 +196,10 @@ export default function AddEventDialog({
                             ? { ...n, order: 0 }
                             : { ...n, order: (n.order ?? 0) + 1 }
                         );
-
-                        // 2. 更新排序
-                        await reorderNotes(updatedNotes);
-
-                        // 3. 設為目前選中的筆記
+                        // 2. 設為目前選中的筆記
                         setSelectedNote(note);
 
-                        // 4. 跳轉到筆記頁
+                        // 3. 跳轉到筆記頁
                         router.push("/home/note");
                       }}
                     >
@@ -258,11 +236,29 @@ export default function AddEventDialog({
         </div>
         <DialogFooter className="flex justify-between">
           {isEditing && (
-            <Button variant="destructive" onClick={handleDelete}>
+            <button
+              className="px-4 py-2 bg-[#D93131] text-white rounded-md transition"
+              onClick={handleDelete}
+            >
               刪除
-            </Button>
+            </button>
           )}
-          <Button onClick={handleSubmit}>{isEditing ? "更新" : "新增"}</Button>
+          <button
+            onClick={handleSubmit}
+            disabled={isSaving}
+            className="px-4 py-2 bg-[var(--color-primary)] text-white rounded-md hover:bg-[#323153] transition"
+          >
+            {isSaving ? (
+              <div className="flex items-center justify-center">
+                <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                儲存中...
+              </div>
+            ) : isEditing ? (
+              "更新"
+            ) : (
+              "新增"
+            )}
+          </button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
