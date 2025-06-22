@@ -18,7 +18,6 @@ import Image from "next/image";
 
 interface SidebarProps {
   userName: string | null;
-  userEmail: string | null;
   userAvatar: string | null;
   userId: string | null;
   tags: Tag[];
@@ -42,7 +41,6 @@ const pagePathMap: Record<string, string> = {
 
 export default function Sidebar({
   userName,
-  userEmail,
   userAvatar,
   userId,
   tags,

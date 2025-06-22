@@ -190,7 +190,6 @@ function LayoutContent({
         <aside className="hidden md:block bg-white dark:bg-black border-r border-[var(--line)] h-screen">
           <Sidebar
             userName={user.displayName}
-            userEmail={user.email}
             userAvatar={user.photoURL}
             userId={user.uid}
             tags={tags}

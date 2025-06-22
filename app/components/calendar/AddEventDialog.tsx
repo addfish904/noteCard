@@ -56,7 +56,7 @@ export default function AddEventDialog({
   const [startTime, setStartTime] = useState(start.toISOString().slice(0, 16));
   const [endTime, setEndTime] = useState(end.toISOString().slice(0, 16));
   const [color, setColor] = useState("#3b82f6");
-  const { notes, reorderNotes, setSelectedNote } = useNoteContext();
+  const { notes, setSelectedNote } = useNoteContext();
   const [selectedNoteIds, setSelectedNoteIds] = useState<string[]>([]);
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
@@ -190,16 +190,10 @@ export default function AddEventDialog({
                       key={note.id}
                       className="flex justify-between items-center px-4 py-1 bg-[var(--color-secondary)] rounded cursor-pointer border border-transparent hover:border-[#8384C9]"
                       onClick={async () => {
-                        // 1. 將此筆記設為第一，其餘往後排
-                        const updatedNotes = notes.map((n) =>
-                          n.id === note.id
-                            ? { ...n, order: 0 }
-                            : { ...n, order: (n.order ?? 0) + 1 }
-                        );
-                        // 2. 設為目前選中的筆記
+                        // 1. 設為目前選中的筆記
                         setSelectedNote(note);
 
-                        // 3. 跳轉到筆記頁
+                        // 2. 跳轉到筆記頁
                         router.push("/home/note");
                       }}
                     >
