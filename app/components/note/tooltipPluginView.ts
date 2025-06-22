@@ -17,8 +17,8 @@ export function tooltipPluginView(editor: Editor, view: EditorView) {
   content.className = "tooltip-menu";
   content.style.cssText = `
     display: flex;
-    gap: 12px;
-    padding: 10px 14px;
+    gap: 6px;
+    padding: 8px 12px;
     border: 1px solid #ccc;
     border-radius: 6px;
     background: white;
@@ -33,19 +33,31 @@ export function tooltipPluginView(editor: Editor, view: EditorView) {
     img.alt = alt;
     img.style.width = "18px";
     img.style.height = "18px";
-
+  
     const btn = document.createElement("button");
     btn.appendChild(img);
     btn.style.border = "none";
     btn.style.background = "transparent";
     btn.style.cursor = "pointer";
+    btn.style.padding = "4px";
+    btn.style.borderRadius = "4px";
+  
+    btn.onmouseenter = () => {
+      btn.style.background = "#FAF9FD";
+    };
+    btn.onmouseleave = () => {
+      btn.style.background = "transparent";
+    };
+  
     btn.onclick = (e) => {
       e.preventDefault();
       onClick();
       view.focus();
     };
+  
     content.appendChild(btn);
   };
+  
 
   createButton("/toolbar/bold.svg", "Bold", () =>
     editor.action(callCommand(toggleStrongCommand.key))

@@ -1,7 +1,10 @@
 {
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/icon0.svg/route": "app/icon0.svg/route.js",
   "/page": "app/page.js",
-  "/home/calendar/page": "app/home/calendar/page.js",
   "/home/note/page": "app/home/note/page.js",
+  "/home/calendar/page": "app/home/calendar/page.js",
   "/home/page": "app/home/page.js",
   "/home/canvas/page": "app/home/canvas/page.js"
 }
