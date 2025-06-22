@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📝 noteCard
 
-## Getting Started
+**noteCard** is a minimalist and powerful markdown note-taking web app designed for fast recording, tag-based organization, and intuitive visual management. Whether you're jotting down quick ideas or organizing your study notes, noteCard helps you focus on your content without distractions.
 
-First, run the development server:
+## 🔍 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **🪄 Card View:**  
+  Instantly view all your notes in a clean and scannable card layout. Recent updates and titles are clearly visible for fast browsing.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **🏷️ Tag Management:**  
+  Categorize your notes using custom tags. Filter with ease and recognize your content through tag colors.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **⌨️ Markdown Support:**  
+  Write with markdown and instantly see formatted results. Enjoy a live preview editor with support for bold, italic, code, links, headings, and more.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **📁 Firebase Firestore Integration:**  
+  All notes are stored in real-time with Firestore, keeping your content updated across devices.
 
-## Learn More
+- **🌙 Dark Mode:**  
+  Toggle between light and dark themes to suit your reading environment.
 
-To learn more about Next.js, take a look at the following resources:
+- **📅 Calendar & Heatmap:**  
+  Visualize your writing activity over time and connect notes to calendar events.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Built With
 
-## Deploy on Vercel
+- [Next.js 14 (App Router)](https://nextjs.org/)
+- [React 18](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Firebase Authentication](https://firebase.google.com/docs/auth)
+- [Firestore Database](https://firebase.google.com/docs/firestore)
+- [Milkdown](https://milkdown.dev/) for live markdown editing
+- [Remix Icons](https://remixicon.com/) & [React Icons](https://react-icons.github.io/react-icons/)  
+- [shadcn/ui](https://ui.shadcn.dev/) for modern UI components
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
