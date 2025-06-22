@@ -27,6 +27,10 @@ export default function HomePage() {
   const blackSection = useRef(null);
   const heroImage = useRef(null);
 
+  const notesPageRef = useRef(null);
+  const penRef = useRef(null);
+  const tagRef = useRef(null);
+
   const pinSection = useRef(null);
   const pinImage = useRef(null);
   const textSections = useRef<(HTMLDivElement | null)[]>([]);
@@ -103,6 +107,53 @@ export default function HomePage() {
       },
     });
 
+    gsap.fromTo(
+      notesPageRef.current,
+      { y: 400, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: blackSection.current,
+          start: "top center",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
+    gsap.fromTo(
+      penRef.current,
+      { x: 400, opacity: 0 },
+      {
+        x: 0,
+        opacity: 1,
+        duration: 2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: blackSection.current,
+          start: "top center",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+    gsap.fromTo(
+      tagRef.current,
+      { x: -400, opacity: 0 },
+      {
+        x: 0,
+        opacity: 1,
+        duration: 1.5,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: blackSection.current,
+          start: "top center",
+          toggleActions: "play none none none",
+        },
+      }
+    );
+
     headingsRef.current.forEach((el) => {
       if (!el) return;
       const split = new SplitType(el, { types: "chars", tagName: "span" });
@@ -177,7 +228,7 @@ export default function HomePage() {
       ScrollTrigger.create({
         trigger: pinSection.current,
         start: "top center",
-        end: "bottom center",
+        end: "bottom 90%",
         onEnter: () => setShowProgress(true),
         onLeaveBack: () => setShowProgress(false),
         onLeave: () => setShowProgress(false),
@@ -241,23 +292,29 @@ export default function HomePage() {
               <Image src="/logo.svg" alt="logo" width={30} height={20} />
 
               <ul className="justify-center gap-4 list-none md:flex hidden">
-                <li
-                  key={"about"}
-                  className="bg-white rounded-full px-7 py-3 flex justify-center items-center shadow-[0px_0px_20px_0px_rgba(0,0,0,0.1)]"
-                >
-                  <a href="#about">About</a>
+                <li key="about">
+                  <a
+                    href="#about"
+                    className="cursor-pointer bg-white rounded-full px-7 py-3 flex justify-center items-center shadow-[0px_0px_20px_0px_rgba(0,0,0,0.1)]"
+                  >
+                    About
+                  </a>
                 </li>
-                <li
-                  key={"features"}
-                  className="bg-white rounded-full px-7 py-3 flex justify-center items-center shadow-[0px_0px_20px_0px_rgba(0,0,0,0.1)]"
-                >
-                  <a href="#features">Features</a>
+                <li key="features">
+                  <a
+                    href="#features"
+                    className="cursor-pointer bg-white rounded-full px-7 py-3 flex justify-center items-center shadow-[0px_0px_20px_0px_rgba(0,0,0,0.1)]"
+                  >
+                    Features
+                  </a>
                 </li>
-                <li
-                  key={"contact"}
-                  className="bg-white rounded-full px-7 py-3 flex justify-center items-center shadow-[0px_0px_20px_0px_rgba(0,0,0,0.1)]"
-                >
-                  <a href="#contact">Contact</a>
+                <li key="Contact">
+                  <a
+                    href="#contact"
+                    className="cursor-pointer bg-white rounded-full px-7 py-3 flex justify-center items-center shadow-[0px_0px_20px_0px_rgba(0,0,0,0.1)]"
+                  >
+                    Contact
+                  </a>
                 </li>
               </ul>
 
@@ -371,10 +428,10 @@ export default function HomePage() {
         ref={blackSection}
         id="about"
         className="bg-black w-full relative top-full z-30 pb-40 px-10 flex flex-col items-center
-        lg:rounded-[80px_80px_0_0] md:rounded-[60px_60px_0_0] rounded-[20px_20px_0_0] md:pt-24 pt-18 md:gap-12 gap-8"
+        lg:rounded-[80px_80px_0_0] md:rounded-[60px_60px_0_0] rounded-[20px_20px_0_0] md:pt-24 pt-18 md:gap-12"
       >
         <span className="bg-white rounded-full px-7 py-3">About</span>
-        <div className="flex flex-col items-center -gap-4">
+        <div className="flex flex-col items-center -gap-12">
           <h3
             ref={(el) => {
               headingsRef.current[1] = el!;
@@ -383,16 +440,38 @@ export default function HomePage() {
           >
             Think, plan and write
           </h3>
-          <h4 className="text-gray-500 sm:text-[30px] md:text-[40px] text-[24px]">
+          <h4
+            ref={(el) => {
+              headingsRef.current[2] = el!;
+            }}
+            className="text-gray-500 sm:text-[30px] md:text-[40px] text-[24px]"
+          >
             in one place
           </h4>
         </div>
         <Image
+          ref={notesPageRef}
           src={"/landing/notes-page.png"}
           alt="page img"
           width={1000}
           height={700}
           className="p-8 bg-[#21C7FF] rounded-2xl"
+        />
+        <Image
+          ref={penRef}
+          src="/landing/1/pen.png"
+          alt="pen icon"
+          width={120}
+          height={120}
+          className="absolute top-1/2 right-40"
+        />
+        <Image
+          ref={tagRef}
+          src="/landing/1/tag.png"
+          alt="tag icon"
+          width={100}
+          height={100}
+          className="absolute top-2/3 left-35"
         />
       </div>
 
@@ -414,14 +493,14 @@ export default function HomePage() {
 
         <div
           ref={pinSection}
-          className="flex flex-col md:flex-row gap-14 p-5 bg-[#F7F6F9] min-h-[300vh] -mt-[400px] w-full px-25"
+          className="flex flex-col md:flex-row bg-[#F7F6F9] min-h-[300vh] -mt-[400px] w-full px-25"
         >
           {/* 左側固定圖片容器 */}
           <div
             ref={pinImage}
-            className="sticky top-[15vh] w-[55%] h-[60vh] items-center justify-center hidden md:flex"
+            className="sticky top-[15vh] w-[50%] h-[60vh] items-center justify-center hidden md:flex"
           >
-            <div className="bg-[#F1F0F3] rounded-2xl w-full max-w-[580px] h-[380px] border border-gray-300">
+            <div className="bg-[#F1F0F3] rounded-2xl w-full max-w-[500px] h-[380px] border border-gray-300">
               <Image
                 ref={(el) => {
                   images.current[0] = el!;
@@ -456,7 +535,7 @@ export default function HomePage() {
             </div>
           </div>
           {/* 右側文字內容 */}
-          <div className="w-[45%] flex flex-col gap-[50vh] pt-[20vh]">
+          <div className="w-[50%] flex flex-col gap-30 pt-[10vh] py-6 px-12">
             <div
               key={0}
               ref={(el) => {
@@ -476,7 +555,7 @@ export default function HomePage() {
               <div className="flex items-end justify-between mb-[20px]">
                 <h2
                   ref={(el) => {
-                    headingsRef.current[2] = el!;
+                    headingsRef.current[3] = el!;
                   }}
                   className="text-[50px] font-semibold leading-[110%] text-[var(--color-primary)]"
                 >
@@ -487,18 +566,42 @@ export default function HomePage() {
                 <p>卡片式管理筆記</p>
               </div>
               <hr className="text-gray-400" />
-              <div className="flex items-center gap-3 mt-[20px]">
-                <CircleCheck className="text-[var(--color-primary)]" />
-                <p className="text-base">快速紀錄</p>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3 mt-[20px]">
+                  <CircleCheck className="text-[var(--color-primary)]" />
+                  <h4 className="text-lg font-semibold text-[var(--color-primary)]">
+                    即時記錄
+                  </h4>
+                </div>
+                <p className="text-gray-700">
+                  點擊「＋」號即可快速建立新筆記，讓你在靈感閃現時迅速紀錄。
+                </p>
               </div>
-              <div className="flex items-center gap-3 mt-[20px]">
-                <CircleCheck className="text-[var(--color-primary)]" />
-                <p className="text-base">即時更新</p>
+              <div className="relative flex flex-col gap-4">
+                <div className="flex items-center gap-3 mt-[20px]">
+                  <CircleCheck className="text-[var(--color-primary)]" />
+                  <h4 className="text-lg font-semibold text-[var(--color-primary)]">
+                    即時更新
+                  </h4>
+                </div>
+                <p className="text-gray-700">
+                  支援筆記自由拖曳排序，搭配關鍵字搜尋與行事曆連動，點擊活動即可查看相關筆記，實現活動與內容整合。
+                </p>
               </div>
-              <div className="flex items-center gap-3 mt-[20px]">
-                <CircleCheck className="text-[var(--color-primary)]" />
-                <p className="text-base">快速瀏覽</p>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3 mt-[20px]">
+                  <CircleCheck className="text-[var(--color-primary)]" />
+                  <h4 className="text-lg font-semibold text-[var(--color-primary)]">
+                    快速瀏覽
+                  </h4>
+                </div>
+                <p className="text-gray-700">
+                  卡片式筆記管理，一眼掌握所有筆記的標題、標籤，幫助快速回顧與切換，提升效率與閱讀體驗。
+                </p>
               </div>
+              <p className="absolute -top-40 -right-10 text-[280px] text-[#F0EFF4] font-semibold -z-1">
+                01
+              </p>
             </div>
 
             <div
@@ -506,7 +609,7 @@ export default function HomePage() {
               ref={(el) => {
                 textSections.current[1] = el!;
               }}
-              className="opacity-0 flex flex-col gap-4"
+              className="relative opacity-0 flex flex-col gap-4"
             >
               <div className="flex items-center justify-center w-fit gap-2 bg-white rounded-full px-7 py-3">
                 <Image
@@ -520,7 +623,7 @@ export default function HomePage() {
               <div className="flex items-end justify-between mb-[20px]">
                 <h2
                   ref={(el) => {
-                    headingsRef.current[3] = el!;
+                    headingsRef.current[4] = el!;
                   }}
                   className="text-[50px] font-semibold leading-[110%] text-[var(--color-primary)]"
                 >
@@ -531,19 +634,44 @@ export default function HomePage() {
                 <p>標籤管理與分類</p>
               </div>
               <hr className="text-gray-400" />
-              <div className="flex items-center gap-3 mt-[20px]">
-                <CircleCheck className="text-[var(--color-primary)]" />
-                <p className="text-base">自由分類</p>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3 mt-[20px]">
+                  <CircleCheck className="text-[var(--color-primary)]" />
+                  <h4 className="text-lg font-semibold text-[var(--color-primary)]">
+                    自由分類
+                  </h4>
+                </div>
+                <p className="text-gray-700">
+                  自訂標籤名稱，依照工作、生活、靈感等需求彈性分類筆記，建立屬於自己的筆記系統。
+                </p>
               </div>
-              <div className="flex items-center gap-3 mt-[20px]">
-                <CircleCheck className="text-[var(--color-primary)]" />
-                <p className="text-base">快速篩選</p>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3 mt-[20px]">
+                  <CircleCheck className="text-[var(--color-primary)]" />
+                  <h4 className="text-lg font-semibold text-[var(--color-primary)]">
+                    快速篩選
+                  </h4>
+                </div>
+                <p className="text-gray-700">
+                  點擊任一標籤，快速過濾出相關筆記，查找該標籤所有筆記內容。
+                </p>
               </div>
-              <div className="flex items-center gap-3 mt-[20px]">
-                <CircleCheck className="text-[var(--color-primary)]" />
-                <p className="text-base">顏色辨識</p>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3 mt-[20px]">
+                  <CircleCheck className="text-[var(--color-primary)]" />
+                  <h4 className="text-lg font-semibold text-[var(--color-primary)]">
+                    顏色辨識
+                  </h4>
+                </div>
+                <p className="text-gray-700">
+                  可指定標籤顏色，透過視覺引導快速辨別分類主題，讓筆記畫面更有條理與美感，提升整體閱讀與使用體驗。
+                </p>
               </div>
+              <p className="absolute -top-45 -right-10 text-[280px] text-[#F3F2F6] font-semibold -z-1">
+                02
+              </p>
             </div>
+
             <div
               key={2}
               ref={(el) => {
@@ -553,17 +681,17 @@ export default function HomePage() {
             >
               <div className="flex items-center justify-center w-fit gap-2 bg-white rounded-full px-7 py-3">
                 <Image
-                  src="/icons/tag.svg"
-                  alt="tag icon"
+                  src="/icons/edit.svg"
+                  alt="edit icon"
                   width={16}
                   height={16}
                 ></Image>
-                <p>Tags</p>
+                <p>Editor</p>
               </div>
               <div className="flex items-end justify-between mb-[20px]">
                 <h2
                   ref={(el) => {
-                    headingsRef.current[3] = el!;
+                    headingsRef.current[5] = el!;
                   }}
                   className="text-[50px] font-semibold leading-[110%] text-[var(--color-primary)]"
                 >
@@ -574,14 +702,32 @@ export default function HomePage() {
                 <p>支援 Markdown 語法及文字工具列</p>
               </div>
               <hr className="text-gray-400" />
-              <div className="flex items-center gap-3 mt-[20px]">
-                <CircleCheck className="text-[var(--color-primary)]" />
-                <p className="text-base">方便快速</p>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3 mt-[20px]">
+                  <CircleCheck className="text-[var(--color-primary)]" />
+                  <h4 className="text-lg font-semibold text-[var(--color-primary)]">
+                    方便快速
+                  </h4>
+                </div>
+                <p className="text-gray-700">
+                  反選文字透過浮動工具列，改變文字樣式，快速編輯。
+                </p>
               </div>
-              <div className="flex items-center gap-3 mt-[20px]">
-                <CircleCheck className="text-[var(--color-primary)]" />
-                <p className="text-base">所見即所得</p>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3 mt-[20px]">
+                  <CircleCheck className="text-[var(--color-primary)]" />
+                  <h4 className="text-lg font-semibold text-[var(--color-primary)]">
+                    所見即所得
+                  </h4>
+                </div>
+                <p className="text-gray-700">
+                  輸入 Markdown
+                  語法即時渲染，無需切換模式或預覽視窗，所寫即所見。
+                </p>
               </div>
+              <p className="absolute -top-45 -right-10 text-[280px] text-[#F3F2F6] font-semibold -z-1">
+                03
+              </p>
             </div>
           </div>
         </div>
@@ -590,20 +736,30 @@ export default function HomePage() {
       {/* 第四段：元件介紹 */}
       <div
         id="features"
-        className="h-full bg-[#F7F6F9] flex flex-col justify-center items-center gap-12 pt-24 overflow-hidden 
+        className="h-full bg-[#F7F6F9] flex flex-col justify-center items-center gap-12 pt-2 overflow-hidden 
         sm:pb-40 pb-10 lg:px-24 sm:px-12 px-6 md:mt-0 -mt-[400px]"
       >
         <span className="bg-white rounded-full px-7 py-3 shadow-[0px_0px_20px_0px_rgba(0,0,0,0.1)]">
           Features
         </span>
-        <h3
-          ref={(el) => {
-            headingsRef.current[4] = el!;
-          }}
-          className="sm:text-[40px] lg:text-[58px] md:text-[48px] text-[30px] text-center break-normal"
-        >
-          Organize your life in NoteCard
-        </h3>
+        <div className="flex flex-col items-center -gap-12">
+          <h3
+            ref={(el) => {
+              headingsRef.current[1] = el!;
+            }}
+            className="sm:text-[40px] md:text-[58px] text-[30px]"
+          >
+            Organize your life
+          </h3>
+          <h4
+            ref={(el) => {
+              headingsRef.current[2] = el!;
+            }}
+            className="invert-10 sm:text-[30px] md:text-[40px] text-[24px]"
+          >
+            in NoteCard
+          </h4>
+        </div>
         <div className="w-full flex flex-col gap-4">
           <div className="flex gap-4 md:flex-nowrap flex-wrap">
             <div className="md:w-1/3 w-full h-full p-8 rounded-2xl bg-white flex flex-col gap-4 overflow-hidden group relative">
