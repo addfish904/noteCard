@@ -27,13 +27,12 @@
 ## 🛠️ Built With
 
 - [Next.js 14 (App Router)](https://nextjs.org/)
-- [React 18](https://reactjs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Firebase Authentication](https://firebase.google.com/docs/auth)
-- [Firestore Database](https://firebase.google.com/docs/firestore)
-- [Milkdown](https://milkdown.dev/) for live markdown editing
-- [Remix Icons](https://remixicon.com/) & [React Icons](https://react-icons.github.io/react-icons/)  
-- [shadcn/ui](https://ui.shadcn.dev/) for modern UI components
+
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
+![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white)
+![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
 
 ---
