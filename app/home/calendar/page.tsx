@@ -11,11 +11,11 @@ import { DateSelectArg, EventClickArg, EventDropArg } from "@fullcalendar/core";
 import { format } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { useAuth } from "@/hooks/useAuth";
 import AddEventDialog from "@/app/components/calendar/AddEventDialog";
 import { getEvents, updateEvent } from "@/lib/firestore";
 import { CalendarEvent } from "@/types/event";
 import { useNoteContext } from "@/app/context/NoteContext";
+import { useAuthContext } from "@/app/context/AuthContext";
 
 export default function CalendarPage() {
   const calendarRef = useRef<FullCalendar | null>(null);
@@ -28,7 +28,7 @@ export default function CalendarPage() {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
     null
   );
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuthContext();
   const [calendarView, setCalendarView] = useState<
     "dayGridMonth" | "timeGridWeek" | "timeGridDay"
   >("timeGridWeek");

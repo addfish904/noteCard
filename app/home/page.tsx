@@ -3,8 +3,8 @@
 import React, { useEffect } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { useNoteContext } from "../context/NoteContext";
+import { useAuthContext } from "../context/AuthContext";
 import { useTags } from "../context/TagContext";
 
 import Article from "@/app/components/home/grid/article";
@@ -21,7 +21,7 @@ import { gridlayouts } from "../components/home/config/gridLayouts";
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 export default function HomePage() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuthContext();
   const router = useRouter();
 
   const { notes, addNote } = useNoteContext();

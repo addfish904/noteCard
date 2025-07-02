@@ -3,14 +3,14 @@
 import { useEffect, useState } from "react";
 import NotesList from "@/app/components/note/NotesList";
 import Editor from "@/app/components/note/Editor";
-import { useSelectedTag } from "@/app/context/SelectedTagContext";
+import { useTags } from "@/app/context/TagContext";
 import { useNoteContext } from "@/app/context/NoteContext";
 import { cn } from "@/lib/utils";
 
 export default function NotesPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const { selectedTagId } = useSelectedTag();
+  const { selectedTagId } = useTags();
 
   const { selectedNote, addNote } = useNoteContext();
 

@@ -1,12 +1,21 @@
+"use client";
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Note } from "@/types/note";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "./AuthContext";
 import {
   addNote as addNoteToFirestore,
   updateNote as updateNoteInFirestore,
   deleteNote as deleteNoteFromFirestore,
-  getAllNotes,
 } from "@/lib/firestore";
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 interface NoteContextType {
   notes: Note[];
@@ -21,23 +30,36 @@ interface NoteContextType {
 const NoteContext = createContext<NoteContextType | undefined>(undefined);
 
 export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
 
-  // 初始取得 notes
+  // 即時監聽使用者的筆記
   useEffect(() => {
-    const fetchNotes = async () => {
-      if (user?.uid) {
-        const userNotes = await getAllNotes(user.uid);
-        setNotes(userNotes);
+    if (!user?.uid) return;
 
-        if (userNotes.length > 0) {
-          setSelectedNote(userNotes[0]);
-        }
-      }
-    };
-    fetchNotes();
+    const q = query(
+      collection(db, "notes"),
+      where("userId", "==", user.uid),
+      orderBy("order", "asc")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const userNotes = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Note[];
+
+      setNotes(userNotes);
+
+      setSelectedNote((prev) => {
+        if (!prev && userNotes.length > 0) return userNotes[0];
+        const found = userNotes.find((n) => n.id === prev?.id);
+        return found || userNotes[0] || null;
+      });
+    });
+
+    return () => unsubscribe();
   }, [user]);
 
   const addNote = async () => {
@@ -45,49 +67,31 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
       alert("請先登入");
       return;
     }
-    const maxOrder =
-      notes.length > 0 ? Math.max(...notes.map((n) => n.order || 0)) : 0;
+    const minOrder =
+      notes.length > 0 ? Math.min(...notes.map((n) => n.order || 0)) : 0;
 
     const newNote = {
       title: "Untitled Note",
       content: "輸入你的內容...",
       userId: user.uid,
       tags: [],
-      order: maxOrder + 1,
-    };
-
-    const docRef = await addNoteToFirestore(newNote);
-    const newNoteWithId: Note = {
-      id: docRef.id,
-      ...newNote,
-      tagId: "",
-      updatedAt: new Date(),
+      order: minOrder - 1,
       createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
-    setNotes((prev) => [newNoteWithId, ...prev]);
-    setSelectedNote(newNoteWithId);
+    await addNoteToFirestore(newNote);
   };
 
   const updateNote = async (id: string, data: Partial<Note>) => {
-    await updateNoteInFirestore(id, data);
-    setNotes((prev) =>
-      prev.map((note) =>
-        note.id === id ? { ...note, ...data, updatedAt: new Date() } : note
-      )
-    );
-    setSelectedNote((prev) => {
-      if (prev && prev.id === id) {
-        return { ...prev, ...data, updatedAt: new Date() };
-      }
-      return prev;
+    await updateNoteInFirestore(id, {
+      ...data,
+      updatedAt: new Date(),
     });
   };
 
   const deleteNote = async (id: string) => {
     await deleteNoteFromFirestore(id);
-    setNotes((prev) => prev.filter((note) => note.id !== id));
-    setSelectedNote(null);
   };
 
   const reorderNotes = async (newNotes: Note[]) => {
@@ -95,7 +99,6 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
       updateNoteInFirestore(note.id, { order: index })
     );
     await Promise.all(updatePromises);
-    setNotes(newNotes);
   };
 
   return (

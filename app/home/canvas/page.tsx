@@ -6,7 +6,7 @@ import "@excalidraw/excalidraw/index.css";
 import { useTheme } from "next-themes";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/app/context/AuthContext";
 import type {
   ExcalidrawProps,
   ExcalidrawInitialDataState,
@@ -15,7 +15,7 @@ import type {
 type OnChangeHandler = NonNullable<ExcalidrawProps["onChange"]>;
 
 export default function ExcalidrawWrapper() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuthContext();
   const { theme } = useTheme();
   const isDark = theme === "dark";
 

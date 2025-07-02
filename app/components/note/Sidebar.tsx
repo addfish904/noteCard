@@ -13,7 +13,7 @@ import {
   Ellipsis,
   Trash2,
 } from "lucide-react";
-import { useSelectedTag } from "@/app/context/SelectedTagContext";
+import { useTags } from "@/app/context/TagContext";
 import Image from "next/image";
 
 interface SidebarProps {
@@ -57,7 +57,7 @@ export default function Sidebar({
 
   const router = useRouter();
   const pathname = usePathname();
-  const { setSelectedTagId } = useSelectedTag();
+  const { setSelectedTagId } = useTags();
 
   const handleNewTagKeyDown = async (
     e: React.KeyboardEvent<HTMLInputElement>

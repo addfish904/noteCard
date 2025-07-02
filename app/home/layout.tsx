@@ -2,32 +2,25 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
-import { TagProvider, useTags } from "@/app/context/TagContext";
-import { NoteProvider } from "@/app/context/NoteContext";
-import {
-  SelectedTagProvider,
-  useSelectedTag,
-} from "@/app/context/SelectedTagContext";
+import { useTags } from "@/app/context/TagContext";
 import Sidebar from "@/app/components/note/Sidebar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, LogOut } from "lucide-react";
 import Image from "next/image";
 import { logout } from "@/lib/firestore";
 import type { User } from "firebase/auth";
+import { useAuthContext } from "../context/AuthContext";
 
 function MobileSidebar() {
   const router = useRouter();
-  const { tags } = useTags();
-  const { setSelectedTagId } = useSelectedTag();
-  const [, setActiveTagId] = useState<string | null>(null);
+  const { tags, setSelectedTagId } = useTags();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleNavigate = (callback: () => void) => {
     setIsLoading(true);
     callback();
-    setTimeout(() => setIsLoading(false), 800); // fake loading timeout
+    setTimeout(() => setIsLoading(false), 800);
     setOpen(false);
   };
 
@@ -74,13 +67,11 @@ function MobileSidebar() {
         </div>
         <hr className="my-2 text-gray-200" />
 
-        {/* tag標籤 */}
         <div className="flex flex-col gap-8 p-0 sm:p-6">
           <button
             onClick={() =>
               handleNavigate(() => {
                 setSelectedTagId(null);
-                setActiveTagId(null);
                 router.push("/home/note");
               })
             }
@@ -99,13 +90,12 @@ function MobileSidebar() {
           {tags.map((tag) => (
             <button
               key={tag.id}
-              onClick={() => {
+              onClick={() =>
                 handleNavigate(() => {
                   setSelectedTagId(tag.id);
-                  setActiveTagId(tag.id);
                   router.push("/home/note");
-                });
-              }}
+                })
+              }
               className="flex items-center gap-[22px] justify-start cursor-pointer"
             >
               <Image
@@ -121,7 +111,6 @@ function MobileSidebar() {
         </div>
         <hr className="my-2 text-gray-200" />
 
-        {/* 設定/登出 */}
         <div className="flex flex-col gap-8 p-0 sm:p-6">
           <button
             onClick={handleLogout}
@@ -137,7 +126,7 @@ function MobileSidebar() {
 }
 
 export default function NotesLayout({ children }: { children: ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuthContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -154,15 +143,7 @@ export default function NotesLayout({ children }: { children: ReactNode }) {
     );
   }
 
-  return (
-    <TagProvider userId={user.uid}>
-      <SelectedTagProvider>
-        <NoteProvider>
-          <LayoutContent user={user}>{children}</LayoutContent>
-        </NoteProvider>
-      </SelectedTagProvider>
-    </TagProvider>
-  );
+  return <LayoutContent user={user}>{children}</LayoutContent>;
 }
 
 function LayoutContent({
@@ -181,7 +162,6 @@ function LayoutContent({
           <Image src="/logo.svg" alt="logo" width={26} height={26} />
           <p>Notecard</p>
         </header>
-        {/* 手機版漢堡選單 */}
         <div className="px-6 flex md:hidden">
           <MobileSidebar />
         </div>

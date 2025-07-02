@@ -23,7 +23,7 @@ export default function HomePage() {
   const noteWrapper = useRef(null);
   const clockWrapper = useRef(null);
 
-  const scrollSection = useRef(null);
+  const heroSection = useRef(null);
   const blackSection = useRef(null);
   const heroImage = useRef(null);
 
@@ -80,7 +80,7 @@ export default function HomePage() {
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: scrollSection.current,
+        trigger: heroSection.current,
         start: "top center",
         end: "bottom center",
         scrub: true,
@@ -100,7 +100,7 @@ export default function HomePage() {
       y: yValue,
       ease: "none",
       scrollTrigger: {
-        trigger: scrollSection.current,
+        trigger: heroSection.current,
         start: "bottom bottom",
         end: "+=500",
         scrub: true,
@@ -331,7 +331,7 @@ export default function HomePage() {
         </nav>
 
         {/* hero section */}
-        <div ref={scrollSection} className="relative text-center sm:mt-6 mt-0">
+        <div ref={heroSection} className="relative text-center sm:mt-6 mt-0">
           <div className="relative z-20">
             <p className="text-[30px] text-[var(--color-primary)]">
               Welcome To
