@@ -131,7 +131,7 @@ export default function Article({ userUid }: { userUid: string }) {
                 <DialogFooter className="mt-4">
                   <Button
                     onClick={handleSave}
-                    className="bg-[var(--color-primary)] w-full"
+                    className="bg-[var(--color-primary)] w-full dark:text-white hover:bg-[#201F45]"
                   >
                     儲存
                   </Button>
