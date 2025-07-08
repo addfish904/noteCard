@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -59,14 +59,6 @@ export default function CalendarPage() {
     calendarApi?.next();
     setCurrentDate(calendarApi?.getDate() ?? new Date());
   };
-
-  useEffect(() => {
-    if (user) {
-      getEvents(user.uid).then((data) => setEvents(data));
-    }
-  }, [user]);
-
-  if (loading) return <div>Loading...</div>;
 
   const handleSelect = (info: DateSelectArg) => {
     setSelectInfo({ start: info.start, end: info.end });
