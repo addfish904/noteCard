@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -28,7 +28,7 @@ export default function CalendarPage() {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
     null
   );
-  const { user, loading } = useAuthContext();
+  const { user } = useAuthContext();
   const [calendarView, setCalendarView] = useState<
     "dayGridMonth" | "timeGridWeek" | "timeGridDay"
   >("timeGridWeek");
@@ -36,6 +36,18 @@ export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
 
   const calendarApi = calendarRef.current?.getApi();
+
+  useEffect(() => {
+    if (user) {
+      getEvents(user.uid)
+        .then((fetchedEvents) => {
+          setEvents(fetchedEvents);
+        })
+        .catch((error) => {
+          console.error("無法獲取事件：", error);
+        });
+    }
+  }, [user]);
 
   const handleViewChange = (
     view: "dayGridMonth" | "timeGridWeek" | "timeGridDay"
