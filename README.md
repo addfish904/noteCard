@@ -39,4 +39,8 @@
 
 ## Demo
 
-![Demo](./public/readme/note-demo-1.gif)
+1. **Home Page**｜ Customizable widgets and theme toggle
+   ![Demo](./public/readme/home-demo.gif)
+
+2. **Note Page**｜ Write and manage notes with Markdown support  
+   ![Demo](./public/readme/note-demo-1.gif)
