@@ -1,6 +1,25 @@
+<div align="center">
+
+<img src="./public/readme/noteCardLogo.jpg" width="320px" />
+
+</p>
+   <a href="https://github.com/addfish904/noteCard?tab=readme-ov-file#-notecard">About</a>
+    ｜
+   <a href="https://github.com/addfish904/noteCard?tab=readme-ov-file#%EF%B8%8F-built-with">Tech</a>
+    ｜
+   <a href="https://github.com/addfish904/noteCard?tab=readme-ov-file#demo">Demo</a>
+</p>
+<p><a href="https://www.linkedin.com/in/jiayu-shao-12342b25a/">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
+  </a>
+  <a href="mailto:vivian21509517@gmail.com">
+    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
+  </a></p>
+</div>
+
 # 📝 noteCard
 
-**noteCard** is a minimalist and powerful markdown note-taking web app designed for fast recording, tag-based organization, and intuitive visual management. Whether you're jotting down quick ideas or organizing your study notes, noteCard helps you focus on your content without distractions.
+[NoteCard](https://note-card-blush.vercel.app/) is a minimalist and powerful markdown note-taking web app designed for fast recording, tag-based organization, and intuitive visual management. Whether you're jotting down quick ideas or organizing your study notes, noteCard helps you focus on your content without distractions.
 
 ## 🔍 Features
 
@@ -34,6 +53,20 @@
 ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
 ![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white)
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
+
+### Base
+
+- React
+- TypeScript
+- Tailwind CSS
+- Firebase
+- ESLint
+
+#### Libraries
+
+- dnd-kit
+- framer-motion
+- react-datepicker
 
 ---
 
