@@ -39,8 +39,14 @@
 
 ## Demo
 
-1. **Home Page**｜ Customizable widgets and theme toggle
+1. **Note Page**｜ Write and manage notes with Markdown support
+
+   ![Demo](./public/readme/note-demo-1.gif)
+
+2. **Home Page**｜ Customizable widgets and theme toggle
+
    ![Demo](./public/readme/home-demo.gif)
 
-2. **Note Page**｜ Write and manage notes with Markdown support  
-   ![Demo](./public/readme/note-demo-1.gif)
+3. **Calendar Page**｜ Create events and associate them with related notes.
+
+   ![Demo](./public/readme/calendar-demo.gif)
