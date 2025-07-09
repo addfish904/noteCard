@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./public/readme/noteCardLogo.jpg" width="320px" />
+<img src="./public/readme/noteCardLogo.svg" width="300px" />
 
 </p>
    <a href="https://github.com/addfish904/noteCard?tab=readme-ov-file#-notecard">About</a>
@@ -45,8 +45,6 @@
 
 ## 🛠️ Built With
 
-- [Next.js 14 (App Router)](https://nextjs.org/)
-
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
@@ -54,19 +52,22 @@
 ![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white)
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
 
-### Base
+### 🧱 Base
 
+- Next.js 14
 - React
 - TypeScript
 - Tailwind CSS
 - Firebase
 - ESLint
 
-#### Libraries
+#### 📦 Libraries & Tools
 
 - dnd-kit
+- fullcalendar
+- react-grid-layout
 - framer-motion
-- react-datepicker
+- GSAP (GreenSock)
 
 ---
 
