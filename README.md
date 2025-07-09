@@ -61,13 +61,22 @@
 - Firebase
 - ESLint
 
-#### 📦 Libraries & Tools
+### 📦 Libraries & Tools
 
 - dnd-kit
 - fullcalendar
 - react-grid-layout
 - framer-motion
 - GSAP (GreenSock)
+
+### 🔍 Details
+
+- 🧩 Used **dnd kit** to implement intuitive drag-and-drop card swapping.
+- 🧱 Built **responsive layouts** with Tailwind CSS to speed up UI development.
+- 🔐 Integrated **Firebase Auth + Cookies** for secure 30-day persistent login.
+- 📝 Developed a **WYSIWYG Markdown editor** using Milkdown with a floating toolbar (bold, italic, headings, links, code...).
+- 🧠 Added **Excalidraw canvas** to allow users to freely draw mind maps and visual notes.
+- 🎬 Created smooth **UI animations** with Framer Motion and crafted **GSAP-based landing animations** for an engaging first impression.
 
 ---
 
