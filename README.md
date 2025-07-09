@@ -73,7 +73,7 @@
 
 - 🧩 Used **dnd kit** to implement intuitive drag-and-drop card swapping.
 - 🧱 Built **responsive layouts** with Tailwind CSS to speed up UI development.
-- 🔐 Integrated **Firebase Auth + Cookies** for secure 30-day persistent login.
+- 🔐 Integrated **Firebase Authentication** for secure login, and **Firestore** to store and sync user data in real-time.
 - 📝 Developed a **WYSIWYG Markdown editor** using Milkdown with a floating toolbar (bold, italic, headings, links, code...).
 - 🧠 Added **Excalidraw canvas** to allow users to freely draw mind maps and visual notes.
 - 🎬 Created smooth **UI animations** with Framer Motion and crafted **GSAP-based landing animations** for an engaging first impression.
@@ -92,4 +92,4 @@
 
 3. **Calendar Page**｜ Create events and associate them with related notes.
 
-   ![Demo](./public/readme/calendar-demo.gif)
+   ![Demo](./public/readme/calendar-demo-1.gif)
